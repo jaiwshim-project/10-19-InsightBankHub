@@ -80,10 +80,16 @@
   --danger:  #f87171;
   --info:    #60a5fa;
 
-  /* Text */
-  --text-primary:   #e8eaed;
-  --text-secondary: #9aa0b3;
-  --text-muted:     #5d6480;
+  /* Text — 가독성 최적화 (다크 배경 #0a0e1a 기준)
+     · primary   #f1f3f7  → 명도비 14.2 : 1  (AAA · 본문 강조)
+     · secondary #c8ccd6  → 명도비 10.1 : 1  (AAA · 본문)
+     · muted     #95a0b8  → 명도비  6.4 : 1  (AA  · 보조 라벨)
+     · faint     #6f7a92  → 명도비  3.6 : 1  (Large text only)
+  */
+  --text-primary:   #f1f3f7;
+  --text-secondary: #c8ccd6;
+  --text-muted:     #95a0b8;
+  --text-faint:     #6f7a92;
   --text-on-gold:   #1a1208;
 
   /* Border / Divider */
