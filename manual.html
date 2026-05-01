@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="theme-color" content="#0a0e1a" />
   <title>운영 매뉴얼 — Insight Bank Hub</title>
-  <meta name="description" content="관리자 · 기자 · 일반 사용자 가이드 + FAQ + 다국어 운영" />
+  <meta name="description" content="관리자 · 기자 · B2B 영업 · 그래프 라이선스 · 다국어 · 본업 시너지 · 14개 모듈 가이드" />
   <meta property="og:type" content="website" />
   <meta property="og:title" content="운영 매뉴얼 — Insight Bank Hub" />
   <meta property="og:image" content="assets/og-image.svg" />
@@ -143,20 +143,38 @@
   <header class="header">
     <div class="header__inner">
       <a class="brand" href="index.html" aria-label="Insight Bank Hub"><img src="assets/logo.svg" alt="Insight Bank Hub" class="brand__logo" /></a>
-      <nav class="nav">
+      <nav class="nav" aria-label="주요 메뉴">
         <a class="nav__link" href="index.html">개요</a>
-        <a class="nav__link" href="proposal.html">제안서</a>
-        <a class="nav__link" href="channels.html">6개 채널</a>
-        <a class="nav__link" href="products.html">상품·서비스</a>
-        <a class="nav__link" href="monetization.html">수익 모델</a>
-        <a class="nav__link" href="competitive-landscape.html">경쟁 환경</a>
-        <a class="nav__link" href="ontology.html">온톨로지</a>
-        <a class="nav__link" href="graph-license.html">그래프 라이선스</a>
-        <a class="nav__link" href="structure.html">구조도</a>
-        <a class="nav__link" href="dashboard.html">대시보드</a>
-        <a class="nav__link" href="content.html">콘텐츠</a>
-        <a class="nav__link" href="knowledge.html">지식베이스</a>
-        <a class="nav__link" href="chatbot.html">챗봇</a>
+        <div class="nav__group">
+          <button class="nav__link nav__trigger" type="button" aria-haspopup="true">제안</button>
+          <div class="nav__menu">
+            <div class="nav__menu__heading">제안 · 영업 자료</div>
+            <a class="nav__menu-link" href="proposal.html">계약 제안서<small>선명회계법인 12개월 도입</small></a>
+            <a class="nav__menu-link" href="channels.html">6개 채널<small>바이오·ICT·스타트업·M&A·방산·조세</small></a>
+            <a class="nav__menu-link" href="products.html">상품·서비스 카탈로그<small>8 카테고리 36종</small></a>
+            <a class="nav__menu-link" href="monetization.html">수익 모델<small>9 Stream · Y3 88억</small></a>
+            <a class="nav__menu-link" href="competitive-landscape.html">경쟁 환경<small>40+ 글로벌·한국 경쟁사</small></a>
+          </div>
+        </div>
+        <div class="nav__group">
+          <button class="nav__link nav__trigger" type="button" aria-haspopup="true">기술</button>
+          <div class="nav__menu">
+            <div class="nav__menu__heading">기술 · 차별화</div>
+            <a class="nav__menu-link" href="structure.html">시스템 구조도<small>4-Layer 아키텍처 SVG</small></a>
+            <a class="nav__menu-link" href="ontology.html">온톨로지 레이어<small>FIBO/XBRL · 6채널 결합</small></a>
+            <a class="nav__menu-link" href="graph-license.html">그래프 라이선스<small>Stream 09 · SPARQL B2B</small></a>
+          </div>
+        </div>
+        <div class="nav__group">
+          <button class="nav__link nav__trigger" type="button" aria-haspopup="true">데모</button>
+          <div class="nav__menu">
+            <div class="nav__menu__heading">플랫폼 · 운영 데모</div>
+            <a class="nav__menu-link" href="dashboard.html">통합 대시보드<small>6채널 KPI · AI 인용 추이</small></a>
+            <a class="nav__menu-link" href="content.html">콘텐츠 관리<small>발행 큐 · GEO 점수</small></a>
+            <a class="nav__menu-link" href="knowledge.html">RAG 지식베이스<small>벡터 인덱스 · 토픽</small></a>
+            <a class="nav__menu-link" href="chatbot.html">RAG 챗봇<small>Gemini · 출처 인용</small></a>
+          </div>
+        </div>
         <a class="nav__link" href="manual.html">매뉴얼</a>
       </nav>
       <button class="nav-toggle" aria-label="메뉴"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
@@ -178,15 +196,19 @@
         <!-- ===== TOC ===== -->
         <aside class="toc">
           <div class="toc__heading">목차</div>
-          <a class="toc__link active" href="#getting-started">시작하기</a>
-          <a class="toc__link" href="#roles">사용자 역할</a>
-          <a class="toc__link" href="#editor-guide">기자 가이드</a>
-          <a class="toc__link" href="#admin-guide">관리자 가이드</a>
-          <a class="toc__link" href="#chatbot-guide">챗봇 사용법</a>
-          <a class="toc__link" href="#multilingual">다국어 운영</a>
-          <a class="toc__link" href="#shortcuts">단축키</a>
-          <a class="toc__link" href="#faq">FAQ</a>
-          <a class="toc__link" href="#support">지원·문의</a>
+          <a class="toc__link active" href="#getting-started">1. 시작하기</a>
+          <a class="toc__link" href="#modules">2. 플랫폼 14개 모듈</a>
+          <a class="toc__link" href="#roles">3. 사용자 역할</a>
+          <a class="toc__link" href="#editor-guide">4. 기자 가이드</a>
+          <a class="toc__link" href="#admin-guide">5. 관리자 가이드</a>
+          <a class="toc__link" href="#chatbot-guide">6. 챗봇 사용법</a>
+          <a class="toc__link" href="#graph-license">7. 그래프 라이선스 (B2B)</a>
+          <a class="toc__link" href="#sales-guide">8. B2B 영업 가이드</a>
+          <a class="toc__link" href="#synergy">9. 본업 시너지</a>
+          <a class="toc__link" href="#multilingual">10. 다국어 운영</a>
+          <a class="toc__link" href="#shortcuts">11. 단축키</a>
+          <a class="toc__link" href="#faq">12. FAQ</a>
+          <a class="toc__link" href="#support">13. 지원·문의</a>
         </aside>
 
         <!-- ===== 본문 ===== -->
@@ -236,9 +258,53 @@
             </div>
           </article>
 
+          <!-- 플랫폼 14개 모듈 (NEW) -->
+          <article class="doc-section" id="modules">
+            <h2>2. 플랫폼 14개 모듈</h2>
+            <p>Insight Bank Hub는 14개 독립 페이지로 구성되며, 단일 인증·단일 데이터 위에서 동작합니다.</p>
+
+            <h3>2.1 핵심 자료 (제안·영업)</h3>
+            <ul>
+              <li><a href="index.html" style="color:var(--gold-300);">개요</a> — 플랫폼 비전 + 8개 모듈 진입점 + 6개 매체 + 글로벌 8개 언어</li>
+              <li><a href="proposal.html" style="color:var(--gold-300);">계약 제안서</a> — 선명회계법인 12개월 도입 로드맵 (Phase 1~4) · 가격 (현재 000 마스킹)</li>
+              <li><a href="channels.html" style="color:var(--gold-300);">6개 채널</a> — 바이오타임즈·ARG·스타트업투데이·KMNA·디펜스투데이·월간지방세연구 상세 + 한국 1위 표기</li>
+              <li><a href="products.html" style="color:var(--gold-300);">상품·서비스</a> — 8개 카테고리 36종 + B2B 1-pager 인쇄 (Ctrl+P)</li>
+              <li><a href="monetization.html" style="color:var(--gold-300);">수익 모델</a> — 9개 Stream + 글로벌 단가 비교 + 36종 매핑 + Y3 88억</li>
+              <li><a href="competitive-landscape.html" style="color:var(--gold-300);">경쟁 환경</a> — 8영역 40+ 경쟁사 (Bloomberg·PitchBook·Diffbot 등) + Moat + 위협</li>
+            </ul>
+
+            <h3>2.2 기술 / 차별화 (의사결정자용)</h3>
+            <ul>
+              <li><a href="ontology.html" style="color:var(--gold-300);">온톨로지</a> — Phase 2.5 도메인 그래프 + FIBO/XBRL 호환 + 6채널 결합 추론</li>
+              <li><a href="graph-license.html" style="color:var(--gold-300);">그래프 라이선스</a> — Stream 09 SPARQL API B2B 영업 자료 + 4티어 가격</li>
+              <li><a href="structure.html" style="color:var(--gold-300);">시스템 구조도</a> — 4-Layer SVG 아키텍처 + 기술 스택</li>
+            </ul>
+
+            <h3>2.3 운영 데모 (실제 사용)</h3>
+            <ul>
+              <li><a href="dashboard.html" style="color:var(--gold-300);">대시보드</a> — 6채널 통합 KPI · AI 인용 추이 · 히트맵</li>
+              <li><a href="content.html" style="color:var(--gold-300);">콘텐츠 관리</a> — 6채널 발행 큐 + GEO 점수 + AI 보조</li>
+              <li><a href="knowledge.html" style="color:var(--gold-300);">지식베이스</a> — RAG 벡터 인덱스 + 토픽 클러스터 + AI 인용 점수</li>
+              <li><a href="chatbot.html" style="color:var(--gold-300);">RAG 챗봇</a> — Gemini 기반 통합 검색 + 출처 인용 + 멀티턴</li>
+              <li><a href="manual.html" style="color:var(--gold-300);">운영 매뉴얼</a> — 본 문서</li>
+            </ul>
+
+            <div class="card mt-5" style="background:var(--glass-gold); border-color:var(--border-gold); padding:var(--s-4);">
+              <strong style="color:var(--gold-300);">고객 유형별 권장 진입 경로</strong>
+              <ul class="mt-3" style="padding-left:20px; color:var(--text-secondary); font-size:var(--fs-sm);">
+                <li><strong style="color:var(--text-primary);">신회장/임원</strong> → 개요 → 제안서 → 경쟁 환경 → 수익 모델</li>
+                <li><strong style="color:var(--text-primary);">기술 임원/CTO</strong> → 시스템 구조도 → 온톨로지 → 그래프 라이선스 → 지식베이스</li>
+                <li><strong style="color:var(--text-primary);">B2B 영업팀</strong> → 상품·서비스 → 그래프 라이선스 → 경쟁 환경 (인쇄)</li>
+                <li><strong style="color:var(--text-primary);">투자자/IR</strong> → 수익 모델 → 경쟁 환경 → 제안서</li>
+                <li><strong style="color:var(--text-primary);">기자/편집자</strong> → 콘텐츠 관리 → 매뉴얼 4. 기자 가이드 → 챗봇</li>
+                <li><strong style="color:var(--text-primary);">독자</strong> → 챗봇 → 6개 채널 → 지식베이스</li>
+              </ul>
+            </div>
+          </article>
+
           <!-- 사용자 역할 -->
           <article class="doc-section" id="roles">
-            <h2>2. 사용자 역할</h2>
+            <h2>3. 사용자 역할</h2>
             <p>플랫폼은 4단계 권한 체계로 운영됩니다.</p>
 
             <div class="grid grid-2 mt-4">
@@ -272,7 +338,7 @@
 
           <!-- 기자 가이드 -->
           <article class="doc-section" id="editor-guide">
-            <h2>3. 기자 가이드</h2>
+            <h2>4. 기자 가이드</h2>
 
             <h3>3.1 콘텐츠 작성 워크플로우</h3>
             <ul>
@@ -295,7 +361,7 @@
 
           <!-- 관리자 가이드 -->
           <article class="doc-section" id="admin-guide">
-            <h2>4. 관리자 가이드</h2>
+            <h2>5. 관리자 가이드</h2>
 
             <h3>4.1 사용자 / 권한</h3>
             <ul>
@@ -328,7 +394,7 @@ License: https://insightbankhub.com/license</pre>
 
           <!-- 챗봇 -->
           <article class="doc-section" id="chatbot-guide">
-            <h2>5. RAG 챗봇 사용법</h2>
+            <h2>6. RAG 챗봇 사용법</h2>
             <p><a href="chatbot.html" style="color:var(--gold-300);">챗봇 페이지</a>에서 통합 지식 검색을 사용할 수 있습니다.</p>
 
             <h3>5.1 효과적인 질문법</h3>
@@ -343,9 +409,117 @@ License: https://insightbankhub.com/license</pre>
             <p>좌측 사이드바에서 6개 채널 중 검색 대상을 선택할 수 있습니다. 기본값은 전체 활성화.</p>
           </article>
 
+          <!-- 그래프 라이선스 (B2B) -->
+          <article class="doc-section" id="graph-license">
+            <h2>7. 그래프 라이선스 (B2B)</h2>
+            <p>Stream 09 — <strong style="color:var(--gold-300);">SPARQL 그래프 라이선스</strong>는 6개 매체 결합 RDF 그래프를 B2B 고객(법무법인·PEF·IB·정부·LLM)에게 라이선싱하는 차별화 영역입니다.</p>
+
+            <h3>7.1 4티어 가격</h3>
+            <ul>
+              <li><strong style="color:var(--text-primary);">Tier 1 · Read-only Query</strong> — 연 3,600만 (월 100K 쿼리, 출처 인용)</li>
+              <li><strong style="color:var(--text-primary);">Tier 2 · Pro</strong> — 연 9,600만 (OWL2 추론 + GraphQL + 전담 매니저)</li>
+              <li><strong style="color:var(--text-primary);">Tier 3 · Enterprise</strong> — 연 2.8억 (8개 언어 + 무제한 + SLA 99.9%)</li>
+              <li><strong style="color:var(--gold-300);">Tier 4 · Strategic</strong> — 연 5억+ (LLM 학습 라이선스 + 전체 트리플 덤프 + 공동 모델 개발)</li>
+            </ul>
+
+            <h3>7.2 SPARQL 엔드포인트 사용법</h3>
+            <pre>POST /sparql
+Authorization: Bearer &lt;your-api-key&gt;
+Content-Type: application/sparql-query
+
+PREFIX ibh: &lt;https://ibh.kr/onto#&gt;
+SELECT ?company ?contractValue
+WHERE {
+  ?company a ibh:Corporation ;
+           ibh:hasContract ?c .
+  ?c ibh:contractType ibh:DefenseExport ;
+     ibh:value ?contractValue .
+}
+LIMIT 20</pre>
+
+            <h3>7.3 영업 자료</h3>
+            <ul>
+              <li><a href="graph-license.html" style="color:var(--gold-300);">graph-license.html</a> — 전체 B2B 영업 자료 (Diffbot 비교 + 4티어 + 14개월 일정)</li>
+              <li><a href="ontology.html" style="color:var(--gold-300);">ontology.html</a> — 기술 상세 (NER/RE 파이프라인, 도메인 트리, 추론 룰)</li>
+              <li><a href="products.html" style="color:var(--gold-300);">products.html#06</a> — 상품 카드 + 가격</li>
+            </ul>
+
+            <h3>7.4 차별화 메시지 (영업 한 줄)</h3>
+            <p style="padding:var(--s-3); background:var(--glass-gold); border-left:3px solid var(--gold-500); border-radius:var(--r-sm);">
+              "Diffbot은 영문 웹 그래프, 우리는 한국 산업·자본·조세 큐레이션 그래프 — 한 사건이 4~6개 매체에 걸쳐 시간순 추적되는 수직 결합. 단일 매체로는 흉내 불가."
+            </p>
+          </article>
+
+          <!-- B2B 영업 가이드 -->
+          <article class="doc-section" id="sales-guide">
+            <h2>8. B2B 영업 가이드</h2>
+            <p>36종 상품을 개별 판매하지 않고 <strong style="color:var(--text-primary);">고객 유형별 6종 패키지</strong>로 묶음 영업하여 사이클 6개월 → 3개월로 단축.</p>
+
+            <h3>8.1 고객 유형별 패키지 6종</h3>
+            <ul>
+              <li><strong style="color:var(--text-primary);">법무법인 패키지</strong> (연 9,600만): 지방세 판례 + M&amp;A DB + 그래프 라이선스 Tier 1<br/>→ 김앤장·광장·세종·율촌·화우·태평양</li>
+              <li><strong style="color:var(--text-primary);">사모펀드/IB 패키지</strong> (연 2.5억): M&amp;A + VC 펀딩 + K-방산 + 그래프 Pro + 임원 브리핑<br/>→ MBK·IMM·한앤컴퍼니·미래에셋·NH·삼성증권 IB</li>
+              <li><strong style="color:var(--text-primary);">대기업 IR 패키지</strong> (연 3.6억): Enterprise RAG + 맞춤 분석 + 임원 브리핑 + 기업 구독<br/>→ 삼성·SK·LG·현대차 IR·신사업</li>
+              <li><strong style="color:var(--text-primary);">바이오 IR 패키지</strong> (연 1.8억): 바이오 임상 DB + M&amp;A + 임원 브리핑 + 맞춤 분석<br/>→ 셀트리온·삼성바이오·SK바이오팜·한미·녹십자</li>
+              <li><strong style="color:var(--text-primary);">정부·공공 패키지</strong> (연 8억+): 그래프 Enterprise + 정책 자문 + 글로벌 인덱스<br/>→ 기재부·과기부·산업부·국민연금·KIC</li>
+              <li><strong style="color:var(--gold-300);">★ LLM 회사 패키지</strong> (연 10억+): LLM 학습 라이선스 + 다국어 8개 + 그래프 Strategic<br/>→ OpenAI·Anthropic·Google·Naver·카카오</li>
+            </ul>
+
+            <h3>8.2 1-pager 인쇄 (영업 미팅용)</h3>
+            <p><a href="products.html" style="color:var(--gold-300);">products.html</a>에서 <code>Ctrl/⌘ + P</code> 누르면 A4 형태의 영업 자료가 즉시 출력됩니다. @media print 최적화 — 헤더/푸터 자동 숨김.</p>
+
+            <h3>8.3 영업 사이클</h3>
+            <ul>
+              <li><strong style="color:var(--text-primary);">Tier 1~2</strong> (연 1억 이하): 영업 사이클 1~2개월</li>
+              <li><strong style="color:var(--text-primary);">Tier 3 · Enterprise</strong> (연 2~5억): 영업 사이클 4~6개월</li>
+              <li><strong style="color:var(--gold-300);">Tier 4 · Strategic</strong> (연 5억+): 영업 사이클 12~18개월 (의사결정자 직접 접촉 필요)</li>
+            </ul>
+
+            <h3>8.4 First Reference 확보 전략</h3>
+            <p>첫 사례 1~2곳 확보가 후속 영업의 결정적 무기. 우선 타깃:</p>
+            <ul>
+              <li><strong style="color:var(--text-primary);">법무법인 1곳</strong> — 김앤장 또는 광장 (지방세 + M&amp;A 결합)</li>
+              <li><strong style="color:var(--text-primary);">PEF 1곳</strong> — MBK 또는 IMM (M&amp;A + VC 결합)</li>
+              <li><strong style="color:var(--gold-300);">LLM 1곳 ★</strong> — Naver 또는 카카오 (한국 LLM 우선, 그 후 글로벌 진출)</li>
+            </ul>
+          </article>
+
+          <!-- 본업 시너지 (선명회계) -->
+          <article class="doc-section" id="synergy">
+            <h2>9. 선명회계법인 본업 시너지</h2>
+            <p>36종 중 <strong style="color:var(--gold-300);">8종</strong>이 회계·세무·M&amp;A 본업과 직접 시너지. 본업 단가 +30~50% 정당화.</p>
+
+            <h3>9.1 본업 결합 8종 상품</h3>
+            <ul>
+              <li><strong style="color:var(--text-primary);">#07 M&amp;A 거래 DB</strong> + 회계법인 M&amp;A 자문 → 거래 단가 +50%</li>
+              <li><strong style="color:var(--text-primary);">#12 지방세 판례 DB</strong> + 세무 자문 → 일상 자문 도구</li>
+              <li><strong style="color:var(--text-primary);">#19 도메인 분기 리포트</strong> (조세) + 본업 컨설팅</li>
+              <li><strong style="color:var(--text-primary);">#20 맞춤 시장 분석</strong> + M&amp;A 실사</li>
+              <li><strong style="color:var(--text-primary);">#27 M&amp;A 자문 보조</strong> — 데이터 백본 + 본업 결합 핵심</li>
+              <li><strong style="color:var(--text-primary);">#28 정부·공공 정책 자문</strong> — 그래프 + 본업 정량 분석</li>
+              <li><strong style="color:var(--text-primary);">#30 지방세 공무원 보수교육</strong> — 한국지방세연구회 활용</li>
+              <li><strong style="color:var(--text-primary);">#31 회계사·세무사 CPE</strong> + 본업 강사진</li>
+            </ul>
+
+            <h3>9.2 영업 통합 워크플로우</h3>
+            <ol style="color:var(--text-secondary); padding-left:20px; line-height:1.8;">
+              <li>선명회계 본업 고객사 (200+) → IBH 데이터 라이선스 교차 영업</li>
+              <li>IBH 그래프 라이선스 고객 (법무법인·PEF) → 본업 자문 의뢰 유도</li>
+              <li>월간지방세연구 발행 → 신규 회계·세무 클라이언트 발굴 채널</li>
+              <li>임원 분기 브리핑 (#29) → 본업 자문 계약 갱신·확장</li>
+            </ol>
+
+            <h3>9.3 통합 KPI</h3>
+            <ul>
+              <li>본업 → IBH 교차 매출: 연 1.2억 (B2B 패키지 기준)</li>
+              <li>IBH → 본업 추천 매출: 연 3.6억 (M&amp;A 자문 + 컨설팅)</li>
+              <li>총 시너지 매출: <strong style="color:var(--gold-300);">연 4.8억+</strong></li>
+            </ul>
+          </article>
+
           <!-- 다국어 -->
           <article class="doc-section" id="multilingual">
-            <h2>6. 다국어 운영</h2>
+            <h2>10. 다국어 운영</h2>
             <p>Insight Bank Hub는 한국어를 기본으로 8개 언어를 지원합니다. 상단 우측 🌐 언어 선택기로 즉시 전환됩니다.</p>
 
             <h3>6.1 지원 언어</h3>
@@ -427,7 +601,7 @@ License: https://insightbankhub.com/license</pre>
 
           <!-- 단축키 -->
           <article class="doc-section" id="shortcuts">
-            <h2>7. 단축키</h2>
+            <h2>11. 단축키</h2>
             <div class="card" style="padding:0; overflow:hidden;">
               <table class="table">
                 <thead><tr><th>기능</th><th>Windows / Linux</th><th>macOS</th></tr></thead>
@@ -446,7 +620,7 @@ License: https://insightbankhub.com/license</pre>
 
           <!-- FAQ -->
           <article class="doc-section" id="faq">
-            <h2>8. FAQ</h2>
+            <h2>12. FAQ</h2>
 
             <details class="faq-item">
               <summary>6개 채널의 기존 도메인은 유지되나요?</summary>
@@ -486,12 +660,12 @@ License: https://insightbankhub.com/license</pre>
 
           <!-- 지원 -->
           <article class="doc-section" id="support">
-            <h2>9. 지원·문의</h2>
+            <h2>13. 지원·문의</h2>
             <div class="grid grid-3">
               <div class="role-card text-center">
                 <div style="font-size:32px;">📧</div>
                 <strong style="color:var(--text-primary); display:block; margin-top:var(--s-2);">이메일</strong>
-                <p class="text-secondary mb-0" style="font-size:var(--fs-sm);">support@insightbankhub.kr<br/>응답 평균 4시간 이내</p>
+                <p class="text-secondary mb-0" style="font-size:var(--fs-sm);">jaiwshim@gmail.com<br/>응답 평균 4시간 이내</p>
               </div>
               <div class="role-card text-center">
                 <div style="font-size:32px;">💬</div>
@@ -563,7 +737,7 @@ License: https://insightbankhub.com/license</pre>
           </div>
           <div class="footer__col">
             <h5>연락처</h5>
-            <p>support@insightbankhub.kr</p>
+            <p>jaiwshim@gmail.com</p>
             <p>평일 09:00 – 18:00 KST</p>
             <p>SLA 24/7 비상 라인</p>
             <a href="proposal.html" class="btn btn--ghost btn--sm" style="margin-top:8px; display:inline-flex;">파트너 문의 →</a>

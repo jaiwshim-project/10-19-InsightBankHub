@@ -140,20 +140,38 @@
   <header class="header">
     <div class="header__inner">
       <a class="brand" href="index.html" aria-label="Insight Bank Hub"><img src="assets/logo.svg" alt="Insight Bank Hub" class="brand__logo" /></a>
-      <nav class="nav">
+      <nav class="nav" aria-label="주요 메뉴">
         <a class="nav__link" href="index.html">개요</a>
-        <a class="nav__link" href="proposal.html">제안서</a>
-        <a class="nav__link" href="channels.html">6개 채널</a>
-        <a class="nav__link" href="products.html">상품·서비스</a>
-        <a class="nav__link" href="monetization.html">수익 모델</a>
-        <a class="nav__link" href="competitive-landscape.html">경쟁 환경</a>
-        <a class="nav__link" href="ontology.html">온톨로지</a>
-        <a class="nav__link" href="graph-license.html">그래프 라이선스</a>
-        <a class="nav__link" href="structure.html">구조도</a>
-        <a class="nav__link" href="dashboard.html">대시보드</a>
-        <a class="nav__link" href="content.html">콘텐츠</a>
-        <a class="nav__link" href="knowledge.html">지식베이스</a>
-        <a class="nav__link" href="chatbot.html">챗봇</a>
+        <div class="nav__group">
+          <button class="nav__link nav__trigger" type="button" aria-haspopup="true">제안</button>
+          <div class="nav__menu">
+            <div class="nav__menu__heading">제안 · 영업 자료</div>
+            <a class="nav__menu-link" href="proposal.html">계약 제안서<small>선명회계법인 12개월 도입</small></a>
+            <a class="nav__menu-link" href="channels.html">6개 채널<small>바이오·ICT·스타트업·M&A·방산·조세</small></a>
+            <a class="nav__menu-link" href="products.html">상품·서비스 카탈로그<small>8 카테고리 36종</small></a>
+            <a class="nav__menu-link" href="monetization.html">수익 모델<small>9 Stream · Y3 88억</small></a>
+            <a class="nav__menu-link" href="competitive-landscape.html">경쟁 환경<small>40+ 글로벌·한국 경쟁사</small></a>
+          </div>
+        </div>
+        <div class="nav__group">
+          <button class="nav__link nav__trigger" type="button" aria-haspopup="true">기술</button>
+          <div class="nav__menu">
+            <div class="nav__menu__heading">기술 · 차별화</div>
+            <a class="nav__menu-link" href="structure.html">시스템 구조도<small>4-Layer 아키텍처 SVG</small></a>
+            <a class="nav__menu-link" href="ontology.html">온톨로지 레이어<small>FIBO/XBRL · 6채널 결합</small></a>
+            <a class="nav__menu-link" href="graph-license.html">그래프 라이선스<small>Stream 09 · SPARQL B2B</small></a>
+          </div>
+        </div>
+        <div class="nav__group">
+          <button class="nav__link nav__trigger" type="button" aria-haspopup="true">데모</button>
+          <div class="nav__menu">
+            <div class="nav__menu__heading">플랫폼 · 운영 데모</div>
+            <a class="nav__menu-link" href="dashboard.html">통합 대시보드<small>6채널 KPI · AI 인용 추이</small></a>
+            <a class="nav__menu-link" href="content.html">콘텐츠 관리<small>발행 큐 · GEO 점수</small></a>
+            <a class="nav__menu-link" href="knowledge.html">RAG 지식베이스<small>벡터 인덱스 · 토픽</small></a>
+            <a class="nav__menu-link" href="chatbot.html">RAG 챗봇<small>Gemini · 출처 인용</small></a>
+          </div>
+        </div>
         <a class="nav__link" href="manual.html">매뉴얼</a>
       </nav>
       <button class="nav-toggle" aria-label="메뉴"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
@@ -474,7 +492,7 @@
           </div>
           <div class="footer__col">
             <h5>연락처</h5>
-            <p>support@insightbankhub.kr</p>
+            <p>jaiwshim@gmail.com</p>
             <p>평일 09:00 – 18:00 KST</p>
             <p>SLA 24/7 비상 라인</p>
             <a href="proposal.html" class="btn btn--ghost btn--sm" style="margin-top:8px; display:inline-flex;">파트너 문의 →</a>

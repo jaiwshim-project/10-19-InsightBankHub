@@ -44,20 +44,38 @@
   <header class="header">
     <div class="header__inner">
       <a class="brand" href="index.html" aria-label="Insight Bank Hub"><img src="assets/logo.svg" alt="Insight Bank Hub" class="brand__logo" /></a>
-      <nav class="nav">
+      <nav class="nav" aria-label="주요 메뉴">
         <a class="nav__link" href="index.html">개요</a>
-        <a class="nav__link" href="proposal.html">제안서</a>
-        <a class="nav__link" href="channels.html">6개 채널</a>
-        <a class="nav__link" href="products.html">상품·서비스</a>
-        <a class="nav__link" href="monetization.html">수익 모델</a>
-        <a class="nav__link" href="competitive-landscape.html">경쟁 환경</a>
-        <a class="nav__link" href="ontology.html">온톨로지</a>
-        <a class="nav__link" href="graph-license.html">그래프 라이선스</a>
-        <a class="nav__link" href="structure.html">구조도</a>
-        <a class="nav__link" href="dashboard.html">대시보드</a>
-        <a class="nav__link" href="content.html">콘텐츠</a>
-        <a class="nav__link" href="knowledge.html">지식베이스</a>
-        <a class="nav__link" href="chatbot.html">챗봇</a>
+        <div class="nav__group">
+          <button class="nav__link nav__trigger" type="button" aria-haspopup="true">제안</button>
+          <div class="nav__menu">
+            <div class="nav__menu__heading">제안 · 영업 자료</div>
+            <a class="nav__menu-link" href="proposal.html">계약 제안서<small>선명회계법인 12개월 도입</small></a>
+            <a class="nav__menu-link" href="channels.html">6개 채널<small>바이오·ICT·스타트업·M&A·방산·조세</small></a>
+            <a class="nav__menu-link" href="products.html">상품·서비스 카탈로그<small>8 카테고리 36종</small></a>
+            <a class="nav__menu-link" href="monetization.html">수익 모델<small>9 Stream · Y3 88억</small></a>
+            <a class="nav__menu-link" href="competitive-landscape.html">경쟁 환경<small>40+ 글로벌·한국 경쟁사</small></a>
+          </div>
+        </div>
+        <div class="nav__group">
+          <button class="nav__link nav__trigger" type="button" aria-haspopup="true">기술</button>
+          <div class="nav__menu">
+            <div class="nav__menu__heading">기술 · 차별화</div>
+            <a class="nav__menu-link" href="structure.html">시스템 구조도<small>4-Layer 아키텍처 SVG</small></a>
+            <a class="nav__menu-link" href="ontology.html">온톨로지 레이어<small>FIBO/XBRL · 6채널 결합</small></a>
+            <a class="nav__menu-link" href="graph-license.html">그래프 라이선스<small>Stream 09 · SPARQL B2B</small></a>
+          </div>
+        </div>
+        <div class="nav__group">
+          <button class="nav__link nav__trigger" type="button" aria-haspopup="true">데모</button>
+          <div class="nav__menu">
+            <div class="nav__menu__heading">플랫폼 · 운영 데모</div>
+            <a class="nav__menu-link" href="dashboard.html">통합 대시보드<small>6채널 KPI · AI 인용 추이</small></a>
+            <a class="nav__menu-link" href="content.html">콘텐츠 관리<small>발행 큐 · GEO 점수</small></a>
+            <a class="nav__menu-link" href="knowledge.html">RAG 지식베이스<small>벡터 인덱스 · 토픽</small></a>
+            <a class="nav__menu-link" href="chatbot.html">RAG 챗봇<small>Gemini · 출처 인용</small></a>
+          </div>
+        </div>
         <a class="nav__link" href="manual.html">매뉴얼</a>
       </nav>
       <button class="nav-toggle" aria-label="메뉴"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
@@ -159,57 +177,72 @@
           <!-- Hub → AI flow -->
           <path class="flow-line flow-line--solid" d="M550 320 L550 380" marker-end="url(#arr2)"/>
 
-          <!-- Layer 3: AI/RAG -->
-          <text x="550" y="402" text-anchor="middle" class="label-strong" fill="#7eb6f5">Layer 3 — AI · RAG · GEO-AIO</text>
-          <rect class="node-box node-box--blue" x="200" y="420" width="700" height="120" rx="14"/>
+          <!-- Layer 3: AI / RAG / Ontology (Phase 2.5 추가) -->
+          <text x="550" y="402" text-anchor="middle" class="label-strong" fill="#7eb6f5">Layer 3 — AI · RAG · Ontology · GEO-AIO</text>
+          <rect class="node-box node-box--blue" x="40" y="420" width="1020" height="120" rx="14"/>
 
           <g>
-            <rect class="node-box" x="220" y="448" width="150" height="56" rx="8"/>
-            <text x="295" y="472" text-anchor="middle" class="label-strong" font-size="12">청킹·임베딩</text>
-            <text x="295" y="490" text-anchor="middle" class="label-muted">Chunking · Embed</text>
+            <rect class="node-box" x="60" y="448" width="180" height="56" rx="8"/>
+            <text x="150" y="470" text-anchor="middle" class="label-strong" font-size="12">청킹·임베딩</text>
+            <text x="150" y="488" text-anchor="middle" class="label-muted">Chunking · Embed</text>
 
-            <rect class="node-box" x="385" y="448" width="150" height="56" rx="8"/>
-            <text x="460" y="472" text-anchor="middle" class="label-strong" font-size="12">벡터 DB</text>
-            <text x="460" y="490" text-anchor="middle" class="label-muted">Vector Index</text>
+            <rect class="node-box" x="252" y="448" width="180" height="56" rx="8"/>
+            <text x="342" y="470" text-anchor="middle" class="label-strong" font-size="12">벡터 DB · BM25</text>
+            <text x="342" y="488" text-anchor="middle" class="label-muted">Hybrid Index</text>
 
-            <rect class="node-box" x="550" y="448" width="150" height="56" rx="8"/>
-            <text x="625" y="472" text-anchor="middle" class="label-strong" font-size="12">RAG 엔진</text>
-            <text x="625" y="490" text-anchor="middle" class="label-muted">Retrieval · Citation</text>
+            <rect class="node-box" x="444" y="448" width="180" height="56" rx="8"/>
+            <text x="534" y="470" text-anchor="middle" class="label-strong" font-size="12">RAG 엔진</text>
+            <text x="534" y="488" text-anchor="middle" class="label-muted">Retrieval · Citation</text>
 
-            <rect class="node-box" x="715" y="448" width="165" height="56" rx="8"/>
-            <text x="797" y="472" text-anchor="middle" class="label-strong" font-size="12">Gemini API</text>
-            <text x="797" y="490" text-anchor="middle" class="label-muted">Answer Generation</text>
+            <!-- Phase 2.5 NEW · 보라 -->
+            <rect class="node-box" x="636" y="448" width="200" height="56" rx="8" stroke="#c084fc" fill="rgba(192,132,252,0.08)"/>
+            <text x="736" y="466" text-anchor="middle" class="label-strong" font-size="12" fill="#c084fc">온톨로지 · 그래프</text>
+            <text x="736" y="482" text-anchor="middle" class="label-muted">RDF · OWL · SPARQL</text>
+            <text x="736" y="498" text-anchor="middle" font-size="9" fill="#c084fc">Phase 2.5 NEW</text>
+
+            <rect class="node-box" x="848" y="448" width="200" height="56" rx="8"/>
+            <text x="948" y="470" text-anchor="middle" class="label-strong" font-size="12">Gemini API</text>
+            <text x="948" y="488" text-anchor="middle" class="label-muted">Answer Generation</text>
           </g>
 
           <!-- AI → Users flow -->
-          <path class="flow-line flow-line--solid" d="M300 540 L240 600" marker-end="url(#arr2)"/>
-          <path class="flow-line flow-line--solid" d="M500 540 L470 600" marker-end="url(#arr2)"/>
-          <path class="flow-line flow-line--solid" d="M700 540 L700 600" marker-end="url(#arr2)"/>
-          <path class="flow-line flow-line--solid" d="M850 540 L900 600" marker-end="url(#arr2)"/>
+          <path class="flow-line flow-line--solid" d="M150 540 L130 600" marker-end="url(#arr2)"/>
+          <path class="flow-line flow-line--solid" d="M342 540 L320 600" marker-end="url(#arr2)"/>
+          <path class="flow-line flow-line--solid" d="M534 540 L510 600" marker-end="url(#arr2)"/>
+          <path class="flow-line flow-line--solid" d="M736 540 L700 600" marker-end="url(#arr2)" stroke="rgba(192,132,252,0.6)"/>
+          <path class="flow-line flow-line--solid" d="M948 540 L890 600" marker-end="url(#arr2)"/>
 
-          <!-- Layer 4: 사용자/AI 엔진 -->
-          <text x="550" y="622" text-anchor="middle" class="label-strong" fill="#d4a574">Layer 4 — Consumer · 사용자 + 외부 AI</text>
+          <!-- Layer 4: 사용자/B2B/AI 엔진 (6개 노드) -->
+          <text x="550" y="622" text-anchor="middle" class="label-strong" fill="#d4a574">Layer 4 — Consumer · 독자 + B2B + 외부 AI</text>
 
           <g>
-            <rect class="node-box" x="100" y="640" width="180" height="60" rx="10"/>
-            <text x="190" y="668" text-anchor="middle" class="label-strong">일반 독자</text>
-            <text x="190" y="684" text-anchor="middle" class="label-muted">웹·모바일</text>
+            <rect class="node-box" x="40" y="640" width="155" height="60" rx="10"/>
+            <text x="117" y="666" text-anchor="middle" class="label-strong" font-size="12">일반 독자</text>
+            <text x="117" y="684" text-anchor="middle" class="label-muted">웹·모바일 PWA</text>
 
-            <rect class="node-box" x="300" y="640" width="180" height="60" rx="10"/>
-            <text x="390" y="668" text-anchor="middle" class="label-strong">RAG 챗봇 사용자</text>
-            <text x="390" y="684" text-anchor="middle" class="label-muted">통합 검색</text>
+            <rect class="node-box" x="205" y="640" width="155" height="60" rx="10"/>
+            <text x="282" y="666" text-anchor="middle" class="label-strong" font-size="12">RAG 챗봇</text>
+            <text x="282" y="684" text-anchor="middle" class="label-muted">B2C SaaS</text>
 
-            <rect class="node-box" x="500" y="640" width="180" height="60" rx="10"/>
-            <text x="590" y="668" text-anchor="middle" class="label-strong">B2B API 고객</text>
-            <text x="590" y="684" text-anchor="middle" class="label-muted">라이선스</text>
+            <rect class="node-box" x="370" y="640" width="155" height="60" rx="10"/>
+            <text x="447" y="666" text-anchor="middle" class="label-strong" font-size="12">B2B 데이터 API</text>
+            <text x="447" y="684" text-anchor="middle" class="label-muted">REST · GraphQL</text>
 
-            <rect class="node-box node-box--gold" x="700" y="640" width="180" height="60" rx="10"/>
-            <text x="790" y="668" text-anchor="middle" class="label-strong">외부 LLM 인용</text>
-            <text x="790" y="684" text-anchor="middle" class="label-muted">ChatGPT · Claude</text>
+            <!-- 그래프 라이선스 NEW · 보라 -->
+            <rect class="node-box" x="535" y="640" width="155" height="60" rx="10" stroke="#c084fc" fill="rgba(192,132,252,0.08)"/>
+            <text x="612" y="664" text-anchor="middle" class="label-strong" font-size="12" fill="#c084fc">그래프 라이선스</text>
+            <text x="612" y="680" text-anchor="middle" class="label-muted">SPARQL · 4 Tier</text>
+            <text x="612" y="694" text-anchor="middle" font-size="8" fill="#c084fc">법무·PEF·정부</text>
 
-            <rect class="node-box node-box--gold" x="900" y="640" width="170" height="60" rx="10"/>
-            <text x="985" y="668" text-anchor="middle" class="label-strong">Gemini · Perplexity</text>
-            <text x="985" y="684" text-anchor="middle" class="label-muted">검색·답변 인용</text>
+            <rect class="node-box node-box--gold" x="700" y="640" width="170" height="60" rx="10"/>
+            <text x="785" y="664" text-anchor="middle" class="label-strong" font-size="12">AI 인용 라이선스</text>
+            <text x="785" y="680" text-anchor="middle" class="label-muted">OpenAI · Claude</text>
+            <text x="785" y="694" text-anchor="middle" font-size="8" fill="#d4a574">Stream 04 (5억+)</text>
+
+            <rect class="node-box node-box--gold" x="880" y="640" width="180" height="60" rx="10"/>
+            <text x="970" y="664" text-anchor="middle" class="label-strong" font-size="12">외부 LLM 인용</text>
+            <text x="970" y="680" text-anchor="middle" class="label-muted">Gemini · Perplexity</text>
+            <text x="970" y="694" text-anchor="middle" font-size="8" fill="#d4a574">검색·답변 자동 인용</text>
           </g>
         </svg>
       </div>
@@ -242,19 +275,21 @@
         </div>
 
         <div class="layer-card" data-reveal>
-          <h4>Layer 3 · AI / RAG</h4>
-          <div class="tech-grid"><strong>임베딩</strong><span class="text-secondary">Gemini Embeddings · 다국어</span></div>
+          <h4>Layer 3 · AI / RAG / 온톨로지</h4>
+          <div class="tech-grid"><strong>임베딩</strong><span class="text-secondary">Gemini Embeddings · 다국어 8개</span></div>
           <div class="tech-grid"><strong>벡터 DB</strong><span class="text-secondary">pgvector · Pinecone (옵션)</span></div>
           <div class="tech-grid"><strong>RAG</strong><span class="text-secondary">하이브리드 검색 · BM25 + 벡터</span></div>
+          <div class="tech-grid"><strong style="color:#c084fc;">온톨로지 ★</strong><span class="text-secondary">Apache Jena · OWL2 RL · FIBO/XBRL · SPARQL 1.1 (Phase 2.5)</span></div>
           <div class="tech-grid"><strong>LLM</strong><span class="text-secondary">Gemini 2.5 Pro · 멀티턴 · 출처 인용</span></div>
         </div>
 
         <div class="layer-card" data-reveal>
-          <h4>Layer 4 · Consumer</h4>
+          <h4>Layer 4 · Consumer / B2B</h4>
           <div class="tech-grid"><strong>웹</strong><span class="text-secondary">PWA · 모바일 우선 · &lt;2초 LCP</span></div>
-          <div class="tech-grid"><strong>API</strong><span class="text-secondary">REST · GraphQL · 라이선스 키</span></div>
-          <div class="tech-grid"><strong>SEO/GEO</strong><span class="text-secondary">JSON-LD · Sitemap · llms.txt</span></div>
-          <div class="tech-grid"><strong>분석</strong><span class="text-secondary">GA4 + 자체 인용 측정 시스템</span></div>
+          <div class="tech-grid"><strong>API</strong><span class="text-secondary">REST · GraphQL · OAuth2 · Stripe Metered</span></div>
+          <div class="tech-grid"><strong style="color:#c084fc;">그래프 ★</strong><span class="text-secondary">SPARQL 1.1 endpoint · 4 Tier · SLA 99.9%</span></div>
+          <div class="tech-grid"><strong>SEO/GEO</strong><span class="text-secondary">JSON-LD · Sitemap · llms.txt · Wikidata QID</span></div>
+          <div class="tech-grid"><strong>분석</strong><span class="text-secondary">GA4 + 자체 인용 측정 (4개 LLM 엔진)</span></div>
         </div>
       </div>
     </div>
@@ -276,8 +311,10 @@
             <tr><td>T+1분</td><td>스키마 정규화 + 메타 추출</td><td>Hub Core</td><td>Article 객체</td></tr>
             <tr><td>T+3분</td><td>JSON-LD · 태그 · 엔티티 자동 생성</td><td>AI 보조</td><td>구조화 데이터</td></tr>
             <tr><td>T+5분</td><td>청킹 + 임베딩 → 벡터 DB 적재</td><td>RAG 파이프라인</td><td>벡터 인덱스</td></tr>
+            <tr style="background:rgba(192,132,252,0.06);"><td style="color:#c084fc;">T+7분</td><td style="color:#c084fc;">NER + RE → RDF 트리플 → Apache Jena 적재 + OWL2 추론</td><td style="color:#c084fc;">온톨로지 (Phase 2.5)</td><td style="color:#c084fc;">그래프 노드 + 추론 사실</td></tr>
             <tr><td>T+10분</td><td>사이트맵·llms.txt 갱신, 외부 검색엔진 핑</td><td>SEO/GEO 모듈</td><td>인용 가능 상태</td></tr>
             <tr><td>T+1시간</td><td>RAG 챗봇 응답 가능 + 출처 인용</td><td>RAG 엔진</td><td>인용 가능 답변</td></tr>
+            <tr style="background:rgba(192,132,252,0.06);"><td style="color:#c084fc;">T+1시간</td><td style="color:#c084fc;">SPARQL endpoint 갱신 — B2B 그래프 라이선스 고객 즉시 쿼리 가능</td><td style="color:#c084fc;">그래프 라이선스</td><td style="color:#c084fc;">법무·PEF·IB 인사이트</td></tr>
             <tr><td>T+24시간</td><td>외부 LLM 인덱스 반영, 노출/인용 측정 시작</td><td>측정 시스템</td><td>인용 KPI</td></tr>
           </tbody>
         </table>
@@ -337,7 +374,7 @@
           </div>
           <div class="footer__col">
             <h5>연락처</h5>
-            <p>support@insightbankhub.kr</p>
+            <p>jaiwshim@gmail.com</p>
             <p>평일 09:00 – 18:00 KST</p>
             <p>SLA 24/7 비상 라인</p>
             <a href="proposal.html" class="btn btn--ghost btn--sm" style="margin-top:8px; display:inline-flex;">파트너 문의 →</a>

@@ -9,11 +9,21 @@
   /* ---------- 1. 활성 네비 표시 (자동 라우팅 인디케이터) ---------- */
   function markActiveNav() {
     const path = (location.pathname.split('/').pop() || 'index.html').toLowerCase();
+    // 일반 nav__link
     document.querySelectorAll('.nav__link').forEach(link => {
       const href = (link.getAttribute('href') || '').toLowerCase();
       if (!href) return;
       if (href === path || (path === '' && href === 'index.html')) {
         link.classList.add('active');
+      }
+    });
+    // 드롭다운 menu link + 부모 group active
+    document.querySelectorAll('.nav__menu-link').forEach(link => {
+      const href = (link.getAttribute('href') || '').toLowerCase();
+      if (href === path) {
+        link.classList.add('active');
+        const group = link.closest('.nav__group');
+        if (group) group.classList.add('has-active');
       }
     });
   }
