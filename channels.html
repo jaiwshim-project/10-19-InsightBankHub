@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0a0e1a" />
+  <title>6개 채널 — Insight Bank Hub</title>
+  <meta name="description" content="바이오타임즈 · 애틀러스리서치 · 스타트업투데이 · 한국M&A경제신문 · 디펜스투데이 · 월간지방세연구 — 한국 산업·자본·조세 6대 권위 매체" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="6개 채널 — Insight Bank Hub" />
+  <meta property="og:image" content="assets/og-image.svg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;700;900&display=swap" />
+  <link rel="stylesheet" href="css/common.css" />
+  <style>
+    .ch-card {
+      background: var(--glass-100);
+      border: 1px solid var(--border-default);
+      border-radius: var(--r-lg);
+      backdrop-filter: blur(14px) saturate(140%);
+      overflow: hidden;
+      transition: all 0.25s var(--ease-out);
+    }
+    @media (hover:hover) {
+      .ch-card:hover { transform: translateY(-4px); border-color: var(--border-gold); box-shadow: var(--shadow-md); }
+    }
+    .ch-card__head {
+      padding: var(--s-5);
+      background: linear-gradient(135deg, var(--glass-gold), transparent);
+      border-bottom: 1px solid var(--border-subtle);
+      position: relative;
+    }
+    .ch-card__num {
+      font-family: 'Noto Serif KR', serif;
+      font-size: 56px;
+      font-weight: 900;
+      line-height: 1;
+      background: linear-gradient(135deg, var(--gold-300), var(--gold-700));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      letter-spacing: -0.04em;
+    }
+    .ch-card__title { font-size: var(--fs-xl); font-weight: 700; margin: var(--s-2) 0 4px; color: var(--text-primary); }
+    .ch-card__sub { color: var(--gold-300); font-size: var(--fs-sm); letter-spacing: 0.02em; }
+    .ch-card__body { padding: var(--s-5); }
+    .ch-meta { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s-3); margin-bottom: var(--s-4); }
+    .ch-meta__item {
+      display: flex; flex-direction: column; gap: 2px;
+      padding: var(--s-3);
+      background: var(--bg-elev-2);
+      border-radius: var(--r-sm);
+      border: 1px solid var(--border-subtle);
+    }
+    .ch-meta__label { font-size: 10px; letter-spacing: 0.12em; color: var(--text-muted); text-transform: uppercase; }
+    .ch-meta__value { color: var(--text-primary); font-weight: 700; font-family: 'Noto Serif KR', serif; }
+    .ch-tag-row { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: var(--s-4); }
+    .ch-sample {
+      padding: var(--s-3);
+      background: var(--glass-100);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--r-sm);
+      font-size: var(--fs-xs);
+      color: var(--text-secondary);
+      margin-bottom: 6px;
+      display: flex; gap: var(--s-2); align-items: flex-start;
+    }
+    .ch-sample__bullet { color: var(--gold-300); flex-shrink: 0; }
+    .ch-sample strong { color: var(--text-primary); display: block; margin-bottom: 2px; font-weight: 600; }
+    .domain-row {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 4px 10px;
+      background: var(--bg-elev-3);
+      border: 1px solid var(--border-default);
+      border-radius: var(--r-sm);
+      color: var(--blue-300);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+    }
+    .domain-row a { color: inherit; }
+    .summary-table { width: 100%; border-collapse: collapse; }
+    .summary-table th, .summary-table td {
+      padding: 12px 16px; text-align: left;
+      border-bottom: 1px solid var(--border-subtle);
+      font-size: var(--fs-sm);
+    }
+    .summary-table th {
+      color: var(--gold-300); font-size: 10px;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      background: var(--glass-100);
+    }
+    .summary-table tr:hover td { background: var(--glass-100); }
+    .summary-table .num {
+      text-align: right;
+      font-family: 'Noto Serif KR', serif; font-weight: 700;
+      color: var(--gold-300);
+    }
+    .pub-info {
+      display: flex; gap: var(--s-3); align-items: center;
+      padding: var(--s-3);
+      background: var(--bg-elev-3);
+      border-radius: var(--r-sm);
+      border-left: 3px solid var(--gold-500);
+      font-size: var(--fs-xs);
+      color: var(--text-secondary);
+    }
+    .pub-info strong { color: var(--text-primary); }
+    .grid-3-ch { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--s-5); }
+    @media (max-width: 1024px) { .grid-3-ch { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 640px) { .grid-3-ch { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+
+  <header class="header">
+    <div class="header__inner">
+      <a class="brand" href="index.html" aria-label="Insight Bank Hub"><img src="assets/logo.svg" alt="Insight Bank Hub" class="brand__logo" /></a>
+      <nav class="nav">
+        <a class="nav__link" href="index.html">개요</a>
+        <a class="nav__link" href="proposal.html">제안서</a>
+        <a class="nav__link" href="channels.html">6개 채널</a>
+        <a class="nav__link" href="monetization.html">수익 모델</a>
+        <a class="nav__link" href="ontology.html">온톨로지</a>
+        <a class="nav__link" href="graph-license.html">그래프 라이선스</a>
+        <a class="nav__link" href="structure.html">구조도</a>
+        <a class="nav__link" href="dashboard.html">대시보드</a>
+        <a class="nav__link" href="content.html">콘텐츠</a>
+        <a class="nav__link" href="knowledge.html">지식베이스</a>
+        <a class="nav__link" href="chatbot.html">챗봇</a>
+        <a class="nav__link" href="manual.html">매뉴얼</a>
+      </nav>
+      <button class="nav-toggle" aria-label="메뉴"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
+    </div>
+  </header>
+
+  <!-- ===== HERO ===== -->
+  <section class="hero" style="padding:80px 0 var(--s-6);">
+    <div class="container hero__inner">
+      <span class="eyebrow">통합 대상 · 실제 매체 6개</span>
+      <h1 class="display hero__title" style="font-size:clamp(36px,6vw,56px);">
+        한국 <span class="text-gradient">산업·자본·조세 6대 권위 매체</span>
+      </h1>
+      <p class="hero__sub">
+        바이오 · ICT/방송 · 스타트업 · M&amp;A · 방산 · 지방세 — 6개 도메인의 인용 권위 매체.
+        통합 후에도 각 매체의 편집 자율성과 도메인 정체성은 유지됩니다.
+      </p>
+    </div>
+  </section>
+
+  <!-- ===== 한눈에 보기 ===== -->
+  <section class="section section--sm">
+    <div class="container">
+      <div class="card" data-reveal style="padding:0; overflow:hidden;">
+        <div style="padding: var(--s-5); border-bottom: 1px solid var(--border-subtle);">
+          <span class="eyebrow">한눈에 보기</span>
+          <h2 style="margin: var(--s-3) 0 0; font-size:var(--fs-lg);">6개 매체 종합 현황</h2>
+        </div>
+        <div style="overflow-x:auto;">
+          <table class="summary-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>매체명</th>
+                <th>도메인</th>
+                <th>전문 영역</th>
+                <th>발행사</th>
+                <th class="num" style="text-align:right;">등록일</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="badge-num">01</span></td>
+                <td style="color:var(--text-primary); font-weight:600;">바이오타임즈<br/><span class="text-muted" style="font-size:11px; font-weight:400;">BioTimes</span></td>
+                <td><span class="domain-row"><a href="https://www.biotimes.co.kr/" target="_blank" rel="noopener">biotimes.co.kr ↗</a></span></td>
+                <td class="text-secondary">바이오·신약·헬스케어</td>
+                <td class="text-secondary">(주)비즈뷰</td>
+                <td class="num">2019.02.27</td>
+              </tr>
+              <tr>
+                <td><span class="badge-num">02</span></td>
+                <td style="color:var(--text-primary); font-weight:600;">애틀러스리서치앤컨설팅<br/><span class="text-muted" style="font-size:11px; font-weight:400;">Atlas R&amp;C</span></td>
+                <td><span class="domain-row"><a href="http://www.arg.co.kr/" target="_blank" rel="noopener">arg.co.kr ↗</a></span></td>
+                <td class="text-secondary">텔레콤·IT·방송 리서치</td>
+                <td class="text-secondary">애틀러스리서치</td>
+                <td class="num">—</td>
+              </tr>
+              <tr>
+                <td><span class="badge-num">03</span></td>
+                <td style="color:var(--text-primary); font-weight:600;">스타트업투데이<br/><span class="text-muted" style="font-size:11px; font-weight:400;">STARTUPTODAY</span></td>
+                <td><span class="domain-row"><a href="https://www.startuptoday.kr/" target="_blank" rel="noopener">startuptoday.kr ↗</a></span></td>
+                <td class="text-secondary">스타트업·벤처·투자</td>
+                <td class="text-secondary">(주)비즈뷰</td>
+                <td class="num">2019.02.27</td>
+              </tr>
+              <tr>
+                <td><span class="badge-num">04</span></td>
+                <td style="color:var(--text-primary); font-weight:600;">한국M&amp;A경제신문<br/><span class="text-muted" style="font-size:11px; font-weight:400;">Korea M&amp;A Business News</span></td>
+                <td><span class="domain-row"><a href="https://www.kmnanews.com/" target="_blank" rel="noopener">kmnanews.com ↗</a></span></td>
+                <td class="text-secondary">M&amp;A·IPO·자본시장</td>
+                <td class="text-secondary">(주)채널더블유</td>
+                <td class="num">2019.02.27</td>
+              </tr>
+              <tr>
+                <td><span class="badge-num">05</span></td>
+                <td style="color:var(--text-primary); font-weight:600;">디펜스투데이<br/><span class="text-muted" style="font-size:11px; font-weight:400;">DefenseToday</span></td>
+                <td><span class="domain-row"><a href="https://www.defensetoday.kr/" target="_blank" rel="noopener">defensetoday.kr ↗</a></span></td>
+                <td class="text-secondary">방위산업·K-방산·국방</td>
+                <td class="text-secondary">(주)비즈뷰</td>
+                <td class="num">2019.03.16</td>
+              </tr>
+              <tr>
+                <td><span class="badge-num">06</span></td>
+                <td style="color:var(--text-primary); font-weight:600;">월간지방세연구<br/><span class="text-muted" style="font-size:11px; font-weight:400;">Local Tax Research</span></td>
+                <td><span class="domain-row"><a href="https://www.localtaxresearch.com/" target="_blank" rel="noopener">localtaxresearch.com ↗</a></span></td>
+                <td class="text-secondary">지방세·조세·세무</td>
+                <td class="text-secondary">한국지방세연구회(주)</td>
+                <td class="num">2009.04.06</td>
+              </tr>
+              <tr style="background:var(--glass-gold);">
+                <td colspan="6" style="color:var(--gold-300); font-weight:700; padding:var(--s-4) var(--s-5);">
+                  K-Industry(바이오·ICT·스타트업·방산) + Capital(M&amp;A) + Tax(조세) — 한국 산업·자본·조세 6대 도메인 망라
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 6개 매체 상세 카드 (3+3) ===== -->
+  <section class="section">
+    <div class="container">
+      <div data-reveal>
+        <span class="eyebrow">상세 프로필</span>
+        <h2 style="margin-top:var(--s-4)">매체별 정체성과 독자층</h2>
+        <p>각 매체는 한국 핵심 도메인의 인용 권위를 가지며, 통합 후에도 별도 브랜드와 편집권은 유지됩니다.</p>
+      </div>
+
+      <div class="grid-3-ch mt-8">
+
+        <!-- ① 바이오타임즈 -->
+        <article class="ch-card" data-reveal>
+          <div class="ch-card__head">
+            <div class="ch-card__num">01</div>
+            <div class="ch-card__title">바이오타임즈</div>
+            <div class="ch-card__sub">BioTimes</div>
+          </div>
+          <div class="ch-card__body">
+            <div class="ch-tag-row">
+              <span class="domain-row"><a href="https://www.biotimes.co.kr/" target="_blank" rel="noopener">biotimes.co.kr ↗</a></span>
+              <span class="chip chip--gold">바이오</span>
+              <span class="chip">K-Bio</span>
+            </div>
+            <div class="ch-meta">
+              <div class="ch-meta__item"><span class="ch-meta__label">분야</span><span class="ch-meta__value">바이오·헬스케어</span></div>
+              <div class="ch-meta__item"><span class="ch-meta__label">발행</span><span class="ch-meta__value">일간</span></div>
+              <div class="ch-meta__item"><span class="ch-meta__label">설립</span><span class="ch-meta__value">2019.02.27</span></div>
+              <div class="ch-meta__item"><span class="ch-meta__label">등록</span><span class="ch-meta__value">서울 아 52184</span></div>
+            </div>
+            <p class="text-secondary" style="font-size:var(--fs-sm);">
+              <strong style="color:var(--text-primary)">독자</strong> — 바이오 R&amp;D·임원, 제약 임상, 헬스케어 정책, 바이오 투자자.
+            </p>
+            <strong style="color:var(--gold-300); font-size:var(--fs-xs); letter-spacing:0.1em; text-transform:uppercase;">주요 섹션</strong>
+            <div class="ch-sample mt-2"><span class="ch-sample__bullet">▸</span><div><strong>Bio Stock</strong>특징주 · 상장 · IPO</div></div>
+            <div class="ch-sample"><span class="ch-sample__bullet">▸</span><div><strong>Bio Tech</strong>신기술 · 신약 · 임상</div></div>
+            <div class="ch-sample"><span class="ch-sample__bullet">▸</span><div><strong>K-Bio · Senior Plus</strong>K-바이오 · 시니어케어</div></div>
+            <div class="pub-info mt-3">
+              <span>📰</span><div><strong>(주)비즈뷰</strong> 발행 · 발행·편집인 이경식</div>
+            </div>
+          </div>
+        </article>
+
+        <!-- ② 애틀러스리서치 -->
+        <article class="ch-card" data-reveal>
+          <div class="ch-card__head">
+            <div class="ch-card__num">02</div>
+            <div class="ch-card__title">애틀러스리서치</div>
+            <div class="ch-card__sub">Atlas Research &amp; Consulting (ARG)</div>
+          </div>
+          <div class="ch-card__body">
+            <div class="ch-tag-row">
+              <span class="domain-row"><a href="http://www.arg.co.kr/" target="_blank" rel="noopener">arg.co.kr ↗</a></span>
+              <span class="chip chip--gold">통신·IT</span>
+              <span class="chip chip--blue">데이터</span>
+            </div>
+            <div class="ch-meta">
+              <div class="ch-meta__item"><span class="ch-meta__label">분야</span><span class="ch-meta__value">텔레콤·IT·방송</span></div>
+              <div class="ch-meta__item"><span class="ch-meta__label">유형</span><span class="ch-meta__value">리서치/컨설팅</span></div>
+              <div class="ch-meta__item"><span class="ch-meta__label">서비스</span><span class="ch-meta__value">통계 DB</span></div>
+              <div class="ch-meta__item"><span class="ch-meta__label">결제</span><span class="ch-meta__value">B2B 유료</span></div>
+            </div>
+            <p class="text-secondary" style="font-size:var(--fs-sm);">
+              <strong style="color:var(--text-primary)">독자</strong> — 통신사 전략, 방송사 편성, ICT 정책, 컨설팅 업계.
+              <strong style="color:var(--gold-300);">유일한 B2B 유료 리서치 채널</strong>.
+            </p>
+            <strong style="color:var(--gold-300); font-size:var(--fs-xs); letter-spacing:0.1em; text-transform:uppercase;">주요 서비스</strong>
+            <div class="ch-sample mt-2"><span class="ch-sample__bullet">▸</span><div><strong>리서치 리포트</strong>분기별 산업 보고서</div></div>
+            <div class="ch-sample"><span class="ch-sample__bullet">▸</span><div><strong>서베이·브리핑</strong>이용자 조사 · 트렌드</div></div>
+            <div class="ch-sample"><span class="ch-sample__bullet">▸</span><div><strong>통계 DB</strong>구조화 산업 통계</div></div>
+            <div class="pub-info mt-3">
+              <span>📊</span><div><strong>RAG 우선 적재</strong> · 정형 통계 DB → 그래프 라이선스 가치 최고</div>
+            </div>
+          </div>
+        </article>
+
+        <!-- ③ 스타트업투데이 -->
+        <article class="ch-card" data-reveal>
+          <div class="ch-card__head">
+            <div class="ch-card__num">03</div>
+            <div class="ch-card__title">스타트업투데이</div>
+            <div class="ch-card__sub">STARTUPTODAY</div>
+          </div>
+          <div class="ch-card__body">
+            <div class="ch-tag-row">
+              <span class="domain-row"><a href="https://www.startuptoday.kr/" target="_blank" rel="noopener">startuptoday.kr ↗</a></span>
+              <span class="chip chip--gold">스타트업</span>
+              <span class="chip">VC</span>
+            </div>
+            <div class="ch-meta">
+              <div class="ch-meta__item"><span class="ch-meta__label">분야</span><span class="ch-meta__value">스타트업·창업</span></div>
+              <div class="ch-meta__item"><span class="ch-meta__label">발행</span><span class="ch-meta__value">일간</span></div>
+              <div class="ch-meta__item"><span class="ch-meta__label">설립</span><span class="ch-meta__value">2019.02.27</span></div>
+              <div class="ch-meta__item"><span class="ch-meta__label">등록</span><span class="ch-meta__value">서울 아 52186</span></div>
+            </div>
+            <p class="text-secondary" style="font-size:var(--fs-sm);">
+              <strong style="color:var(--text-primary)">독자</strong> — 창업가·CEO, VC·액셀러레이터, 중기부·창업진흥원, 대기업 신사업.
+            </p>
+            <strong style="color:var(--gold-300); font-size:var(--fs-xs); letter-spacing:0.1em; text-transform:uppercase;">주요 섹션</strong>
+            <div class="ch-sample mt-2"><span class="ch-sample__bullet">▸</span><div><strong>스타트업</strong>출시 · 성과·지표 · 엑싯·투자</div></div>
+            <div class="ch-sample"><span class="ch-sample__bullet">▸</span><div><strong>업계동향 · 정책·지원사업</strong>중기부 모니터</div></div>
+            <div class="ch-sample"><span class="ch-sample__bullet">▸</span><div><strong>인터뷰 · 오피니언</strong>창업가 단독</div></div>
+            <div class="pub-info mt-3">
+              <span>📰</span><div><strong>(주)비즈뷰</strong> 자매지 · 발행·편집인 이경식</div>
+            </div>
+          </div>
+        </article>
+
+        <!-- ④ 한국M&A경제신문 -->
+        <article class="ch-card" data-reveal>
+          <div class="ch-card__head">
+            <div class="ch-card__num">04</div>
+            <div class="ch-card__title">한국M&amp;A경제신문</div>
+            <div class="ch-card__sub">Korea M&amp;A Business News (KMNA)</div>
+          </div>
+          <div class="ch-card__body">
+            <div class="ch-tag-row">
+              <span class="domain-row"><a href="https://www.kmnanews.com/" target="_blank" rel="noopener">kmnanews.com ↗</a></span>
+              <span class="chip chip--gold">M&amp;A</span>
+              <span class="chip">IPO</span>
+            </div>
+            <div class="ch-meta">
+              <div class="ch-meta__item"><span class="ch-meta__label">분야</span><span class="ch-meta__value">M&amp;A·자본시장</span></div>
+              <div class="ch-meta__item"><span class="ch-meta__label">발행</span><span class="ch-meta__value">일간</span></div>
+              <div class="ch-meta__item"><span class="ch-meta__label">설립</span><span class="ch-meta__value">2019.02.27</span></div>
+              <div class="ch-meta__item"><span class="ch-meta__label">등록</span><span class="ch-meta__value">서울 아 52183</span></div>
+            </div>
+            <p class="text-secondary" style="font-size:var(--fs-sm);">
+              <strong style="color:var(--text-primary)">독자</strong> — IB·법무·회계 M&amp;A팀, 사모펀드(PEF)·VC, 상장사 IR, 자본시장 정책.
+            </p>
+            <strong style="color:var(--gold-300); font-size:var(--fs-xs); letter-spacing:0.1em; text-transform:uppercase;">주요 섹션</strong>
+            <div class="ch-sample mt-2"><span class="ch-sample__bullet">▸</span><div><strong>M&amp;A 포커스</strong>국내 단독 거래</div></div>
+            <div class="ch-sample"><span class="ch-sample__bullet">▸</span><div><strong>투자·IPO</strong>상장 추진 · 라운드 분석</div></div>
+            <div class="ch-sample"><span class="ch-sample__bullet">▸</span><div><strong>글로벌</strong>크로스보더 M&amp;A</div></div>
+            <div class="pub-info mt-3">
+              <span>📰</span><div><strong>(주)채널더블유</strong> 발행 · 회장 김규옥 · 발행·편집인 이철</div>
+            </div>
+          </div>
+        </article>
+
+        <!-- ⑤ 디펜스투데이 -->
+        <article class="ch-card" data-reveal>
+          <div class="ch-card__head">
+            <div class="ch-card__num">05</div>
+            <div class="ch-card__title">디펜스투데이</div>
+            <div class="ch-card__sub">DefenseToday</div>
+          </div>
+          <div class="ch-card__body">
+            <div class="ch-tag-row">
+              <span class="domain-row"><a href="https://www.defensetoday.kr/" target="_blank" rel="noopener">defensetoday.kr ↗</a></span>
+              <span class="chip chip--gold">K-방산</span>
+              <span class="chip">국방</span>
+            </div>
+            <div class="ch-meta">
+              <div class="ch-meta__item"><span class="ch-meta__label">분야</span><span class="ch-meta__value">방위산업·국방</span></div>
+              <div class="ch-meta__item"><span class="ch-meta__label">발행</span><span class="ch-meta__value">일간</span></div>
+              <div class="ch-meta__item"><span class="ch-meta__label">설립</span><span class="ch-meta__value">2019.03.16</span></div>
+              <div class="ch-meta__item"><span class="ch-meta__label">등록</span><span class="ch-meta__value">서울 아 52216</span></div>
+            </div>
+            <p class="text-secondary" style="font-size:var(--fs-sm);">
+              <strong style="color:var(--text-primary)">독자</strong> — 방산 임원·해외영업, 군 관계자, 국방부·방사청, 안보 연구자.
+              <strong style="color:var(--gold-300);">K-방산 수출 권위 매체</strong>.
+            </p>
+            <strong style="color:var(--gold-300); font-size:var(--fs-xs); letter-spacing:0.1em; text-transform:uppercase;">주요 섹션</strong>
+            <div class="ch-sample mt-2"><span class="ch-sample__bullet">▸</span><div><strong>K방산 뉴스</strong>한화·LIG·KAI·현대로템</div></div>
+            <div class="ch-sample"><span class="ch-sample__bullet">▸</span><div><strong>밀리터리</strong>국내·해외 군사 동향</div></div>
+            <div class="ch-sample"><span class="ch-sample__bullet">▸</span><div><strong>한국군 병기</strong>K-2 · K-9 · KF-21 데이터</div></div>
+            <div class="pub-info mt-3">
+              <span>📰</span><div><strong>(주)비즈뷰</strong> 자매지</div>
+            </div>
+          </div>
+        </article>
+
+        <!-- ⑥ 월간지방세연구 (NEW) -->
+        <article class="ch-card" data-reveal style="border-color: rgba(192,132,252,0.30);">
+          <div class="ch-card__head" style="background: linear-gradient(135deg, rgba(192,132,252,0.10), transparent);">
+            <div class="ch-card__num" style="background: linear-gradient(135deg, #c084fc, var(--gold-700)); -webkit-background-clip:text; background-clip:text;">06</div>
+            <div class="ch-card__title">월간지방세연구 <span style="font-size:11px; padding:2px 8px; background:rgba(192,132,252,0.15); color:#c084fc; border-radius:var(--r-full); margin-left:6px; font-weight:600; vertical-align:middle;">NEW</span></div>
+            <div class="ch-card__sub" style="color:#c084fc;">Local Tax Research · 지방세 전문 권위</div>
+          </div>
+          <div class="ch-card__body">
+            <div class="ch-tag-row">
+              <span class="domain-row"><a href="https://www.localtaxresearch.com/" target="_blank" rel="noopener">localtaxresearch.com ↗</a></span>
+              <span class="chip" style="background:rgba(192,132,252,0.10); color:#c084fc; border-color:rgba(192,132,252,0.30);">지방세</span>
+              <span class="chip">조세·세무</span>
+              <span class="chip">판례</span>
+            </div>
+            <div class="ch-meta">
+              <div class="ch-meta__item"><span class="ch-meta__label">분야</span><span class="ch-meta__value">지방세·조세</span></div>
+              <div class="ch-meta__item"><span class="ch-meta__label">발행</span><span class="ch-meta__value">월간</span></div>
+              <div class="ch-meta__item"><span class="ch-meta__label">설립</span><span class="ch-meta__value">2009.04.06</span></div>
+              <div class="ch-meta__item"><span class="ch-meta__label">등록</span><span class="ch-meta__value">성동 라 00032</span></div>
+            </div>
+            <p class="text-secondary" style="font-size:var(--fs-sm);">
+              <strong style="color:var(--text-primary)">독자</strong> — 지자체 세무 공무원, 회계사·세무사, 부동산 실무자, 조세 정책 연구자.
+              <strong style="color:#c084fc;">선명회계법인 본업과 직접 시너지</strong>.
+            </p>
+            <strong style="color:#c084fc; font-size:var(--fs-xs); letter-spacing:0.1em; text-transform:uppercase;">주요 섹션</strong>
+            <div class="ch-sample mt-2"><span class="ch-sample__bullet" style="color:#c084fc;">▸</span><div><strong>판례분석 · 유권해석</strong>지방세 분쟁·해석 사례</div></div>
+            <div class="ch-sample"><span class="ch-sample__bullet" style="color:#c084fc;">▸</span><div><strong>법령개정</strong>지방세법·시행령 모니터</div></div>
+            <div class="ch-sample"><span class="ch-sample__bullet" style="color:#c084fc;">▸</span><div><strong>전문가 칼럼</strong>지자체·회계사·세무사 1차 의견</div></div>
+            <div class="ch-sample"><span class="ch-sample__bullet" style="color:#c084fc;">▸</span><div><strong>부동산 정보 · 상담사례</strong>실무 적용 가이드</div></div>
+            <div class="pub-info mt-3" style="border-left-color:#c084fc;">
+              <span>📜</span><div><strong>한국지방세연구회(주)</strong> 발행 · 발행·편집인 김의효 · 슬로건 "신뢰받는 조세문화 정착"</div>
+            </div>
+          </div>
+        </article>
+
+      </div>
+
+      <!-- Hub Card (Full Width) -->
+      <article class="ch-card mt-6" data-reveal style="background:linear-gradient(135deg, var(--glass-gold), var(--glass-blue)); border-color:var(--border-gold);">
+        <div class="ch-card__body" style="padding: var(--s-7);">
+          <div class="row" style="justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:var(--s-5);">
+            <div style="max-width:680px;">
+              <div class="ch-card__num" style="font-size: 64px; background: linear-gradient(135deg, var(--gold-300), var(--blue-500)); -webkit-background-clip:text; background-clip:text;">∞</div>
+              <div class="ch-card__title" style="font-size: var(--fs-2xl);">Insight Bank Hub</div>
+              <div class="ch-card__sub" style="margin-top:4px;">한국 산업·자본·조세 6대 매체 통합 운영체</div>
+              <p class="text-secondary mt-4" style="font-size:var(--fs-sm);">
+                6개 매체는 <strong style="color:var(--text-primary);">바이오 · ICT/방송 · 스타트업 · M&amp;A · 방산 · 지방세</strong> —
+                한국 신성장 산업 + 자본시장 + 조세를 모두 커버합니다.
+                개별로 흩어져 있을 때는 약한 신호 6개이지만, 하나의 허브로 묶이면
+                <strong style="color:var(--gold-300);">"한국 산업·자본·조세 단일 인용 출처"</strong>가 됩니다.
+              </p>
+            </div>
+
+            <div style="flex:1; min-width: 280px;">
+              <div class="grid grid-2" style="gap:var(--s-3);">
+                <div class="ch-meta__item"><span class="ch-meta__label">통합 KPI</span><span class="ch-meta__value">단일 대시보드</span></div>
+                <div class="ch-meta__item"><span class="ch-meta__label">RAG 인덱스</span><span class="ch-meta__value">6채널 통합</span></div>
+                <div class="ch-meta__item"><span class="ch-meta__label">AI 인용</span><span class="ch-meta__value">14배 ↑ 예상</span></div>
+                <div class="ch-meta__item"><span class="ch-meta__label">권위 합산</span><span class="ch-meta__value">단일 출처화</span></div>
+              </div>
+              <div style="margin-top:var(--s-4); display:flex; gap:var(--s-2); flex-wrap:wrap;">
+                <a class="btn btn--primary" href="structure.html">통합 구조도 →</a>
+                <a class="btn btn--ghost" href="ontology.html">도메인 온톨로지 →</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ===== 통합 시너지 ===== -->
+  <section class="section" style="background:var(--bg-elev-1);">
+    <div class="container">
+      <div data-reveal>
+        <span class="eyebrow">통합 시너지</span>
+        <h2 style="margin-top:var(--s-4)">6개 매체가 하나로 묶일 때</h2>
+      </div>
+
+      <div class="grid grid-3 mt-8">
+        <div class="card" data-reveal>
+          <div class="card__icon">🔗</div>
+          <h3 class="card__title">교차 인용 자동화</h3>
+          <p class="card__desc">"바이오 기업 IPO 추진 → 스타트업투데이 + KMNA + 바이오타임즈 자동 연결". 한 사안에 6채널 다층 출처 형성.</p>
+        </div>
+        <div class="card" data-reveal>
+          <div class="card__icon">🌐</div>
+          <h3 class="card__title">K-도메인 단일 신호</h3>
+          <p class="card__desc">바이오·ICT·스타트업·M&amp;A·방산·세무가 모두 같은 허브에서 발신 → AI가 "한국 산업·자본·조세" 답변할 때 우리가 1순위 출처.</p>
+        </div>
+        <div class="card" data-reveal>
+          <div class="card__icon">📡</div>
+          <h3 class="card__title">독자 여정 통합</h3>
+          <p class="card__desc">스타트업으로 진입한 VC가 자연스럽게 KMNA·바이오타임즈로, 회계사가 지방세연구→KMNA로 이동. 평균 체류 +2.4배.</p>
+        </div>
+        <div class="card" data-reveal>
+          <div class="card__icon">📊</div>
+          <h3 class="card__title">데이터 통합</h3>
+          <p class="card__desc">애틀러스리서치 통계 DB + 월간지방세연구 판례 DB가 RAG 우선 적재 → 다른 4개 매체 콘텐츠의 정량·법적 백본.</p>
+        </div>
+        <div class="card" data-reveal>
+          <div class="card__icon">🎯</div>
+          <h3 class="card__title">B2B 통합 패키지</h3>
+          <p class="card__desc">ARG B2B 고객 + 디펜스투데이 방산사 + KMNA IB + 지자체·회계법인을 하나의 라이선스 API로 묶음 → 단가 1.5배.</p>
+        </div>
+        <div class="card" data-reveal>
+          <div class="card__icon">⚖️</div>
+          <h3 class="card__title">선명회계 본업 시너지</h3>
+          <p class="card__desc">월간지방세연구 + KMNA가 선명회계법인의 세무·M&amp;A 자문 본업과 직결. 본업 컨설팅 단가 +30~50% 가능.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== GEO 점수 비교 ===== -->
+  <section class="section">
+    <div class="container">
+      <div data-reveal>
+        <span class="eyebrow">GEO 잠재력</span>
+        <h2 style="margin-top:var(--s-4)">매체별 AI 인용 잠재 점수</h2>
+      </div>
+
+      <div class="card mt-6" data-reveal style="padding:var(--s-5);">
+        <div style="display: grid; gap: var(--s-4);">
+          <div>
+            <div class="row" style="justify-content:space-between; align-items:baseline; margin-bottom:6px;">
+              <strong style="color:var(--text-primary);">02 · 애틀러스리서치 (ARG)</strong>
+              <span style="font-family:'Noto Serif KR',serif; color:var(--gold-300); font-weight:700; font-size:var(--fs-md);">95점</span>
+            </div>
+            <div style="height:8px; background: var(--bg-elev-2); border-radius:4px; overflow:hidden;">
+              <div style="height:100%; width:95%; background: linear-gradient(90deg, var(--gold-500), var(--gold-300)); border-radius:4px;"></div>
+            </div>
+            <p class="text-muted mt-2 mb-0" style="font-size:var(--fs-xs);">정형 통계 DB · 1차 데이터 → AI가 정량 답변에 우선 인용</p>
+          </div>
+          <div>
+            <div class="row" style="justify-content:space-between; align-items:baseline; margin-bottom:6px;">
+              <strong style="color:var(--text-primary);">06 · 월간지방세연구</strong>
+              <span style="font-family:'Noto Serif KR',serif; color:#c084fc; font-weight:700; font-size:var(--fs-md);">94점</span>
+            </div>
+            <div style="height:8px; background: var(--bg-elev-2); border-radius:4px; overflow:hidden;">
+              <div style="height:100%; width:94%; background: linear-gradient(90deg, #c084fc, var(--gold-300)); border-radius:4px;"></div>
+            </div>
+            <p class="text-muted mt-2 mb-0" style="font-size:var(--fs-xs);">15년+ 판례 아카이브 · 1차 유권해석 → 조세 영역 절대 권위</p>
+          </div>
+          <div>
+            <div class="row" style="justify-content:space-between; align-items:baseline; margin-bottom:6px;">
+              <strong style="color:var(--text-primary);">04 · 한국M&amp;A경제신문</strong>
+              <span style="font-family:'Noto Serif KR',serif; color:var(--gold-300); font-weight:700; font-size:var(--fs-md);">92점</span>
+            </div>
+            <div style="height:8px; background: var(--bg-elev-2); border-radius:4px; overflow:hidden;">
+              <div style="height:100%; width:92%; background: linear-gradient(90deg, var(--gold-500), var(--gold-300)); border-radius:4px;"></div>
+            </div>
+            <p class="text-muted mt-2 mb-0" style="font-size:var(--fs-xs);">단독 거래 정보 · 시의성 → 자본시장 답변 1순위</p>
+          </div>
+          <div>
+            <div class="row" style="justify-content:space-between; align-items:baseline; margin-bottom:6px;">
+              <strong style="color:var(--text-primary);">05 · 디펜스투데이</strong>
+              <span style="font-family:'Noto Serif KR',serif; color:var(--gold-300); font-weight:700; font-size:var(--fs-md);">90점</span>
+            </div>
+            <div style="height:8px; background: var(--bg-elev-2); border-radius:4px; overflow:hidden;">
+              <div style="height:100%; width:90%; background: linear-gradient(90deg, var(--gold-500), var(--gold-300)); border-radius:4px;"></div>
+            </div>
+            <p class="text-muted mt-2 mb-0" style="font-size:var(--fs-xs);">K-방산 글로벌 관심 ↑ · 영문 인용 잠재력 최상</p>
+          </div>
+          <div>
+            <div class="row" style="justify-content:space-between; align-items:baseline; margin-bottom:6px;">
+              <strong style="color:var(--text-primary);">01 · 바이오타임즈</strong>
+              <span style="font-family:'Noto Serif KR',serif; color:var(--gold-300); font-weight:700; font-size:var(--fs-md);">88점</span>
+            </div>
+            <div style="height:8px; background: var(--bg-elev-2); border-radius:4px; overflow:hidden;">
+              <div style="height:100%; width:88%; background: linear-gradient(90deg, var(--gold-500), var(--gold-300)); border-radius:4px;"></div>
+            </div>
+            <p class="text-muted mt-2 mb-0" style="font-size:var(--fs-xs);">임상·신약 정보 · IPO 추적 → 헬스케어 핵심 출처</p>
+          </div>
+          <div>
+            <div class="row" style="justify-content:space-between; align-items:baseline; margin-bottom:6px;">
+              <strong style="color:var(--text-primary);">03 · 스타트업투데이</strong>
+              <span style="font-family:'Noto Serif KR',serif; color:var(--gold-300); font-weight:700; font-size:var(--fs-md);">82점</span>
+            </div>
+            <div style="height:8px; background: var(--bg-elev-2); border-radius:4px; overflow:hidden;">
+              <div style="height:100%; width:82%; background: linear-gradient(90deg, var(--gold-500), var(--gold-300)); border-radius:4px;"></div>
+            </div>
+            <p class="text-muted mt-2 mb-0" style="font-size:var(--fs-xs);">투자 라운드 강세 · 인터뷰 기반 → 출처 자동화 보강 시 +10점</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CTA ===== -->
+  <section class="section">
+    <div class="container">
+      <div class="card" data-reveal style="background:var(--glass-gold); border-color:var(--border-gold); padding:var(--s-6);">
+        <div class="row" style="justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:var(--s-4);">
+          <div style="max-width: 720px;">
+            <span class="chip chip--gold">다음 단계</span>
+            <h3 style="margin: var(--s-3) 0 var(--s-2);">실 통합 데이터로 갱신</h3>
+            <p class="mb-0" style="color:var(--text-secondary);">
+              본 페이지는 6개 매체 공개 정보 기반입니다.
+              실제 통합 시 <strong style="color:var(--text-primary);">월간 발행량·UV·트래픽·기존 광고/구독 매출</strong>을
+              매체별로 받아 모든 KPI·매출 추정을 정밀화합니다.
+            </p>
+          </div>
+          <div class="row gap-2">
+            <a class="btn btn--primary" href="proposal.html">제안서 보기</a>
+            <a class="btn btn--ghost" href="monetization.html">수익 모델</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="footer__cta-strip">
+      <div class="container">
+        <div class="row" style="justify-content:space-between; align-items:center; flex-wrap:wrap; gap:var(--s-4);">
+          <div>
+            <h3>한국 산업·자본·조세 6대 매체의 권위, 하나의 인사이트 뱅크 허브로</h3>
+            <p>제안서 검토부터 시작하시거나, 데모 모듈을 둘러보세요.</p>
+          </div>
+          <div class="row gap-2">
+            <a class="btn btn--primary" href="proposal.html">제안서 보기</a>
+            <a class="btn btn--ghost" href="dashboard.html">데모 대시보드</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer__main">
+      <div class="container">
+        <div class="footer__grid">
+          <div class="footer__brand-col">
+            <img src="assets/logo.svg" alt="Insight Bank Hub" />
+            <p class="footer__tagline">바이오·ICT·스타트업·M&amp;A·방산·지방세 — 한국 산업·자본·조세 6대 매체 통합 GEO-AIO 싱크탱크.</p>
+            <div class="footer__langs">🇰🇷 🇺🇸 🇨🇳 🇯🇵 🇪🇸 🇫🇷 🇩🇪 🇸🇦</div>
+            <div class="footer__social">
+              <a href="#" aria-label="X / Twitter"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+              <a href="#" aria-label="LinkedIn"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67h-3.55V9h3.41v1.56h.05c.48-.9 1.65-1.85 3.4-1.85 3.64 0 4.31 2.4 4.31 5.51zM5.34 7.43A2.06 2.06 0 113.28 5.37a2.06 2.06 0 012.06 2.06zm-1.78 13.02h3.56V9H3.56zM22.23 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.46c.98 0 1.77-.77 1.77-1.72V1.72C24 .77 23.21 0 22.23 0z"/></svg></a>
+              <a href="#" aria-label="YouTube"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M23.5 6.5c-.3-1-1-1.8-2-2C19.7 4 12 4 12 4s-7.7 0-9.5.5c-1 .2-1.7 1-2 2C0 8.3 0 12 0 12s0 3.7.5 5.5c.3 1 1 1.8 2 2C4.3 20 12 20 12 20s7.7 0 9.5-.5c1-.2 1.7-1 2-2 .5-1.8.5-5.5.5-5.5s0-3.7-.5-5.5zM9.5 15.5v-7l6 3.5z"/></svg></a>
+              <a href="#" aria-label="RSS"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M4 4v3a14 14 0 0114 14h3A17 17 0 004 4zm0 6v3a8 8 0 018 8h3a11 11 0 00-11-11zm2.5 8a2.5 2.5 0 110 5 2.5 2.5 0 010-5z"/></svg></a>
+            </div>
+          </div>
+          <div class="footer__col">
+            <h5>플랫폼</h5>
+            <a href="dashboard.html">통합 대시보드</a>
+            <a href="content.html">콘텐츠 관리</a>
+            <a href="knowledge.html">RAG 지식베이스</a>
+            <a href="ontology.html">온톨로지</a>
+            <a href="graph-license.html">그래프 라이선스</a>
+            <a href="chatbot.html">RAG 챗봇</a>
+          </div>
+          <div class="footer__col">
+            <h5>자료</h5>
+            <a href="index.html">개요</a>
+            <a href="channels.html">6개 채널</a>
+            <a href="monetization.html">수익 모델</a>
+            <a href="proposal.html">계약 제안서</a>
+            <a href="manual.html">운영 매뉴얼</a>
+          </div>
+          <div class="footer__col">
+            <h5>연락처</h5>
+            <p>support@insightbankhub.kr</p>
+            <p>평일 09:00 – 18:00 KST</p>
+            <p>SLA 24/7 비상 라인</p>
+            <a href="proposal.html" class="btn btn--ghost btn--sm" style="margin-top:8px; display:inline-flex;">파트너 문의 →</a>
+          </div>
+        </div>
+
+        <hr class="footer__divider" />
+
+        <div class="footer__bottom">
+          <span>© 2026 Insight Bank Hub. All rights reserved.</span>
+          <div class="footer__legal">
+            <a href="#">이용약관</a>
+            <a href="#">개인정보처리방침</a>
+            <a href="#">llms.txt</a>
+            <span class="footer__seal">v1.0 · Confidential</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/common.js"></script>
+</body>
+</html>

@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0a0e1a" />
+  <title>비즈니스 모델 — Insight Bank Hub</title>
+  <meta name="description" content="9가지 수익 흐름 · Y1~Y3 매출 추정 · BEP · AI 인용 라이선스 + 그래프 라이선스 차별화" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="비즈니스 모델 — Insight Bank Hub" />
+  <meta property="og:image" content="assets/og-image.svg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;700;900&display=swap" />
+  <link rel="stylesheet" href="css/common.css" />
+  <style>
+    .stream-card {
+      background: var(--glass-100);
+      border: 1px solid var(--border-default);
+      border-radius: var(--r-lg);
+      padding: var(--s-5);
+      backdrop-filter: blur(14px) saturate(140%);
+      transition: all 0.25s var(--ease-out);
+      position: relative;
+      overflow: hidden;
+    }
+    @media (hover:hover) {
+      .stream-card:hover { transform: translateY(-3px); border-color: var(--border-gold); box-shadow: var(--shadow-md); }
+    }
+    .stream-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 3px;
+      opacity: 0.7;
+    }
+    .stream-card--ad::before { background: var(--gold-500); }
+    .stream-card--sub::before { background: var(--blue-500); }
+    .stream-card--api::before { background: linear-gradient(90deg, var(--gold-500), var(--blue-500)); }
+    .stream-card--cite::before { background: linear-gradient(90deg, var(--gold-300), var(--gold-700)); }
+    .stream-card--report::before { background: var(--success); }
+    .stream-card--event::before { background: var(--warning); }
+    .stream-card--consult::before { background: var(--danger); }
+    .stream-card--global::before { background: linear-gradient(90deg, var(--blue-500), var(--gold-500)); }
+    .stream-card--graph::before { background: linear-gradient(90deg, #c084fc, var(--blue-500), var(--gold-500)); height: 4px; }
+
+    .stream__title {
+      font-size: var(--fs-md);
+      font-weight: 700;
+      margin: 0 0 4px;
+      color: var(--text-primary);
+    }
+    .stream__sub { color: var(--gold-300); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; }
+    .stream__icon {
+      font-size: 32px;
+      margin-bottom: var(--s-3);
+    }
+    .stream__metrics {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--s-2);
+      margin-top: var(--s-4);
+      padding-top: var(--s-3);
+      border-top: 1px solid var(--border-subtle);
+    }
+    .stream__metric {
+      text-align: center;
+    }
+    .stream__metric strong {
+      display: block;
+      color: var(--gold-300);
+      font-family: 'Noto Serif KR', serif;
+      font-weight: 700;
+      font-size: var(--fs-md);
+    }
+    .stream__metric small {
+      color: var(--text-muted);
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .revenue-stack {
+      display: grid;
+      grid-template-columns: 80px 1fr;
+      gap: var(--s-3);
+      align-items: center;
+      padding: var(--s-3) 0;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .revenue-stack:last-child { border:none; }
+    .revenue-stack__year {
+      font-family: 'Noto Serif KR', serif;
+      font-weight: 700;
+      color: var(--gold-300);
+      font-size: var(--fs-md);
+    }
+    .stack-bar {
+      display: flex;
+      height: 32px;
+      border-radius: var(--r-sm);
+      overflow: hidden;
+      border: 1px solid var(--border-subtle);
+    }
+    .stack-seg {
+      display: grid; place-items: center;
+      color: rgba(255,255,255,0.92);
+      font-size: 11px;
+      font-weight: 700;
+      transition: opacity 0.18s;
+    }
+    .stack-seg:hover { opacity: 0.85; cursor: pointer; }
+
+    .funnel-stage {
+      padding: var(--s-4);
+      background: var(--bg-elev-2);
+      border-radius: var(--r-md);
+      margin-bottom: var(--s-3);
+      border-left: 3px solid var(--gold-500);
+    }
+    .funnel-stage h4 { color: var(--gold-300); margin-bottom: var(--s-2); }
+    .funnel-stage p { color: var(--text-secondary); font-size: var(--fs-sm); margin-bottom: var(--s-2); }
+
+    .price-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .price-table th, .price-table td {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border-subtle);
+      text-align: left;
+      font-size: var(--fs-sm);
+    }
+    .price-table th {
+      color: var(--gold-300);
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      background: var(--glass-100);
+    }
+    .price-table .num {
+      text-align: right;
+      font-family: 'Noto Serif KR', serif;
+      font-weight: 700;
+      color: var(--gold-300);
+    }
+    .tier-row td:first-child { font-weight: 600; color: var(--text-primary); }
+
+    .bep-card {
+      background: linear-gradient(135deg, var(--glass-gold), var(--glass-blue));
+      border: 1px solid var(--border-gold);
+      border-radius: var(--r-lg);
+      padding: var(--s-6);
+      backdrop-filter: blur(12px);
+    }
+
+    .market-tier {
+      text-align: center;
+      padding: var(--s-5);
+    }
+    .market-tier__circle {
+      display: grid; place-items: center;
+      width: 140px; height: 140px;
+      border-radius: 50%;
+      margin: 0 auto var(--s-3);
+      background: var(--glass-200);
+      border: 2px solid var(--border-default);
+    }
+    .market-tier--som .market-tier__circle {
+      background: var(--glass-gold);
+      border-color: var(--gold-500);
+      box-shadow: var(--shadow-gold);
+    }
+    .market-tier__amount {
+      font-family: 'Noto Serif KR', serif;
+      font-weight: 700;
+      font-size: var(--fs-xl);
+      color: var(--gold-300);
+    }
+    .market-tier__label {
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      margin-top: 4px;
+    }
+  </style>
+</head>
+<body>
+
+  <header class="header">
+    <div class="header__inner">
+      <a class="brand" href="index.html" aria-label="Insight Bank Hub"><img src="assets/logo.svg" alt="Insight Bank Hub" class="brand__logo" /></a>
+      <nav class="nav">
+        <a class="nav__link" href="index.html">개요</a>
+        <a class="nav__link" href="proposal.html">제안서</a>
+        <a class="nav__link" href="channels.html">6개 채널</a>
+        <a class="nav__link" href="monetization.html">수익 모델</a>
+        <a class="nav__link" href="ontology.html">온톨로지</a>
+        <a class="nav__link" href="structure.html">구조도</a>
+        <a class="nav__link" href="dashboard.html">대시보드</a>
+        <a class="nav__link" href="content.html">콘텐츠</a>
+        <a class="nav__link" href="knowledge.html">지식베이스</a>
+        <a class="nav__link" href="chatbot.html">챗봇</a>
+        <a class="nav__link" href="manual.html">매뉴얼</a>
+      </nav>
+      <button class="nav-toggle" aria-label="메뉴"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
+    </div>
+  </header>
+
+  <!-- ===== HERO ===== -->
+  <section class="hero" style="padding:80px 0 var(--s-6);">
+    <div class="container hero__inner">
+      <span class="eyebrow">Business Model</span>
+      <h1 class="display hero__title" style="font-size:clamp(36px,6vw,56px);">콘텐츠를 자산으로 · <span class="text-gradient">자산을 매출로</span></h1>
+      <p class="hero__sub">
+        9가지 수익 흐름 · 3년 누적 매출 88억 · BEP 17개월.
+        <strong style="color:var(--text-primary);">AI 인용 라이선스 + 그래프 라이선스</strong>로 이중 차별화된 비즈니스 모델.
+      </p>
+    </div>
+  </section>
+
+  <!-- ===== KPI ===== -->
+  <section class="section section--sm">
+    <div class="container">
+      <div class="grid grid-4" data-reveal>
+        <div class="stat card">
+          <div class="stat__value"><span data-count="88" data-suffix="억">88억</span></div>
+          <div class="stat__label">3년 누적 매출 (KRW)</div>
+        </div>
+        <div class="stat card">
+          <div class="stat__value"><span data-count="17" data-suffix="개월">17개월</span></div>
+          <div class="stat__label">BEP (Y2 H1)</div>
+        </div>
+        <div class="stat card">
+          <div class="stat__value"><span data-count="9">9</span></div>
+          <div class="stat__label">수익 흐름</div>
+        </div>
+        <div class="stat card">
+          <div class="stat__value"><span data-count="71" data-suffix="%">71%</span></div>
+          <div class="stat__label">Y3 영업이익률</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 8가지 수익 흐름 ===== -->
+  <section class="section">
+    <div class="container">
+      <div data-reveal>
+        <span class="eyebrow">Revenue Streams</span>
+        <h2 style="margin-top:var(--s-4)">9가지 수익 흐름</h2>
+        <p>전통 미디어의 광고 단일 의존을 넘어, 데이터·AI·라이선스 기반의 다층 수익 모델로 재설계합니다.</p>
+      </div>
+
+      <div class="grid grid-4 mt-8" style="gap:var(--s-4);">
+
+        <!-- 1. 디지털 광고 -->
+        <article class="stream-card stream-card--ad" data-reveal>
+          <div class="stream__icon">📢</div>
+          <span class="stream__sub">Stream 01</span>
+          <div class="stream__title">디지털 광고</div>
+          <p class="text-secondary mb-0" style="font-size:var(--fs-sm); margin-top:8px;">
+            6채널 통합 패키지로 광고 단가 상향. 프로그래매틱 + 네이티브 + 뉴스레터 스폰서.
+          </p>
+          <div class="stream__metrics">
+            <div class="stream__metric"><strong>~12억</strong><small>Y3 매출</small></div>
+            <div class="stream__metric"><strong>25%</strong><small>비중</small></div>
+            <div class="stream__metric"><strong>↑1.8x</strong><small>CPM</small></div>
+          </div>
+        </article>
+
+        <!-- 2. 프리미엄 구독 -->
+        <article class="stream-card stream-card--sub" data-reveal>
+          <div class="stream__icon">💎</div>
+          <span class="stream__sub">Stream 02</span>
+          <div class="stream__title">프리미엄 구독</div>
+          <p class="text-secondary mb-0" style="font-size:var(--fs-sm); margin-top:8px;">
+            개인 (월 19,900원) · 기업 (월 99,000원/seat). RAG 챗봇 무제한 + 리포트 무료.
+          </p>
+          <div class="stream__metrics">
+            <div class="stream__metric"><strong>~8억</strong><small>Y3 매출</small></div>
+            <div class="stream__metric"><strong>17%</strong><small>비중</small></div>
+            <div class="stream__metric"><strong>4,200</strong><small>유료 구독</small></div>
+          </div>
+        </article>
+
+        <!-- 3. B2B 데이터 API -->
+        <article class="stream-card stream-card--api" data-reveal>
+          <div class="stream__icon">⚙️</div>
+          <span class="stream__sub">Stream 03</span>
+          <div class="stream__title">B2B 데이터 API</div>
+          <p class="text-secondary mb-0" style="font-size:var(--fs-sm); margin-top:8px;">
+            기업 RAG 시스템에 통합 가능한 정형화 데이터 API. 종량제 + 월정액 혼합.
+          </p>
+          <div class="stream__metrics">
+            <div class="stream__metric"><strong>~14억</strong><small>Y3 매출</small></div>
+            <div class="stream__metric"><strong>29%</strong><small>비중</small></div>
+            <div class="stream__metric"><strong>180+</strong><small>B2B 고객</small></div>
+          </div>
+        </article>
+
+        <!-- 4. AI 인용 라이선스 -->
+        <article class="stream-card stream-card--cite" data-reveal style="background: linear-gradient(135deg, var(--glass-gold), var(--glass-100)); border-color: var(--border-gold);">
+          <div class="stream__icon">🏛️</div>
+          <span class="stream__sub" style="color:var(--gold-300);">Stream 04 · 차별화</span>
+          <div class="stream__title">AI 인용 라이선스</div>
+          <p class="text-secondary mb-0" style="font-size:var(--fs-sm); margin-top:8px;">
+            <strong style="color:var(--text-primary);">국내 최초.</strong> LLM 회사가 합법적으로 학습·인용 가능한 라이선스 패키지.
+          </p>
+          <div class="stream__metrics">
+            <div class="stream__metric"><strong>~9억</strong><small>Y3 매출</small></div>
+            <div class="stream__metric"><strong>19%</strong><small>비중</small></div>
+            <div class="stream__metric"><strong>OpenAI · Anthropic · Google · Naver</strong><small>잠재 고객</small></div>
+          </div>
+        </article>
+
+        <!-- 5. 리서치 리포트 -->
+        <article class="stream-card stream-card--report" data-reveal>
+          <div class="stream__icon">📊</div>
+          <span class="stream__sub">Stream 05</span>
+          <div class="stream__title">리서치 리포트 판매</div>
+          <p class="text-secondary mb-0" style="font-size:var(--fs-sm); margin-top:8px;">
+            분기별 산업·정책 심층 보고서 (50~100p). 건당 480,000원 ~ 2,800,000원.
+          </p>
+          <div class="stream__metrics">
+            <div class="stream__metric"><strong>~3억</strong><small>Y3 매출</small></div>
+            <div class="stream__metric"><strong>6%</strong><small>비중</small></div>
+            <div class="stream__metric"><strong>48편/년</strong><small>발행</small></div>
+          </div>
+        </article>
+
+        <!-- 6. 컨퍼런스 / 이벤트 -->
+        <article class="stream-card stream-card--event" data-reveal>
+          <div class="stream__icon">🎤</div>
+          <span class="stream__sub">Stream 06</span>
+          <div class="stream__title">컨퍼런스 · 이벤트</div>
+          <p class="text-secondary mb-0" style="font-size:var(--fs-sm); margin-top:8px;">
+            연 2회 플래그십 + 분기별 세미나. 스폰서 + 티켓 + VIP 라운드테이블.
+          </p>
+          <div class="stream__metrics">
+            <div class="stream__metric"><strong>~3억</strong><small>Y3 매출</small></div>
+            <div class="stream__metric"><strong>6%</strong><small>비중</small></div>
+            <div class="stream__metric"><strong>6회/년</strong><small>이벤트</small></div>
+          </div>
+        </article>
+
+        <!-- 7. 컨설팅 / 맞춤 분석 -->
+        <article class="stream-card stream-card--consult" data-reveal>
+          <div class="stream__icon">🤝</div>
+          <span class="stream__sub">Stream 07</span>
+          <div class="stream__title">컨설팅 · 맞춤 분석</div>
+          <p class="text-secondary mb-0" style="font-size:var(--fs-sm); margin-top:8px;">
+            기업 의사결정용 맞춤 데이터 분석 + 임원 브리핑. 선명회계 본업과 시너지.
+          </p>
+          <div class="stream__metrics">
+            <div class="stream__metric"><strong>~4억</strong><small>Y3 매출</small></div>
+            <div class="stream__metric"><strong>8%</strong><small>비중</small></div>
+            <div class="stream__metric"><strong>32건/년</strong><small>프로젝트</small></div>
+          </div>
+        </article>
+
+        <!-- 8. 글로벌 라이선스 -->
+        <article class="stream-card stream-card--global" data-reveal>
+          <div class="stream__icon">🌐</div>
+          <span class="stream__sub">Stream 08</span>
+          <div class="stream__title">글로벌 라이선스</div>
+          <p class="text-secondary mb-0" style="font-size:var(--fs-sm); margin-top:8px;">
+            영·중·일·아 등 8개 언어로 변환된 콘텐츠를 해외 매체·플랫폼에 라이선싱.
+          </p>
+          <div class="stream__metrics">
+            <div class="stream__metric"><strong>~5억</strong><small>Y3 매출</small></div>
+            <div class="stream__metric"><strong>9%</strong><small>비중</small></div>
+            <div class="stream__metric"><strong>8개 언어</strong><small>채널</small></div>
+          </div>
+        </article>
+
+        <!-- 9. 그래프 라이선스 (신규 · 차별화) -->
+        <article class="stream-card stream-card--graph" data-reveal style="background: linear-gradient(135deg, rgba(192,132,252,0.10), var(--glass-blue)); border-color: rgba(192,132,252,0.30); grid-column: span 2;">
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:var(--s-5);">
+            <div>
+              <div class="stream__icon">🕸️</div>
+              <span class="stream__sub" style="color:#c084fc;">Stream 09 · 신규 차별화</span>
+              <div class="stream__title">지식 그래프 라이선스 <span style="font-size:11px; padding:2px 8px; background:rgba(192,132,252,0.15); color:#c084fc; border-radius:var(--r-full); margin-left:6px; font-weight:600;">NEW</span></div>
+              <p class="text-secondary mb-0" style="font-size:var(--fs-sm); margin-top:8px;">
+                온톨로지 레이어가 가능케 하는 <strong style="color:var(--text-primary);">SPARQL 그래프 API</strong>.
+                <strong style="color:#c084fc;">6개 매체 결합 수직 그래프</strong> — 한 사건이 4~6개 매체에 걸쳐 시간순으로 추적.
+                기업 IR·법무법인·투자은행·정부가 1쿼리로 컨설턴트 1주일 작업을 대체.
+              </p>
+              <div style="margin-top:var(--s-3); padding:var(--s-3); background: rgba(192,132,252,0.08); border-left: 3px solid #c084fc; border-radius:var(--r-sm);">
+                <strong style="color:#c084fc; font-size:11px; letter-spacing:0.1em; text-transform:uppercase;">결정적 차별화</strong>
+                <p class="text-secondary mb-0 mt-1" style="font-size:var(--fs-xs);">
+                  단일 매체로는 흉내내기 불가. 6개 매체 결합 + 15년+ 아카이브 + FIBO/XBRL 호환은 진입 장벽 5년+.
+                </p>
+              </div>
+              <a href="graph-license.html" class="btn btn--ghost btn--sm" style="margin-top:var(--s-3); background:rgba(192,132,252,0.10); border-color:rgba(192,132,252,0.30); color:#c084fc;">전체 라이선스 설계 보기 →</a>
+              <div class="row gap-2 mt-3">
+                <span class="chip" style="background:rgba(192,132,252,0.10); color:#c084fc; border-color:rgba(192,132,252,0.30);">SPARQL</span>
+                <span class="chip" style="background:rgba(192,132,252,0.10); color:#c084fc; border-color:rgba(192,132,252,0.30);">FIBO 호환</span>
+                <span class="chip" style="background:rgba(192,132,252,0.10); color:#c084fc; border-color:rgba(192,132,252,0.30);">자동 추론</span>
+                <span class="chip" style="background:rgba(192,132,252,0.10); color:#c084fc; border-color:rgba(192,132,252,0.30);">6채널 결합</span>
+              </div>
+            </div>
+            <div>
+              <div style="background: var(--bg-elev-2); border-radius: var(--r-md); padding: var(--s-3); border:1px solid var(--border-subtle);">
+                <strong style="color:#c084fc; font-size:11px; letter-spacing:0.12em; text-transform:uppercase;">티어 가격 (연간)</strong>
+                <div style="display:grid; gap:var(--s-2); margin-top:var(--s-3);">
+                  <div class="row" style="justify-content:space-between;"><span class="text-secondary" style="font-size:var(--fs-sm);">Read-only Query</span><span style="font-family:'Noto Serif KR',serif; font-weight:700; color:var(--gold-300);">3,600만</span></div>
+                  <div class="row" style="justify-content:space-between;"><span class="text-secondary" style="font-size:var(--fs-sm);">Pro (추론 포함)</span><span style="font-family:'Noto Serif KR',serif; font-weight:700; color:var(--gold-300);">9,600만</span></div>
+                  <div class="row" style="justify-content:space-between;"><span class="text-secondary" style="font-size:var(--fs-sm);">Enterprise (전체 + 다국어)</span><span style="font-family:'Noto Serif KR',serif; font-weight:700; color:var(--gold-300);">2.8억</span></div>
+                  <div class="row" style="justify-content:space-between; padding-top:var(--s-2); border-top:1px solid var(--border-subtle);"><span style="color:#c084fc; font-size:var(--fs-sm);">LLM 학습 라이선스</span><span style="font-family:'Noto Serif KR',serif; font-weight:700; color:#c084fc;">5억+</span></div>
+                </div>
+              </div>
+              <div class="stream__metrics" style="margin-top:var(--s-3); padding-top:var(--s-3); border-top:1px solid var(--border-subtle);">
+                <div class="stream__metric"><strong>~7억</strong><small>Y3 매출</small></div>
+                <div class="stream__metric"><strong>13%</strong><small>비중</small></div>
+                <div class="stream__metric"><strong>~28건</strong><small>계약</small></div>
+              </div>
+            </div>
+          </div>
+        </article>
+
+      </div>
+
+      <div class="card mt-6" style="background:linear-gradient(135deg, rgba(192,132,252,0.08), var(--glass-gold)); border-color:rgba(192,132,252,0.30); padding:var(--s-5);" data-reveal>
+        <div class="row" style="justify-content:space-between; align-items:center; flex-wrap:wrap; gap:var(--s-4);">
+          <div>
+            <span class="chip" style="background:rgba(192,132,252,0.15); color:#c084fc; border-color:rgba(192,132,252,0.30);">왜 그래프 라이선스가 결정적인가</span>
+            <h3 style="margin: var(--s-3) 0 var(--s-2);">단일 투자 항목 중 ROI 최고</h3>
+            <p class="mb-0" style="color:var(--text-secondary); font-size:var(--fs-sm);">
+              Phase 2.5 온톨로지 1.8억 투자가 9번째 수익 흐름 (Y3 +7억) +
+              <strong style="color:var(--text-primary);">기존 8개 스트림 단가까지 상승</strong>시킵니다 (Stream 04 +60%, Stream 03 +40%).
+              3년 누적 추가 매출 약 +20억.
+            </p>
+          </div>
+          <a class="btn btn--primary" href="ontology.html">온톨로지 상세 →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 차별화 포인트: AI 인용 라이선스 ===== -->
+  <section class="section" style="background:var(--bg-elev-1);">
+    <div class="container">
+      <div class="grid grid-2" style="gap:var(--s-7); align-items:center;">
+        <div data-reveal>
+          <span class="eyebrow">차별화 모델</span>
+          <h2 style="margin-top:var(--s-4)">AI 인용 라이선스 — 국내 최초</h2>
+          <p>
+            ChatGPT·Claude·Gemini·Perplexity·Naver CueA가 학습·답변 시
+            <strong style="color:var(--text-primary);">합법적으로 인용할 수 있는 출처</strong>를 패키지로 라이선싱하는 모델입니다.
+            저작권 분쟁이 본격화되는 글로벌 추세에서, 한국에서 가장 먼저 합법적 공급선이 됩니다.
+          </p>
+          <div class="card mt-5" style="background: var(--glass-gold); border-color: var(--border-gold); padding:var(--s-4);">
+            <strong style="color:var(--gold-300);">핵심 가치 제안</strong>
+            <p class="mt-2 mb-0" style="font-size:var(--fs-sm);">
+              <strong style="color:var(--text-primary);">AI 회사</strong>는 무단 학습 리스크 제거,
+              <strong style="color:var(--text-primary);">우리</strong>는 새로운 매출 확보 — 양측이 모두 승리하는 구조.
+            </p>
+          </div>
+        </div>
+
+        <div data-reveal>
+          <div class="card" style="padding:0; overflow:hidden;">
+            <div style="padding:var(--s-4); border-bottom:1px solid var(--border-subtle);">
+              <strong style="color:var(--gold-300);">가격 구조</strong>
+              <p class="text-muted mb-0" style="font-size:var(--fs-xs);">단위: KRW · VAT 별도 · 연간 계약 기준</p>
+            </div>
+            <table class="price-table">
+              <thead>
+                <tr><th>티어</th><th>대상</th><th class="num" style="text-align:right;">연간</th></tr>
+              </thead>
+              <tbody>
+                <tr class="tier-row"><td>Starter</td><td class="text-secondary">RAG 검색만 / 인용 표시</td><td class="num">2,400만</td></tr>
+                <tr class="tier-row"><td>Pro</td><td class="text-secondary">학습 + 인용 / 분기 갱신</td><td class="num">7,200만</td></tr>
+                <tr class="tier-row"><td>Enterprise</td><td class="text-secondary">전체 콘텐츠 + 8개 언어</td><td class="num">2.4억</td></tr>
+                <tr class="tier-row" style="background:var(--glass-gold);"><td style="color:var(--gold-300);">Strategic</td><td class="text-secondary">전체 + 우선 공급 + 컨설팅</td><td class="num" style="color:var(--gold-300);">5억+</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 매출 추정 (Y1~Y3) ===== -->
+  <section class="section">
+    <div class="container">
+      <div data-reveal>
+        <span class="eyebrow">Revenue Forecast</span>
+        <h2 style="margin-top:var(--s-4)">3개년 매출 추정</h2>
+        <p>각 수익 흐름의 누적 발달 곡선. Y2부터 B2B/AI 라이선스가 본격 가동.</p>
+      </div>
+
+      <div class="card mt-6" style="padding:var(--s-5);" data-reveal>
+        <div class="revenue-stack">
+          <div class="revenue-stack__year">Y1 · 8억</div>
+          <div class="stack-bar">
+            <div class="stack-seg" style="width:62%; background:#b8864e;">광고 5억</div>
+            <div class="stack-seg" style="width:25%; background:#2c6fc2;">구독 2억</div>
+            <div class="stack-seg" style="width:13%; background:#4ade80;">기타 1억</div>
+          </div>
+        </div>
+
+        <div class="revenue-stack">
+          <div class="revenue-stack__year">Y2 · 25억</div>
+          <div class="stack-bar">
+            <div class="stack-seg" style="width:32%; background:#b8864e;">광고 8억</div>
+            <div class="stack-seg" style="width:16%; background:#2c6fc2;">구독 4억</div>
+            <div class="stack-seg" style="width:24%; background:#4a90e2;">B2B API 6억</div>
+            <div class="stack-seg" style="width:16%; background:#d4a574;">AI 인용 4억</div>
+            <div class="stack-seg" style="width:8%; background:#c084fc;">그래프 2억</div>
+            <div class="stack-seg" style="width:4%; background:#4ade80;">기타 1억</div>
+          </div>
+        </div>
+
+        <div class="revenue-stack">
+          <div class="revenue-stack__year">Y3 · 55억</div>
+          <div class="stack-bar">
+            <div class="stack-seg" style="width:22%; background:#b8864e;">광고 12억</div>
+            <div class="stack-seg" style="width:15%; background:#2c6fc2;">구독 8억</div>
+            <div class="stack-seg" style="width:25%; background:#4a90e2;">B2B API 14억</div>
+            <div class="stack-seg" style="width:20%; background:#d4a574;">AI 인용 11억</div>
+            <div class="stack-seg" style="width:13%; background:#c084fc;">그래프 7억</div>
+            <div class="stack-seg" style="width:5%; background:#7eb6f5;">기타 3억</div>
+          </div>
+        </div>
+
+        <p class="text-muted mt-4 mb-0" style="font-size:var(--fs-xs);">
+          * Phase 2.5 온톨로지 도입 효과 반영: <strong style="color:#c084fc;">그래프 라이선스 신규 +7억</strong> + AI 인용 단가 상승 +2억 + B2B 단가 상승. 3년 누적 88억.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== BEP & ROI ===== -->
+  <section class="section" style="background:var(--bg-elev-1);">
+    <div class="container">
+      <div class="grid grid-2" style="gap:var(--s-5);">
+        <div class="bep-card" data-reveal>
+          <span class="chip chip--gold">BEP 분석</span>
+          <h3 style="margin: var(--s-3) 0 var(--s-4);">손익분기점</h3>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--s-3);">
+            <div class="card" style="padding:var(--s-3); background:var(--bg-elev-2);">
+              <small class="text-muted" style="font-size:10px; letter-spacing:0.1em;">Y1 투자</small>
+              <strong style="display:block; color:var(--gold-300); font-family:'Noto Serif KR',serif; font-size:var(--fs-lg); margin-top:4px;">14.24억</strong>
+            </div>
+            <div class="card" style="padding:var(--s-3); background:var(--bg-elev-2);">
+              <small class="text-muted" style="font-size:10px; letter-spacing:0.1em;">Y1 매출</small>
+              <strong style="display:block; color:var(--text-primary); font-family:'Noto Serif KR',serif; font-size:var(--fs-lg); margin-top:4px;">8억</strong>
+            </div>
+            <div class="card" style="padding:var(--s-3); background:var(--bg-elev-2);">
+              <small class="text-muted" style="font-size:10px; letter-spacing:0.1em;">Y2 누적 매출</small>
+              <strong style="display:block; color:var(--text-primary); font-family:'Noto Serif KR',serif; font-size:var(--fs-lg); margin-top:4px;">33억</strong>
+            </div>
+            <div class="card" style="padding:var(--s-3); background:var(--bg-elev-2);">
+              <small class="text-muted" style="font-size:10px; letter-spacing:0.1em;">BEP 도달</small>
+              <strong style="display:block; color:var(--gold-300); font-family:'Noto Serif KR',serif; font-size:var(--fs-lg); margin-top:4px;">Y2 H1 (M17)</strong>
+            </div>
+          </div>
+
+          <p class="text-secondary mt-4 mb-0" style="font-size:var(--fs-sm);">
+            Y3 누적 매출 88억 ÷ 누적 비용 약 44억 → <strong style="color:var(--gold-300);">3년 ROI 100%</strong>
+            <br/><span class="text-muted" style="font-size:var(--fs-xs);">* 온톨로지 1.8억 추가 투자가 +20억 매출 기여 — 단일 항목 ROI ≈ 1,000%</span>
+          </p>
+        </div>
+
+        <div data-reveal>
+          <h3>단위 경제 (Unit Economics)</h3>
+          <div class="card mt-4" style="padding:0; overflow:hidden;">
+            <table class="price-table">
+              <thead><tr><th>지표</th><th class="num" style="text-align:right;">값</th></tr></thead>
+              <tbody>
+                <tr><td>유료 구독자 ARPU</td><td class="num">월 26,000원</td></tr>
+                <tr><td>구독자 LTV (24M)</td><td class="num">624,000원</td></tr>
+                <tr><td>CAC (구독)</td><td class="num">68,000원</td></tr>
+                <tr><td>LTV / CAC</td><td class="num" style="color:var(--success);">9.2x</td></tr>
+                <tr><td>B2B API ARR (평균)</td><td class="num">월 320만원</td></tr>
+                <tr><td>B2B 이탈률 (월)</td><td class="num">2.8%</td></tr>
+                <tr><td>AI 라이선스 평균 ACV</td><td class="num">1.8억/년</td></tr>
+                <tr><td>그래프 라이선스 평균 ACV</td><td class="num" style="color:#c084fc;">2.5억/년</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 시장 규모 (TAM/SAM/SOM) ===== -->
+  <section class="section">
+    <div class="container">
+      <div data-reveal>
+        <span class="eyebrow">Market Size</span>
+        <h2 style="margin-top:var(--s-4)">시장 규모 (TAM / SAM / SOM)</h2>
+        <p>국내 미디어·B2B 데이터·AI 라이선스 시장의 합산 규모.</p>
+      </div>
+
+      <div class="grid grid-3 mt-8">
+        <div class="market-tier" data-reveal>
+          <div class="market-tier__circle" style="width:180px; height:180px;">
+            <div>
+              <div class="market-tier__amount" style="font-size:var(--fs-xl);">2.4조</div>
+              <div class="market-tier__label">TAM</div>
+            </div>
+          </div>
+          <h4>전체 시장</h4>
+          <p class="text-secondary" style="font-size:var(--fs-sm);">국내 디지털 미디어 + B2B 데이터 + AI 라이선스 합산</p>
+        </div>
+
+        <div class="market-tier" data-reveal>
+          <div class="market-tier__circle" style="width:140px; height:140px;">
+            <div>
+              <div class="market-tier__amount">3,200억</div>
+              <div class="market-tier__label">SAM</div>
+            </div>
+          </div>
+          <h4>유효 시장</h4>
+          <p class="text-secondary" style="font-size:var(--fs-sm);">전문 콘텐츠 (회계·세무·정책·기업) 영역 한정</p>
+        </div>
+
+        <div class="market-tier market-tier--som" data-reveal>
+          <div class="market-tier__circle">
+            <div>
+              <div class="market-tier__amount">120억</div>
+              <div class="market-tier__label">SOM (3년)</div>
+            </div>
+          </div>
+          <h4>달성 가능 시장</h4>
+          <p class="text-secondary" style="font-size:var(--fs-sm);">3.7% 점유 → 78억 매출 달성 가능 영역</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 단계별 활성화 ===== -->
+  <section class="section" style="background:var(--bg-elev-1);">
+    <div class="container">
+      <div data-reveal>
+        <span class="eyebrow">Activation Sequence</span>
+        <h2 style="margin-top:var(--s-4)">수익 모델 단계별 활성화 순서</h2>
+      </div>
+
+      <div class="grid grid-2 mt-6" style="gap:var(--s-5);">
+        <div data-reveal>
+          <div class="funnel-stage">
+            <h4>Phase 1 · M1~M6 — 기반 다지기</h4>
+            <p>광고 + 기존 매출 디지털화. 통합 패키지 광고 단가 1.4배 상향.</p>
+            <div class="row gap-2"><span class="chip chip--gold">광고</span><span class="chip">트래픽 통합</span></div>
+          </div>
+          <div class="funnel-stage" style="border-left-color: var(--blue-500);">
+            <h4>Phase 2 · M7~M12 — 구독 + B2B 시작</h4>
+            <p>프리미엄 구독 런칭 (개인+기업), B2B API 알파 출시 (10개 고객).</p>
+            <div class="row gap-2"><span class="chip chip--blue">구독</span><span class="chip chip--blue">B2B API</span></div>
+          </div>
+        </div>
+        <div data-reveal>
+          <div class="funnel-stage" style="border-left-color: var(--gold-300);">
+            <h4>Phase 3 · M13~M18 — AI 라이선스 본격화</h4>
+            <p>AI 인용 라이선스 4개 티어 정식 런칭. OpenAI/Anthropic/Google/Naver와 1차 협상.</p>
+            <div class="row gap-2"><span class="chip chip--gold">AI 라이선스</span><span class="chip chip--gold">컨퍼런스</span></div>
+          </div>
+          <div class="funnel-stage" style="border-left-color: var(--success);">
+            <h4>Phase 4 · M19~M36 — 글로벌 확장</h4>
+            <p>8개 언어 라이선스 + 해외 매체 제휴. 글로벌 LLM 회사 대상 다국어 패키지.</p>
+            <div class="row gap-2"><span class="chip chip--success">글로벌</span><span class="chip chip--success">컨설팅</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 리스크 ===== -->
+  <section class="section">
+    <div class="container">
+      <div data-reveal>
+        <span class="eyebrow">Risk &amp; Mitigation</span>
+        <h2 style="margin-top:var(--s-4)">예상 리스크와 완화책</h2>
+      </div>
+
+      <div class="grid grid-3 mt-6">
+        <div class="card" data-reveal>
+          <span class="chip" style="background:rgba(248,113,113,0.10); color:var(--danger); border-color:rgba(248,113,113,0.30);">매출 리스크</span>
+          <h4 class="mt-3">AI 라이선스 협상 지연</h4>
+          <p class="text-secondary" style="font-size:var(--fs-sm);"><strong style="color:var(--text-primary);">완화</strong> · Strategic 티어 1건만 체결되어도 5억+ 확보. 동시에 4개사 병행 협상.</p>
+        </div>
+        <div class="card" data-reveal>
+          <span class="chip" style="background:rgba(248,113,113,0.10); color:var(--danger); border-color:rgba(248,113,113,0.30);">수요 리스크</span>
+          <h4 class="mt-3">B2B API 도입률 저조</h4>
+          <p class="text-secondary" style="font-size:var(--fs-sm);"><strong style="color:var(--text-primary);">완화</strong> · 선명회계 기존 고객 200+ 직접 영업. Free 티어로 진입 장벽 낮추기.</p>
+        </div>
+        <div class="card" data-reveal>
+          <span class="chip" style="background:rgba(248,113,113,0.10); color:var(--danger); border-color:rgba(248,113,113,0.30);">시장 리스크</span>
+          <h4 class="mt-3">광고 시장 위축</h4>
+          <p class="text-secondary" style="font-size:var(--fs-sm);"><strong style="color:var(--text-primary);">완화</strong> · 광고 비중을 25%로 제한. 구독+B2B+라이선스가 전체 75% 차지.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CTA ===== -->
+  <section class="section section--lg">
+    <div class="container">
+      <div class="card card--featured text-center" style="padding:var(--s-8);" data-reveal>
+        <span class="eyebrow">투자 결정</span>
+        <h2 style="margin: var(--s-4) 0;">14.24억 투자 → 3년 누적 매출 88억</h2>
+        <p style="max-width:600px; margin: 0 auto var(--s-6);">
+          단순 계산으로도 ROI 100%+. <strong style="color:#c084fc;">그래프 라이선스</strong>와 AI 인용 단가 상승이 기대치를 상회하면 250% 이상도 가능합니다.
+        </p>
+        <div class="hero__cta">
+          <a class="btn btn--primary btn--lg" href="proposal.html">계약 제안서 보기</a>
+          <a class="btn btn--ghost btn--lg" href="channels.html">6개 채널 상세</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="footer__cta-strip">
+      <div class="container">
+        <div class="row" style="justify-content:space-between; align-items:center; flex-wrap:wrap; gap:var(--s-4);">
+          <div>
+            <h3>여섯 채널의 권위, 하나의 인사이트 뱅크 허브로</h3>
+            <p>제안서 검토부터 시작하시거나, 데모 모듈을 둘러보세요.</p>
+          </div>
+          <div class="row gap-2">
+            <a class="btn btn--primary" href="proposal.html">제안서 보기</a>
+            <a class="btn btn--ghost" href="dashboard.html">데모 대시보드</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer__main">
+      <div class="container">
+        <div class="footer__grid">
+          <div class="footer__brand-col">
+            <img src="assets/logo.svg" alt="Insight Bank Hub" />
+            <p class="footer__tagline">6개 인터넷 매체를 통합한 GEO-AIO 싱크탱크 허브.<br/>분산된 채널을 인용 가능한 자산으로 전환합니다.</p>
+            <div class="footer__langs">🇰🇷 🇺🇸 🇨🇳 🇯🇵 🇪🇸 🇫🇷 🇩🇪 🇸🇦</div>
+            <div class="footer__social">
+              <a href="#" aria-label="X / Twitter"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+              <a href="#" aria-label="LinkedIn"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67h-3.55V9h3.41v1.56h.05c.48-.9 1.65-1.85 3.4-1.85 3.64 0 4.31 2.4 4.31 5.51zM5.34 7.43A2.06 2.06 0 113.28 5.37a2.06 2.06 0 012.06 2.06zm-1.78 13.02h3.56V9H3.56zM22.23 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.46c.98 0 1.77-.77 1.77-1.72V1.72C24 .77 23.21 0 22.23 0z"/></svg></a>
+              <a href="#" aria-label="YouTube"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M23.5 6.5c-.3-1-1-1.8-2-2C19.7 4 12 4 12 4s-7.7 0-9.5.5c-1 .2-1.7 1-2 2C0 8.3 0 12 0 12s0 3.7.5 5.5c.3 1 1 1.8 2 2C4.3 20 12 20 12 20s7.7 0 9.5-.5c1-.2 1.7-1 2-2 .5-1.8.5-5.5.5-5.5s0-3.7-.5-5.5zM9.5 15.5v-7l6 3.5z"/></svg></a>
+              <a href="#" aria-label="RSS"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M4 4v3a14 14 0 0114 14h3A17 17 0 004 4zm0 6v3a8 8 0 018 8h3a11 11 0 00-11-11zm2.5 8a2.5 2.5 0 110 5 2.5 2.5 0 010-5z"/></svg></a>
+            </div>
+          </div>
+          <div class="footer__col">
+            <h5>플랫폼</h5>
+            <a href="dashboard.html">통합 대시보드</a>
+            <a href="content.html">콘텐츠 관리</a>
+            <a href="knowledge.html">RAG 지식베이스</a>
+            <a href="ontology.html">온톨로지</a>
+            <a href="chatbot.html">RAG 챗봇</a>
+          </div>
+          <div class="footer__col">
+            <h5>자료</h5>
+            <a href="index.html">개요</a>
+            <a href="channels.html">6개 채널</a>
+            <a href="monetization.html">수익 모델</a>
+            <a href="proposal.html">계약 제안서</a>
+            <a href="manual.html">운영 매뉴얼</a>
+          </div>
+          <div class="footer__col">
+            <h5>연락처</h5>
+            <p>support@insightbankhub.kr</p>
+            <p>평일 09:00 – 18:00 KST</p>
+            <p>SLA 24/7 비상 라인</p>
+            <a href="proposal.html" class="btn btn--ghost btn--sm" style="margin-top:8px; display:inline-flex;">파트너 문의 →</a>
+          </div>
+        </div>
+
+        <hr class="footer__divider" />
+
+        <div class="footer__bottom">
+          <span>© 2026 Insight Bank Hub. All rights reserved.</span>
+          <div class="footer__legal">
+            <a href="#">이용약관</a>
+            <a href="#">개인정보처리방침</a>
+            <a href="#">llms.txt</a>
+            <span class="footer__seal">v1.0 · Confidential</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/common.js"></script>
+</body>
+</html>

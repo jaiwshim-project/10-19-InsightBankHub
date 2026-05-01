@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0a0e1a" />
+  <title>통합 대시보드 — Insight Bank Hub</title>
+  <meta name="description" content="6개 채널 통합 KPI · AI 인용 추이 · 트래픽 분석" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="통합 대시보드 — Insight Bank Hub" />
+  <meta property="og:image" content="assets/og-image.svg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;700;900&display=swap" />
+  <link rel="stylesheet" href="css/common.css" />
+  <style>
+    .kpi-card {
+      background: var(--glass-100);
+      border: 1px solid var(--border-default);
+      border-radius: var(--r-lg);
+      padding: var(--s-5);
+      backdrop-filter: blur(12px);
+      position: relative;
+      overflow: hidden;
+    }
+    .kpi-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, var(--gold-500), var(--blue-500));
+      opacity: 0.6;
+    }
+    .kpi-card__label { color: var(--text-muted); font-size: var(--fs-xs); letter-spacing: 0.1em; text-transform: uppercase; }
+    .kpi-card__value {
+      font-family: 'Noto Serif KR', serif;
+      font-size: var(--fs-2xl);
+      font-weight: 700;
+      color: var(--text-primary);
+      margin: var(--s-2) 0 var(--s-2);
+      line-height: 1;
+    }
+    .kpi-card__delta {
+      display: inline-flex; align-items: center; gap: 4px;
+      font-size: var(--fs-xs); font-weight: 600;
+      padding: 2px 8px; border-radius: var(--r-full);
+    }
+    .kpi-card__delta--up { background: rgba(74,222,128,0.10); color: var(--success); }
+    .kpi-card__delta--down { background: rgba(248,113,113,0.10); color: var(--danger); }
+
+    .panel {
+      background: var(--glass-100);
+      border: 1px solid var(--border-default);
+      border-radius: var(--r-lg);
+      padding: var(--s-5);
+      backdrop-filter: blur(12px);
+    }
+    .panel__head {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: var(--s-4);
+    }
+    .panel__title { font-size: var(--fs-md); font-weight: 700; margin: 0; }
+    .panel__sub { color: var(--text-muted); font-size: var(--fs-xs); margin: 4px 0 0; }
+
+    .filter-pill {
+      display: inline-flex; gap: 6px; padding: 6px 12px;
+      background: var(--bg-elev-2); border: 1px solid var(--border-subtle);
+      border-radius: var(--r-full); font-size: var(--fs-xs); color: var(--text-secondary);
+      cursor: pointer; transition: all 0.18s;
+    }
+    .filter-pill:hover { border-color: var(--border-default); color: var(--text-primary); }
+    .filter-pill.active { background: var(--glass-gold); color: var(--gold-300); border-color: var(--border-gold); }
+
+    .channel-bar {
+      display: grid; grid-template-columns: 100px 1fr 70px;
+      gap: var(--s-3); align-items: center;
+      padding: 10px 0; border-bottom: 1px solid var(--border-subtle);
+    }
+    .channel-bar:last-child { border:none; }
+    .channel-bar__label { font-size: var(--fs-sm); color: var(--text-secondary); }
+    .channel-bar__track {
+      height: 8px; border-radius: 4px;
+      background: var(--bg-elev-2); overflow: hidden;
+    }
+    .channel-bar__fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--gold-500), var(--gold-300));
+      border-radius: 4px;
+    }
+    .channel-bar__value { text-align: right; color: var(--gold-300); font-weight: 600; font-size: var(--fs-sm); font-family: 'Noto Serif KR', serif; }
+
+    .heat-row { display: grid; grid-template-columns: 80px repeat(7, 1fr); gap: 4px; align-items: center; }
+    .heat-cell {
+      aspect-ratio: 1.6; border-radius: 4px;
+      background: var(--bg-elev-2);
+      transition: transform 0.18s;
+    }
+    .heat-cell:hover { transform: scale(1.05); cursor: pointer; }
+
+    .legend { display: inline-flex; align-items: center; gap: 6px; }
+    .legend-dot { width: 10px; height: 10px; border-radius: 50%; }
+
+    .ai-engine {
+      display: grid; grid-template-columns: auto 1fr auto;
+      align-items: center; gap: var(--s-3);
+      padding: var(--s-3) 0;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .ai-engine:last-child { border:none; }
+    .ai-engine__logo {
+      width: 36px; height: 36px;
+      border-radius: var(--r-sm);
+      background: var(--bg-elev-3);
+      display: grid; place-items: center;
+      font-weight: 700;
+    }
+
+    .grid-dash {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: var(--s-4);
+    }
+    .col-12 { grid-column: span 12; }
+    .col-8 { grid-column: span 8; }
+    .col-6 { grid-column: span 6; }
+    .col-4 { grid-column: span 4; }
+    .col-3 { grid-column: span 3; }
+
+    @media (max-width: 1024px) {
+      .col-8, .col-6, .col-4, .col-3 { grid-column: span 12; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="header">
+    <div class="header__inner">
+      <a class="brand" href="index.html" aria-label="Insight Bank Hub"><img src="assets/logo.svg" alt="Insight Bank Hub" class="brand__logo" /></a>
+      <nav class="nav">
+        <a class="nav__link" href="index.html">개요</a>
+        <a class="nav__link" href="proposal.html">제안서</a>
+        <a class="nav__link" href="channels.html">6개 채널</a>
+        <a class="nav__link" href="monetization.html">수익 모델</a>
+        <a class="nav__link" href="ontology.html">온톨로지</a>
+        <a class="nav__link" href="graph-license.html">그래프 라이선스</a>
+        <a class="nav__link" href="structure.html">구조도</a>
+        <a class="nav__link" href="dashboard.html">대시보드</a>
+        <a class="nav__link" href="content.html">콘텐츠</a>
+        <a class="nav__link" href="knowledge.html">지식베이스</a>
+        <a class="nav__link" href="chatbot.html">챗봇</a>
+        <a class="nav__link" href="manual.html">매뉴얼</a>
+      </nav>
+      <button class="nav-toggle" aria-label="메뉴"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
+    </div>
+  </header>
+
+  <section class="section section--sm">
+    <div class="container">
+      <!-- ===== 헤더 ===== -->
+      <div class="row" style="justify-content:space-between; align-items:flex-end; flex-wrap:wrap; gap:var(--s-4); margin-bottom: var(--s-6);">
+        <div>
+          <span class="eyebrow">통합 모니터링</span>
+          <h1 style="margin: var(--s-2) 0 0; font-size:var(--fs-xl);">6채널 통합 대시보드</h1>
+          <p class="text-muted mb-0" style="font-size:var(--fs-sm);">실시간 인용·트래픽·콘텐츠 흐름</p>
+        </div>
+        <div class="row gap-2">
+          <span class="filter-pill">최근 7일</span>
+          <span class="filter-pill active">최근 30일</span>
+          <span class="filter-pill">분기</span>
+          <span class="filter-pill">연간</span>
+        </div>
+      </div>
+
+      <!-- ===== KPI 카드 ===== -->
+      <div class="grid-dash" style="margin-bottom:var(--s-5);">
+        <div class="col-3 kpi-card" data-reveal>
+          <div class="kpi-card__label">AI 응답 인용 (월)</div>
+          <div class="kpi-card__value"><span data-count="2847">2,847</span></div>
+          <span class="kpi-card__delta kpi-card__delta--up">▲ 142% vs 전월</span>
+        </div>
+        <div class="col-3 kpi-card" data-reveal>
+          <div class="kpi-card__label">통합 트래픽 (UV)</div>
+          <div class="kpi-card__value"><span data-count="384021">384,021</span></div>
+          <span class="kpi-card__delta kpi-card__delta--up">▲ 38% vs 전월</span>
+        </div>
+        <div class="col-3 kpi-card" data-reveal>
+          <div class="kpi-card__label">발행 건수 (월)</div>
+          <div class="kpi-card__value"><span data-count="1284">1,284</span></div>
+          <span class="kpi-card__delta kpi-card__delta--up">▲ 22%</span>
+        </div>
+        <div class="col-3 kpi-card" data-reveal>
+          <div class="kpi-card__label">RAG 검색 (월)</div>
+          <div class="kpi-card__value"><span data-count="48230">48,230</span></div>
+          <span class="kpi-card__delta kpi-card__delta--up">▲ 86%</span>
+        </div>
+
+        <!-- ===== AI 인용 추이 (라인 차트) ===== -->
+        <div class="col-8 panel" data-reveal>
+          <div class="panel__head">
+            <div>
+              <h3 class="panel__title">AI 응답 인용 추이</h3>
+              <p class="panel__sub">ChatGPT · Claude · Gemini · Perplexity 4개 엔진 통합 측정</p>
+            </div>
+            <div class="row gap-2">
+              <span class="legend"><span class="legend-dot" style="background:var(--gold-500);"></span><small class="text-secondary">통합 허브</small></span>
+              <span class="legend"><span class="legend-dot" style="background:var(--text-muted);"></span><small class="text-secondary">개별 채널 합산 (참고)</small></span>
+            </div>
+          </div>
+
+          <svg viewBox="0 0 800 280" style="width:100%; height:auto;" role="img" aria-label="AI 응답 인용 추이 — 12개월 라인 차트">
+            <defs>
+              <linearGradient id="goldFill" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#d4a574" stop-opacity="0.32"/>
+                <stop offset="100%" stop-color="#d4a574" stop-opacity="0"/>
+              </linearGradient>
+            </defs>
+            <!-- y-grid -->
+            <g stroke="rgba(255,255,255,0.06)">
+              <line x1="40" y1="40"  x2="780" y2="40"/>
+              <line x1="40" y1="100" x2="780" y2="100"/>
+              <line x1="40" y1="160" x2="780" y2="160"/>
+              <line x1="40" y1="220" x2="780" y2="220"/>
+            </g>
+            <g fill="rgba(154,160,179,0.7)" font-size="10" font-family="Pretendard">
+              <text x="10" y="44">3,000</text>
+              <text x="10" y="104">2,000</text>
+              <text x="10" y="164">1,000</text>
+              <text x="10" y="224">0</text>
+            </g>
+            <!-- 통합 허브 도입 후 -->
+            <path d="M40,210 L100,200 L160,180 L220,150 L280,120 L340,80 L400,55 L460,42 L520,35 L580,32 L640,28 L700,22 L760,18"
+                  stroke="#d4a574" stroke-width="2.5" fill="none"/>
+            <path d="M40,210 L100,200 L160,180 L220,150 L280,120 L340,80 L400,55 L460,42 L520,35 L580,32 L640,28 L700,22 L760,18 L760,260 L40,260 Z"
+                  fill="url(#goldFill)"/>
+            <!-- 개별 합산 -->
+            <path d="M40,220 L100,218 L160,215 L220,210 L280,205 L340,200 L400,195 L460,190 L520,188 L580,186 L640,184 L700,182 L760,180"
+                  stroke="rgba(154,160,179,0.6)" stroke-width="1.8" fill="none" stroke-dasharray="4 4"/>
+
+            <!-- x labels -->
+            <g fill="rgba(154,160,179,0.7)" font-size="10" font-family="Pretendard">
+              <text x="40"  y="252">M1</text>
+              <text x="100" y="252">M2</text>
+              <text x="160" y="252">M3</text>
+              <text x="220" y="252">M4</text>
+              <text x="280" y="252">M5</text>
+              <text x="340" y="252">M6</text>
+              <text x="400" y="252">M7</text>
+              <text x="460" y="252">M8</text>
+              <text x="520" y="252">M9</text>
+              <text x="580" y="252">M10</text>
+              <text x="640" y="252">M11</text>
+              <text x="700" y="252">M12</text>
+            </g>
+          </svg>
+        </div>
+
+        <!-- ===== AI 엔진별 인용 ===== -->
+        <div class="col-4 panel" data-reveal>
+          <div class="panel__head">
+            <div>
+              <h3 class="panel__title">엔진별 인용 분포</h3>
+              <p class="panel__sub">최근 30일</p>
+            </div>
+          </div>
+          <div class="ai-engine">
+            <div class="ai-engine__logo" style="background:#10a37f; color:white;">G</div>
+            <div>
+              <strong style="color:var(--text-primary); font-size:var(--fs-sm);">ChatGPT</strong>
+              <div class="text-muted" style="font-size:var(--fs-xs);">OpenAI</div>
+            </div>
+            <div style="text-align:right;">
+              <strong style="color:var(--gold-300); font-family:'Noto Serif KR',serif;">1,124</strong>
+              <div class="text-muted" style="font-size:var(--fs-xs);">39.5%</div>
+            </div>
+          </div>
+          <div class="ai-engine">
+            <div class="ai-engine__logo" style="background:#cc785c; color:white;">C</div>
+            <div>
+              <strong style="color:var(--text-primary); font-size:var(--fs-sm);">Claude</strong>
+              <div class="text-muted" style="font-size:var(--fs-xs);">Anthropic</div>
+            </div>
+            <div style="text-align:right;">
+              <strong style="color:var(--gold-300); font-family:'Noto Serif KR',serif;">820</strong>
+              <div class="text-muted" style="font-size:var(--fs-xs);">28.8%</div>
+            </div>
+          </div>
+          <div class="ai-engine">
+            <div class="ai-engine__logo" style="background:#4285f4; color:white;">G</div>
+            <div>
+              <strong style="color:var(--text-primary); font-size:var(--fs-sm);">Gemini</strong>
+              <div class="text-muted" style="font-size:var(--fs-xs);">Google</div>
+            </div>
+            <div style="text-align:right;">
+              <strong style="color:var(--gold-300); font-family:'Noto Serif KR',serif;">612</strong>
+              <div class="text-muted" style="font-size:var(--fs-xs);">21.5%</div>
+            </div>
+          </div>
+          <div class="ai-engine">
+            <div class="ai-engine__logo" style="background:#1f1f1f; color:white;">P</div>
+            <div>
+              <strong style="color:var(--text-primary); font-size:var(--fs-sm);">Perplexity</strong>
+              <div class="text-muted" style="font-size:var(--fs-xs);">Perplexity AI</div>
+            </div>
+            <div style="text-align:right;">
+              <strong style="color:var(--gold-300); font-family:'Noto Serif KR',serif;">291</strong>
+              <div class="text-muted" style="font-size:var(--fs-xs);">10.2%</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===== 채널별 트래픽 ===== -->
+        <div class="col-6 panel" data-reveal>
+          <div class="panel__head">
+            <div>
+              <h3 class="panel__title">채널별 인용 점유율</h3>
+              <p class="panel__sub">6개 채널 콘텐츠 기준</p>
+            </div>
+          </div>
+          <div class="channel-bar">
+            <div class="channel-bar__label">애틀러스리서치</div>
+            <div class="channel-bar__track"><div class="channel-bar__fill" style="width:88%;"></div></div>
+            <div class="channel-bar__value">22.8%</div>
+          </div>
+          <div class="channel-bar">
+            <div class="channel-bar__label">한국M&amp;A경제신문</div>
+            <div class="channel-bar__track"><div class="channel-bar__fill" style="width:80%;"></div></div>
+            <div class="channel-bar__value">20.4%</div>
+          </div>
+          <div class="channel-bar">
+            <div class="channel-bar__label">월간지방세연구</div>
+            <div class="channel-bar__track"><div class="channel-bar__fill" style="width:72%; background:linear-gradient(90deg, #c084fc, var(--gold-300));"></div></div>
+            <div class="channel-bar__value">18.6%</div>
+          </div>
+          <div class="channel-bar">
+            <div class="channel-bar__label">바이오타임즈</div>
+            <div class="channel-bar__track"><div class="channel-bar__fill" style="width:62%;"></div></div>
+            <div class="channel-bar__value">16.2%</div>
+          </div>
+          <div class="channel-bar">
+            <div class="channel-bar__label">디펜스투데이</div>
+            <div class="channel-bar__track"><div class="channel-bar__fill" style="width:48%;"></div></div>
+            <div class="channel-bar__value">12.8%</div>
+          </div>
+          <div class="channel-bar">
+            <div class="channel-bar__label">스타트업투데이</div>
+            <div class="channel-bar__track"><div class="channel-bar__fill" style="width:36%;"></div></div>
+            <div class="channel-bar__value">9.2%</div>
+          </div>
+        </div>
+
+        <!-- ===== 발행 활동 히트맵 ===== -->
+        <div class="col-6 panel" data-reveal>
+          <div class="panel__head">
+            <div>
+              <h3 class="panel__title">발행 활동 히트맵</h3>
+              <p class="panel__sub">요일 × 채널 (최근 4주 평균)</p>
+            </div>
+          </div>
+          <div style="display:grid; gap:6px;">
+            <div class="heat-row">
+              <span class="text-muted" style="font-size:var(--fs-xs);"></span>
+              <span class="text-muted text-center" style="font-size:10px;">월</span>
+              <span class="text-muted text-center" style="font-size:10px;">화</span>
+              <span class="text-muted text-center" style="font-size:10px;">수</span>
+              <span class="text-muted text-center" style="font-size:10px;">목</span>
+              <span class="text-muted text-center" style="font-size:10px;">금</span>
+              <span class="text-muted text-center" style="font-size:10px;">토</span>
+              <span class="text-muted text-center" style="font-size:10px;">일</span>
+            </div>
+            <div class="heat-row">
+              <span class="text-secondary" style="font-size:var(--fs-xs);">바이오타임즈</span>
+              <span class="heat-cell" style="background:rgba(212,165,116,0.32)"></span>
+              <span class="heat-cell" style="background:rgba(212,165,116,0.55)"></span>
+              <span class="heat-cell" style="background:rgba(212,165,116,0.72)"></span>
+              <span class="heat-cell" style="background:rgba(212,165,116,0.88)"></span>
+              <span class="heat-cell" style="background:rgba(212,165,116,0.65)"></span>
+              <span class="heat-cell" style="background:rgba(212,165,116,0.18)"></span>
+              <span class="heat-cell" style="background:rgba(212,165,116,0.10)"></span>
+            </div>
+            <div class="heat-row">
+              <span class="text-secondary" style="font-size:var(--fs-xs);">애틀러스리서치</span>
+              <span class="heat-cell" style="background:rgba(212,165,116,0.42)"></span>
+              <span class="heat-cell" style="background:rgba(212,165,116,0.78)"></span>
+              <span class="heat-cell" style="background:rgba(212,165,116,0.92)"></span>
+              <span class="heat-cell" style="background:rgba(212,165,116,0.96)"></span>
+              <span class="heat-cell" style="background:rgba(212,165,116,0.74)"></span>
+              <span class="heat-cell" style="background:rgba(212,165,116,0.22)"></span>
+              <span class="heat-cell" style="background:rgba(212,165,116,0.12)"></span>
+            </div>
+            <div class="heat-row">
+              <span class="text-secondary" style="font-size:var(--fs-xs);">스타트업투데이</span>
+              <span class="heat-cell" style="background:rgba(212,165,116,0.28)"></span>
+              <span class="heat-cell" style="background:rgba(212,165,116,0.40)"></span>
+              <span class="heat-cell" style="background:rgba(212,165,116,0.52)"></span>
+              <span class="heat-cell" style="background:rgba(212,165,116,0.65)"></span>
+              <span class="heat-cell" style="background:rgba(212,165,116,0.75)"></span>
+              <span class="heat-cell" style="background:rgba(212,165,116,0.30)"></span>
+              <span class="heat-cell" style="background:rgba(212,165,116,0.14)"></span>
+            </div>
+            <div class="heat-row">
+              <span class="text-secondary" style="font-size:var(--fs-xs);">한국M&amp;A경제신문</span>
+              <span class="heat-cell" style="background:rgba(212,165,116,0.50)"></span>
+              <span class="heat-cell" style="background:rgba(212,165,116,0.74)"></span>
+              <span class="heat-cell" style="background:rgba(212,165,116,0.88)"></span>
+              <span class="heat-cell" style="background:rgba(212,165,116,0.82)"></span>
+              <span class="heat-cell" style="background:rgba(212,165,116,0.66)"></span>
+              <span class="heat-cell" style="background:rgba(212,165,116,0.30)"></span>
+              <span class="heat-cell" style="background:rgba(212,165,116,0.16)"></span>
+            </div>
+            <div class="heat-row">
+              <span class="text-secondary" style="font-size:var(--fs-xs);">디펜스투데이</span>
+              <span class="heat-cell" style="background:rgba(212,165,116,0.20)"></span>
+              <span class="heat-cell" style="background:rgba(212,165,116,0.36)"></span>
+              <span class="heat-cell" style="background:rgba(212,165,116,0.58)"></span>
+              <span class="heat-cell" style="background:rgba(212,165,116,0.74)"></span>
+              <span class="heat-cell" style="background:rgba(212,165,116,0.84)"></span>
+              <span class="heat-cell" style="background:rgba(212,165,116,0.42)"></span>
+              <span class="heat-cell" style="background:rgba(212,165,116,0.22)"></span>
+            </div>
+            <div class="heat-row">
+              <span class="text-secondary" style="font-size:var(--fs-xs);">월간지방세연구</span>
+              <span class="heat-cell" style="background:rgba(192,132,252,0.40)"></span>
+              <span class="heat-cell" style="background:rgba(192,132,252,0.55)"></span>
+              <span class="heat-cell" style="background:rgba(192,132,252,0.72)"></span>
+              <span class="heat-cell" style="background:rgba(192,132,252,0.85)"></span>
+              <span class="heat-cell" style="background:rgba(192,132,252,0.62)"></span>
+              <span class="heat-cell" style="background:rgba(192,132,252,0.24)"></span>
+              <span class="heat-cell" style="background:rgba(192,132,252,0.12)"></span>
+            </div>
+          </div>
+          <div class="row mt-4" style="gap:var(--s-3); font-size:var(--fs-xs); color:var(--text-muted);">
+            <span>적음</span>
+            <div style="display:flex; gap:3px;">
+              <span style="width:14px; height:14px; border-radius:3px; background:rgba(212,165,116,0.10);"></span>
+              <span style="width:14px; height:14px; border-radius:3px; background:rgba(212,165,116,0.30);"></span>
+              <span style="width:14px; height:14px; border-radius:3px; background:rgba(212,165,116,0.55);"></span>
+              <span style="width:14px; height:14px; border-radius:3px; background:rgba(212,165,116,0.75);"></span>
+              <span style="width:14px; height:14px; border-radius:3px; background:rgba(212,165,116,0.95);"></span>
+            </div>
+            <span>많음</span>
+          </div>
+        </div>
+
+        <!-- ===== TOP 콘텐츠 ===== -->
+        <div class="col-12 panel" data-reveal>
+          <div class="panel__head">
+            <div>
+              <h3 class="panel__title">최다 인용 콘텐츠 TOP 10</h3>
+              <p class="panel__sub">최근 30일 · AI 엔진 통합 인용 횟수</p>
+            </div>
+            <a class="btn btn--ghost btn--sm" href="content.html">전체 보기 →</a>
+          </div>
+          <table class="table">
+            <thead>
+              <tr><th>#</th><th>제목</th><th>채널</th><th>발행일</th><th>인용</th><th>유입</th><th>점수</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>1</td><td style="color:var(--text-primary);">2026 K-반도체 세제 지원 강화, 신성장 R&D 공제 확대</td><td><span class="chip chip--gold">한국M&A경제신문</span></td><td>2026.04.18</td><td>284</td><td>18,420</td><td><strong style="color:var(--gold-300);">98</strong></td></tr>
+              <tr><td>2</td><td style="color:var(--text-primary);">신성장 4대 분야 R&amp;D 투자 동향 보고서</td><td><span class="chip chip--gold">애틀러스리서치</span></td><td>2026.03.30</td><td>248</td><td>14,280</td><td><strong style="color:var(--gold-300);">95</strong></td></tr>
+              <tr><td>3</td><td style="color:var(--text-primary);">지방세 부과 처분 취소 판례 분석 (2026 1Q)</td><td><span class="chip chip--gold">월간지방세연구</span></td><td>2026.04.22</td><td>212</td><td>12,640</td><td><strong style="color:var(--gold-300);">93</strong></td></tr>
+              <tr><td>4</td><td style="color:var(--text-primary);">K-방산 4Q 수출 22조 돌파, 폴란드·UAE 추가 계약</td><td><span class="chip chip--gold">한국M&A경제신문</span></td><td>2026.04.10</td><td>188</td><td>9,830</td><td><strong style="color:var(--gold-300);">90</strong></td></tr>
+              <tr><td>5</td><td style="color:var(--text-primary);">바이오 신약 1상 IND 승인 동향 (2026 1Q)</td><td><span class="chip chip--gold">바이오타임즈</span></td><td>2026.04.05</td><td>164</td><td>11,280</td><td><strong style="color:var(--gold-300);">88</strong></td></tr>
+              <tr><td>6</td><td style="color:var(--text-primary);">AI 스타트업 1Q 투자 라운드 분석 (10건 ↑)</td><td><span class="chip chip--gold">스타트업투데이</span></td><td>2026.04.12</td><td>142</td><td>8,420</td><td><strong style="color:var(--gold-300);">86</strong></td></tr>
+              <tr><td>7</td><td style="color:var(--text-primary);">5G 어드밴스드 가입자 600만 돌파 (ARG 통계)</td><td><span class="chip chip--gold">월간지방세연구</span></td><td>2026.04.15</td><td>132</td><td>7,640</td><td><strong style="color:var(--gold-300);">84</strong></td></tr>
+              <tr><td>8</td><td style="color:var(--text-primary);">국내 M&A 1Q 거래액 18조원, 전년比 28% ↑</td><td><span class="chip chip--gold">애틀러스리서치</span></td><td>2026.03.20</td><td>118</td><td>6,820</td><td><strong style="color:var(--gold-300);">82</strong></td></tr>
+              <tr><td>9</td><td style="color:var(--text-primary);">취득세 중과세 대상 부동산 판단 기준</td><td><span class="chip chip--gold">한국M&A경제신문</span></td><td>2026.04.02</td><td>104</td><td>5,940</td><td><strong style="color:var(--gold-300);">80</strong></td></tr>
+              <tr><td>10</td><td style="color:var(--text-primary);">스타트업 CEO 서베이: 2026 IPO 추진 현황</td><td><span class="chip chip--gold">스타트업투데이</span></td><td>2026.03.28</td><td>96</td><td>5,210</td><td><strong style="color:var(--gold-300);">78</strong></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="footer__cta-strip">
+      <div class="container">
+        <div class="row" style="justify-content:space-between; align-items:center; flex-wrap:wrap; gap:var(--s-4);">
+          <div>
+            <h3>여섯 채널의 권위, 하나의 인사이트 뱅크 허브로</h3>
+            <p>제안서 검토부터 시작하시거나, 데모 모듈을 둘러보세요.</p>
+          </div>
+          <div class="row gap-2">
+            <a class="btn btn--primary" href="proposal.html">제안서 보기</a>
+            <a class="btn btn--ghost" href="dashboard.html">데모 대시보드</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer__main">
+      <div class="container">
+        <div class="footer__grid">
+          <div class="footer__brand-col">
+            <img src="assets/logo.svg" alt="Insight Bank Hub" />
+            <p class="footer__tagline">6개 인터넷 매체를 통합한 GEO-AIO 싱크탱크 허브.<br/>분산된 채널을 인용 가능한 자산으로 전환합니다.</p>
+            <div class="footer__langs">🇰🇷 🇺🇸 🇨🇳 🇯🇵 🇪🇸 🇫🇷 🇩🇪 🇸🇦</div>
+            <div class="footer__social">
+              <a href="#" aria-label="X / Twitter"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+              <a href="#" aria-label="LinkedIn"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67h-3.55V9h3.41v1.56h.05c.48-.9 1.65-1.85 3.4-1.85 3.64 0 4.31 2.4 4.31 5.51zM5.34 7.43A2.06 2.06 0 113.28 5.37a2.06 2.06 0 012.06 2.06zm-1.78 13.02h3.56V9H3.56zM22.23 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.46c.98 0 1.77-.77 1.77-1.72V1.72C24 .77 23.21 0 22.23 0z"/></svg></a>
+              <a href="#" aria-label="YouTube"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M23.5 6.5c-.3-1-1-1.8-2-2C19.7 4 12 4 12 4s-7.7 0-9.5.5c-1 .2-1.7 1-2 2C0 8.3 0 12 0 12s0 3.7.5 5.5c.3 1 1 1.8 2 2C4.3 20 12 20 12 20s7.7 0 9.5-.5c1-.2 1.7-1 2-2 .5-1.8.5-5.5.5-5.5s0-3.7-.5-5.5zM9.5 15.5v-7l6 3.5z"/></svg></a>
+              <a href="#" aria-label="RSS"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M4 4v3a14 14 0 0114 14h3A17 17 0 004 4zm0 6v3a8 8 0 018 8h3a11 11 0 00-11-11zm2.5 8a2.5 2.5 0 110 5 2.5 2.5 0 010-5z"/></svg></a>
+            </div>
+          </div>
+          <div class="footer__col">
+            <h5>플랫폼</h5>
+            <a href="dashboard.html">통합 대시보드</a>
+            <a href="content.html">콘텐츠 관리</a>
+            <a href="knowledge.html">RAG 지식베이스</a>
+            <a href="ontology.html">온톨로지</a>
+            <a href="graph-license.html">그래프 라이선스</a>
+            <a href="chatbot.html">RAG 챗봇</a>
+          </div>
+          <div class="footer__col">
+            <h5>자료</h5>
+            <a href="index.html">개요</a>
+            <a href="channels.html">6개 채널</a>
+            <a href="monetization.html">수익 모델</a>
+            <a href="proposal.html">계약 제안서</a>
+            <a href="structure.html">시스템 구조도</a>
+            <a href="manual.html">운영 매뉴얼</a>
+          </div>
+          <div class="footer__col">
+            <h5>연락처</h5>
+            <p>support@insightbankhub.kr</p>
+            <p>평일 09:00 – 18:00 KST</p>
+            <p>SLA 24/7 비상 라인</p>
+            <a href="proposal.html" class="btn btn--ghost btn--sm" style="margin-top:8px; display:inline-flex;">파트너 문의 →</a>
+          </div>
+        </div>
+
+        <hr class="footer__divider" />
+
+        <div class="footer__bottom">
+          <span>© 2026 Insight Bank Hub. All rights reserved.</span>
+          <div class="footer__legal">
+            <a href="#">이용약관</a>
+            <a href="#">개인정보처리방침</a>
+            <a href="#">llms.txt</a>
+            <span class="footer__seal">v1.0 · Confidential</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/common.js"></script>
+  <script>
+    document.querySelectorAll('.filter-pill').forEach(p => {
+      p.addEventListener('click', () => {
+        document.querySelectorAll('.filter-pill').forEach(x => x.classList.remove('active'));
+        p.classList.add('active');
+      });
+    });
+  </script>
+</body>
+</html>

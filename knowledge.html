@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0a0e1a" />
+  <title>RAG 지식베이스 — Insight Bank Hub</title>
+  <meta name="description" content="벡터 인덱스 · 토픽 클러스터 · AI 인용 가능성 점수" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="RAG 지식베이스 — Insight Bank Hub" />
+  <meta property="og:image" content="assets/og-image.svg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;700;900&display=swap" />
+  <link rel="stylesheet" href="css/common.css" />
+  <style>
+    .kpi-mini {
+      background: var(--glass-100);
+      border: 1px solid var(--border-default);
+      border-radius: var(--r-md);
+      padding: var(--s-4);
+      backdrop-filter: blur(8px);
+    }
+    .kpi-mini strong {
+      display: block;
+      font-family: 'Noto Serif KR', serif;
+      font-size: var(--fs-xl);
+      color: var(--gold-300);
+      line-height: 1.1;
+    }
+    .kpi-mini small { color: var(--text-muted); font-size: var(--fs-xs); letter-spacing: 0.08em; text-transform: uppercase; }
+
+    .topic-bubble {
+      position: relative;
+      width: 100%; aspect-ratio: 1.4;
+      background: var(--glass-100);
+      border: 1px solid var(--border-default);
+      border-radius: var(--r-lg);
+      backdrop-filter: blur(12px);
+      overflow: hidden;
+    }
+    .bubble {
+      position: absolute;
+      border-radius: 50%;
+      display: grid; place-items: center;
+      text-align: center;
+      cursor: pointer;
+      transition: transform 0.25s var(--ease-out);
+    }
+    .bubble:hover { transform: scale(1.08); z-index: 10; }
+    .bubble strong { color: var(--text-primary); font-size: 13px; line-height: 1.1; }
+    .bubble small { display: block; color: var(--text-muted); font-size: 10px; margin-top:2px; }
+
+    .cluster-list {
+      display: flex; flex-direction: column; gap: var(--s-2);
+    }
+    .cluster-item {
+      display: grid;
+      grid-template-columns: auto 1fr 80px 60px;
+      gap: var(--s-3);
+      align-items: center;
+      padding: var(--s-3);
+      background: var(--bg-elev-2);
+      border-radius: var(--r-md);
+      transition: all 0.18s;
+    }
+    .cluster-item:hover { background: var(--bg-elev-3); }
+    .cluster-dot {
+      width: 12px; height: 12px; border-radius: 50%;
+      box-shadow: 0 0 12px currentColor;
+    }
+    .cluster-item__title { color: var(--text-primary); font-size: var(--fs-sm); font-weight: 500; }
+    .cluster-item__meta { color: var(--text-muted); font-size: 11px; }
+    .cluster-item__count { text-align: right; color: var(--gold-300); font-family:'Noto Serif KR', serif; font-weight: 700; }
+
+    .vector-row {
+      display: grid;
+      grid-template-columns: 1.2fr auto 1fr;
+      gap: var(--s-3);
+      align-items: center;
+      padding: var(--s-3) 0;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .vector-row:last-child { border:none; }
+    .vector-row .vec-bar {
+      display: flex; gap: 2px; align-items: center;
+    }
+    .vec-bar span {
+      width: 4px; background: var(--gold-500); border-radius: 1px;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    .score-meter {
+      display: grid; grid-template-columns: 1fr 80px;
+      gap: var(--s-3); align-items: center;
+      padding: var(--s-2) 0;
+    }
+    .score-meter__bar {
+      height: 6px; border-radius: 3px;
+      background: var(--bg-elev-2); overflow: hidden;
+    }
+    .score-meter__fill { height: 100%; border-radius: 3px; }
+
+    .doc-row {
+      display: grid;
+      grid-template-columns: 1fr 110px 100px 80px 60px;
+      gap: var(--s-3); align-items: center;
+      padding: var(--s-3) var(--s-4);
+      background: var(--bg-elev-2);
+      border-radius: var(--r-md);
+      margin-bottom: 6px;
+      transition: all 0.18s;
+    }
+    .doc-row:hover { background: var(--bg-elev-3); }
+    .doc-row__title { color: var(--text-primary); font-size: var(--fs-sm); }
+    .doc-row__meta { color: var(--text-muted); font-size: 11px; }
+
+    @media (max-width: 1024px) {
+      .doc-row { grid-template-columns: 1fr; }
+      .doc-row > *:not(:nth-child(1)) { display:none; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="header">
+    <div class="header__inner">
+      <a class="brand" href="index.html" aria-label="Insight Bank Hub"><img src="assets/logo.svg" alt="Insight Bank Hub" class="brand__logo" /></a>
+      <nav class="nav">
+        <a class="nav__link" href="index.html">개요</a>
+        <a class="nav__link" href="proposal.html">제안서</a>
+        <a class="nav__link" href="channels.html">6개 채널</a>
+        <a class="nav__link" href="monetization.html">수익 모델</a>
+        <a class="nav__link" href="ontology.html">온톨로지</a>
+        <a class="nav__link" href="graph-license.html">그래프 라이선스</a>
+        <a class="nav__link" href="structure.html">구조도</a>
+        <a class="nav__link" href="dashboard.html">대시보드</a>
+        <a class="nav__link" href="content.html">콘텐츠</a>
+        <a class="nav__link" href="knowledge.html">지식베이스</a>
+        <a class="nav__link" href="chatbot.html">챗봇</a>
+        <a class="nav__link" href="manual.html">매뉴얼</a>
+      </nav>
+      <button class="nav-toggle" aria-label="메뉴"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
+    </div>
+  </header>
+
+  <section class="section section--sm">
+    <div class="container">
+      <div class="row" style="justify-content:space-between; align-items:flex-end; flex-wrap:wrap; gap:var(--s-4); margin-bottom:var(--s-5);">
+        <div>
+          <span class="eyebrow">RAG 지식베이스</span>
+          <h1 style="margin:var(--s-2) 0 0; font-size:var(--fs-xl);">벡터 인덱스 · 토픽 · 인용 점수</h1>
+          <p class="text-muted mb-0" style="font-size:var(--fs-sm);">6채널 콘텐츠가 AI에게 어떻게 검색되는지 확인합니다.</p>
+        </div>
+        <div class="row gap-2">
+          <button class="btn btn--ghost btn--sm">재인덱스</button>
+          <button class="btn btn--primary btn--sm">+ 문서 추가</button>
+        </div>
+      </div>
+
+      <!-- ===== KPI 미니 ===== -->
+      <div class="grid grid-4" data-reveal>
+        <div class="kpi-mini">
+          <small>인덱싱된 문서</small>
+          <strong><span data-count="48230">48,230</span></strong>
+        </div>
+        <div class="kpi-mini">
+          <small>총 청크 (벡터)</small>
+          <strong><span data-count="312840">312,840</span></strong>
+        </div>
+        <div class="kpi-mini">
+          <small>임베딩 차원</small>
+          <strong>768</strong>
+        </div>
+        <div class="kpi-mini">
+          <small>평균 검색 응답</small>
+          <strong>180ms</strong>
+        </div>
+      </div>
+
+      <div class="grid grid-2 mt-6" style="gap:var(--s-5);">
+        <!-- ===== 토픽 클러스터 (버블 맵) ===== -->
+        <div data-reveal>
+          <div class="row" style="justify-content:space-between; align-items:flex-end; margin-bottom:var(--s-3);">
+            <div>
+              <h3 style="margin-bottom:0;">토픽 클러스터</h3>
+              <p class="text-muted mb-0" style="font-size:var(--fs-xs);">버블 크기 = 문서 수, 색상 = 인용도</p>
+            </div>
+          </div>
+
+          <div class="topic-bubble">
+            <!-- 각 버블은 절대 위치 -->
+            <div class="bubble" style="left:35%; top:30%; width:160px; height:160px; background: radial-gradient(circle, rgba(212,165,116,0.45), rgba(212,165,116,0.10)); border:1px solid var(--border-gold);">
+              <div><strong>지방세·세무</strong><small>8,420건</small></div>
+            </div>
+            <div class="bubble" style="left:5%; top:10%; width:120px; height:120px; background: radial-gradient(circle, rgba(74,144,226,0.40), rgba(74,144,226,0.08)); border:1px solid rgba(74,144,226,0.4);">
+              <div><strong>K-방산 수출</strong><small>5,210건</small></div>
+            </div>
+            <div class="bubble" style="left:60%; top:8%; width:130px; height:130px; background: radial-gradient(circle, rgba(74,222,128,0.40), rgba(74,222,128,0.08)); border:1px solid rgba(74,222,128,0.4);">
+              <div><strong>바이오 신약</strong><small>5,840건</small></div>
+            </div>
+            <div class="bubble" style="left:8%; top:55%; width:100px; height:100px; background: radial-gradient(circle, rgba(251,191,36,0.40), rgba(251,191,36,0.08)); border:1px solid rgba(251,191,36,0.4);">
+              <div><strong>ICT·5G</strong><small>3,820건</small></div>
+            </div>
+            <div class="bubble" style="left:70%; top:50%; width:110px; height:110px; background: radial-gradient(circle, rgba(248,113,113,0.40), rgba(248,113,113,0.08)); border:1px solid rgba(248,113,113,0.4);">
+              <div><strong>M&amp;A·IPO</strong><small>4,180건</small></div>
+            </div>
+            <div class="bubble" style="left:42%; top:68%; width:90px; height:90px; background: radial-gradient(circle, rgba(212,165,116,0.30), rgba(212,165,116,0.05)); border:1px solid var(--border-gold);">
+              <div><strong>스타트업·VC</strong><small>2,940건</small></div>
+            </div>
+            <div class="bubble" style="left:80%; top:75%; width:75px; height:75px; background: radial-gradient(circle, rgba(74,144,226,0.30), rgba(74,144,226,0.05)); border:1px solid rgba(74,144,226,0.3);">
+              <div><strong>판례·해석</strong><small>1,820건</small></div>
+            </div>
+            <div class="bubble" style="left:18%; top:78%; width:60px; height:60px; background: radial-gradient(circle, rgba(154,160,179,0.30), rgba(154,160,179,0.05)); border:1px solid var(--border-default);">
+              <div><strong>기타</strong><small>980건</small></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===== 클러스터 리스트 ===== -->
+        <div data-reveal>
+          <div class="row" style="justify-content:space-between; align-items:flex-end; margin-bottom:var(--s-3);">
+            <div>
+              <h3 style="margin-bottom:0;">클러스터 디테일</h3>
+              <p class="text-muted mb-0" style="font-size:var(--fs-xs);">상위 8개 토픽 · AI 인용 점수 기준</p>
+            </div>
+          </div>
+
+          <div class="cluster-list">
+            <div class="cluster-item">
+              <span class="cluster-dot" style="background:var(--gold-500); color:var(--gold-500);"></span>
+              <div>
+                <div class="cluster-item__title">지방세·세무</div>
+                <div class="cluster-item__meta">월간지방세연구 + 한국M&A경제신문 · 184 태그</div>
+              </div>
+              <div class="cluster-item__meta">8,420건</div>
+              <div class="cluster-item__count">98</div>
+            </div>
+            <div class="cluster-item">
+              <span class="cluster-dot" style="background:var(--success); color:var(--success);"></span>
+              <div>
+                <div class="cluster-item__title">바이오 신약</div>
+                <div class="cluster-item__meta">바이오타임즈 + 애틀러스리서치 · 102 태그</div>
+              </div>
+              <div class="cluster-item__meta">5,840건</div>
+              <div class="cluster-item__count">95</div>
+            </div>
+            <div class="cluster-item">
+              <span class="cluster-dot" style="background:var(--blue-500); color:var(--blue-500);"></span>
+              <div>
+                <div class="cluster-item__title">K-방산 수출</div>
+                <div class="cluster-item__meta">디펜스투데이 + 애틀러스리서치 · 78 태그</div>
+              </div>
+              <div class="cluster-item__meta">5,210건</div>
+              <div class="cluster-item__count">93</div>
+            </div>
+            <div class="cluster-item">
+              <span class="cluster-dot" style="background:var(--danger); color:var(--danger);"></span>
+              <div>
+                <div class="cluster-item__title">M&amp;A·IPO</div>
+                <div class="cluster-item__meta">한국M&A경제신문 + 스타트업투데이 · 92 태그</div>
+              </div>
+              <div class="cluster-item__meta">4,180건</div>
+              <div class="cluster-item__count">90</div>
+            </div>
+            <div class="cluster-item">
+              <span class="cluster-dot" style="background:var(--warning); color:var(--warning);"></span>
+              <div>
+                <div class="cluster-item__title">ICT·5G</div>
+                <div class="cluster-item__meta">애틀러스리서치 + 스타트업투데이 · 64 태그</div>
+              </div>
+              <div class="cluster-item__meta">3,820건</div>
+              <div class="cluster-item__count">87</div>
+            </div>
+            <div class="cluster-item">
+              <span class="cluster-dot" style="background:var(--gold-300); color:var(--gold-300);"></span>
+              <div>
+                <div class="cluster-item__title">판례·해석</div>
+                <div class="cluster-item__meta">디펜스투데이 + 애틀러스리서치 · 48 태그</div>
+              </div>
+              <div class="cluster-item__meta">2,940건</div>
+              <div class="cluster-item__count">85</div>
+            </div>
+            <div class="cluster-item">
+              <span class="cluster-dot" style="background:var(--blue-300); color:var(--blue-300);"></span>
+              <div>
+                <div class="cluster-item__title">판례·해석</div>
+                <div class="cluster-item__meta">월간지방세연구 + 한국M&A경제신문 · 36 태그</div>
+              </div>
+              <div class="cluster-item__meta">1,820건</div>
+              <div class="cluster-item__count">82</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== AI 인용 점수 분포 + 벡터 검색 ===== -->
+      <div class="grid grid-2 mt-6" style="gap:var(--s-5);">
+        <div class="panel card" data-reveal style="padding:var(--s-5);">
+          <div class="row" style="justify-content:space-between; align-items:flex-end; margin-bottom:var(--s-4);">
+            <div>
+              <h3 style="margin-bottom:0;">AI 인용 점수 분포</h3>
+              <p class="text-muted mb-0" style="font-size:var(--fs-xs);">100점 만점 · 전체 48,230건 분포</p>
+            </div>
+          </div>
+
+          <div class="score-meter">
+            <div>
+              <strong style="color:var(--text-primary); font-size:var(--fs-sm);">90-100 · Excellent</strong>
+              <div class="score-meter__bar mt-2"><div class="score-meter__fill" style="width:18%; background:linear-gradient(90deg, var(--gold-500), var(--gold-300));"></div></div>
+            </div>
+            <div class="text-right">
+              <strong style="color:var(--gold-300); font-family:'Noto Serif KR',serif;">8,680</strong>
+              <div class="text-muted" style="font-size:11px;">18%</div>
+            </div>
+          </div>
+          <div class="score-meter">
+            <div>
+              <strong style="color:var(--text-primary); font-size:var(--fs-sm);">75-89 · Good</strong>
+              <div class="score-meter__bar mt-2"><div class="score-meter__fill" style="width:42%; background:linear-gradient(90deg, var(--success), #86efac);"></div></div>
+            </div>
+            <div class="text-right">
+              <strong style="color:var(--gold-300); font-family:'Noto Serif KR',serif;">20,260</strong>
+              <div class="text-muted" style="font-size:11px;">42%</div>
+            </div>
+          </div>
+          <div class="score-meter">
+            <div>
+              <strong style="color:var(--text-primary); font-size:var(--fs-sm);">60-74 · Fair</strong>
+              <div class="score-meter__bar mt-2"><div class="score-meter__fill" style="width:28%; background:linear-gradient(90deg, var(--blue-500), var(--blue-300));"></div></div>
+            </div>
+            <div class="text-right">
+              <strong style="color:var(--gold-300); font-family:'Noto Serif KR',serif;">13,500</strong>
+              <div class="text-muted" style="font-size:11px;">28%</div>
+            </div>
+          </div>
+          <div class="score-meter">
+            <div>
+              <strong style="color:var(--text-primary); font-size:var(--fs-sm);">40-59 · Needs Work</strong>
+              <div class="score-meter__bar mt-2"><div class="score-meter__fill" style="width:9%; background:var(--warning);"></div></div>
+            </div>
+            <div class="text-right">
+              <strong style="color:var(--gold-300); font-family:'Noto Serif KR',serif;">4,360</strong>
+              <div class="text-muted" style="font-size:11px;">9%</div>
+            </div>
+          </div>
+          <div class="score-meter">
+            <div>
+              <strong style="color:var(--text-primary); font-size:var(--fs-sm);">0-39 · Risk</strong>
+              <div class="score-meter__bar mt-2"><div class="score-meter__fill" style="width:3%; background:var(--danger);"></div></div>
+            </div>
+            <div class="text-right">
+              <strong style="color:var(--gold-300); font-family:'Noto Serif KR',serif;">1,430</strong>
+              <div class="text-muted" style="font-size:11px;">3%</div>
+            </div>
+          </div>
+
+          <div class="card mt-5" style="background:var(--glass-gold); border-color:var(--border-gold); padding:var(--s-3);">
+            <div class="row" style="justify-content:space-between; align-items:center;">
+              <div>
+                <strong style="color:var(--gold-300); font-size:var(--fs-sm);">권장: 60% 이상 인용 등급 유지</strong>
+                <p class="text-muted mb-0" style="font-size:var(--fs-xs);">현재 60점 이상 88% — 목표 달성</p>
+              </div>
+              <div style="font-family:'Noto Serif KR',serif; font-size:var(--fs-xl); color:var(--gold-300); font-weight:700;">88%</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===== 벡터 검색 미리보기 ===== -->
+        <div class="card" data-reveal style="padding:var(--s-5);">
+          <h3 style="margin-bottom:0;">벡터 검색 미리보기</h3>
+          <p class="text-muted" style="font-size:var(--fs-xs); margin: 4px 0 var(--s-4);">쿼리에 가장 가까운 청크 5건</p>
+
+          <div class="search-box" style="display:flex; gap:var(--s-2); align-items:center; padding:10px 14px; background:var(--bg-elev-2); border:1px solid var(--border-default); border-radius:var(--r-md); margin-bottom:var(--s-4);">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.5-4.5"/></svg>
+            <input type="text" value="K-방산 폴란드 수출 4Q 동향" style="flex:1; background:transparent; border:none; color:var(--text-primary); outline:none; font-size:var(--fs-sm);" />
+          </div>
+
+          <div class="vector-row">
+            <div>
+              <div style="color:var(--text-primary); font-size:var(--fs-sm); font-weight:500;">신성장 4대 분야 R&amp;D 투자 동향 보고서</div>
+              <div class="text-muted" style="font-size:11px;">청크 #4 · 데이터·리서치</div>
+            </div>
+            <div class="vec-bar">
+              <span style="height:18px;"></span><span style="height:14px; animation-delay:.1s;"></span><span style="height:22px; animation-delay:.2s;"></span><span style="height:16px; animation-delay:.3s;"></span>
+            </div>
+            <div class="text-right">
+              <strong style="color:var(--gold-300); font-family:'Noto Serif KR',serif;">0.94</strong>
+              <div class="text-muted" style="font-size:11px;">cosine</div>
+            </div>
+          </div>
+
+          <div class="vector-row">
+            <div>
+              <div style="color:var(--text-primary); font-size:var(--fs-sm); font-weight:500;">2026 K-반도체 세제 지원 강화, 신성장 R&D 공제 확대</div>
+              <div class="text-muted" style="font-size:11px;">청크 #2 · 정책·법무</div>
+            </div>
+            <div class="vec-bar">
+              <span style="height:16px;"></span><span style="height:18px; animation-delay:.1s;"></span><span style="height:14px; animation-delay:.2s;"></span><span style="height:20px; animation-delay:.3s;"></span>
+            </div>
+            <div class="text-right">
+              <strong style="color:var(--gold-300); font-family:'Noto Serif KR',serif;">0.88</strong>
+              <div class="text-muted" style="font-size:11px;">cosine</div>
+            </div>
+          </div>
+
+          <div class="vector-row">
+            <div>
+              <div style="color:var(--text-primary); font-size:var(--fs-sm); font-weight:500;">중소기업 R&amp;D 세액공제 신청 가이드</div>
+              <div class="text-muted" style="font-size:11px;">청크 #1 · 전문가 칼럼</div>
+            </div>
+            <div class="vec-bar">
+              <span style="height:14px;"></span><span style="height:16px; animation-delay:.1s;"></span><span style="height:18px; animation-delay:.2s;"></span><span style="height:12px; animation-delay:.3s;"></span>
+            </div>
+            <div class="text-right">
+              <strong style="color:var(--gold-300); font-family:'Noto Serif KR',serif;">0.82</strong>
+              <div class="text-muted" style="font-size:11px;">cosine</div>
+            </div>
+          </div>
+
+          <div class="vector-row">
+            <div>
+              <div style="color:var(--text-primary); font-size:var(--fs-sm); font-weight:500;">국세청 R&amp;D 세제 사후관리 사례 분석</div>
+              <div class="text-muted" style="font-size:11px;">청크 #6 · 데이터·리서치</div>
+            </div>
+            <div class="vec-bar">
+              <span style="height:12px;"></span><span style="height:14px; animation-delay:.1s;"></span><span style="height:16px; animation-delay:.2s;"></span><span style="height:13px; animation-delay:.3s;"></span>
+            </div>
+            <div class="text-right">
+              <strong style="color:var(--gold-300); font-family:'Noto Serif KR',serif;">0.79</strong>
+              <div class="text-muted" style="font-size:11px;">cosine</div>
+            </div>
+          </div>
+
+          <div class="vector-row">
+            <div>
+              <div style="color:var(--text-primary); font-size:var(--fs-sm); font-weight:500;">신성장 원천기술 R&amp;D 인정 범위 변화</div>
+              <div class="text-muted" style="font-size:11px;">청크 #3 · 정책·법무</div>
+            </div>
+            <div class="vec-bar">
+              <span style="height:10px;"></span><span style="height:13px; animation-delay:.1s;"></span><span style="height:11px; animation-delay:.2s;"></span><span style="height:14px; animation-delay:.3s;"></span>
+            </div>
+            <div class="text-right">
+              <strong style="color:var(--gold-300); font-family:'Noto Serif KR',serif;">0.74</strong>
+              <div class="text-muted" style="font-size:11px;">cosine</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== 인덱스 큐 ===== -->
+      <div class="card mt-6" data-reveal style="padding:var(--s-5);">
+        <div class="row" style="justify-content:space-between; align-items:flex-end; margin-bottom:var(--s-4);">
+          <div>
+            <h3 style="margin-bottom:0;">인덱싱 큐</h3>
+            <p class="text-muted mb-0" style="font-size:var(--fs-xs);">최근 24시간 처리 내역</p>
+          </div>
+          <span class="chip chip--success">✓ 평균 5분 적재</span>
+        </div>
+
+        <div class="doc-row">
+          <div>
+            <div class="doc-row__title">바이오 신약 1상 IND 승인 동향 (2026 1Q)</div>
+            <div class="doc-row__meta">2,840자 · 청크 12개 · 임베딩 12개</div>
+          </div>
+          <span class="chip chip--gold" style="font-size:10px;">바이오타임즈</span>
+          <span class="text-secondary" style="font-size:var(--fs-xs);">2시간 전</span>
+          <span class="chip chip--success" style="font-size:10px;">완료</span>
+          <strong style="color:var(--gold-300); font-family:'Noto Serif KR',serif; text-align:right;">88</strong>
+        </div>
+        <div class="doc-row">
+          <div>
+            <div class="doc-row__title">K-방산 4Q 수출 22조 돌파, 폴란드·UAE 추가 계약</div>
+            <div class="doc-row__meta">1,560자 · 청크 7개 · 임베딩 7개</div>
+          </div>
+          <span class="chip chip--gold" style="font-size:10px;">한국M&A경제신문</span>
+          <span class="text-secondary" style="font-size:var(--fs-xs);">5시간 전</span>
+          <span class="chip chip--success" style="font-size:10px;">완료</span>
+          <strong style="color:var(--gold-300); font-family:'Noto Serif KR',serif; text-align:right;">90</strong>
+        </div>
+        <div class="doc-row">
+          <div>
+            <div class="doc-row__title">5G 어드밴스드 가입자 600만 돌파 (ARG 통계)</div>
+            <div class="doc-row__meta">1,920자 · 청크 9개 · 임베딩 9개</div>
+          </div>
+          <span class="chip chip--gold" style="font-size:10px;">월간지방세연구</span>
+          <span class="text-secondary" style="font-size:var(--fs-xs);">8시간 전</span>
+          <span class="chip chip--success" style="font-size:10px;">완료</span>
+          <strong style="color:var(--gold-300); font-family:'Noto Serif KR',serif; text-align:right;">84</strong>
+        </div>
+        <div class="doc-row">
+          <div>
+            <div class="doc-row__title">CEO 서베이: 2026 경영환경 인식 (예약 · 처리 대기)</div>
+            <div class="doc-row__meta">6,420자 · 청크 28개 예상</div>
+          </div>
+          <span class="chip chip--gold" style="font-size:10px;">스타트업투데이</span>
+          <span class="text-secondary" style="font-size:var(--fs-xs);">예약 발행</span>
+          <span class="chip" style="font-size:10px; background:var(--glass-blue); color:var(--blue-300);">대기</span>
+          <strong class="text-muted" style="font-family:'Noto Serif KR',serif; text-align:right;">—</strong>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="footer__cta-strip">
+      <div class="container">
+        <div class="row" style="justify-content:space-between; align-items:center; flex-wrap:wrap; gap:var(--s-4);">
+          <div>
+            <h3>여섯 채널의 권위, 하나의 인사이트 뱅크 허브로</h3>
+            <p>제안서 검토부터 시작하시거나, 데모 모듈을 둘러보세요.</p>
+          </div>
+          <div class="row gap-2">
+            <a class="btn btn--primary" href="proposal.html">제안서 보기</a>
+            <a class="btn btn--ghost" href="dashboard.html">데모 대시보드</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer__main">
+      <div class="container">
+        <div class="footer__grid">
+          <div class="footer__brand-col">
+            <img src="assets/logo.svg" alt="Insight Bank Hub" />
+            <p class="footer__tagline">6개 인터넷 매체를 통합한 GEO-AIO 싱크탱크 허브.<br/>분산된 채널을 인용 가능한 자산으로 전환합니다.</p>
+            <div class="footer__langs">🇰🇷 🇺🇸 🇨🇳 🇯🇵 🇪🇸 🇫🇷 🇩🇪 🇸🇦</div>
+            <div class="footer__social">
+              <a href="#" aria-label="X / Twitter"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+              <a href="#" aria-label="LinkedIn"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67h-3.55V9h3.41v1.56h.05c.48-.9 1.65-1.85 3.4-1.85 3.64 0 4.31 2.4 4.31 5.51zM5.34 7.43A2.06 2.06 0 113.28 5.37a2.06 2.06 0 012.06 2.06zm-1.78 13.02h3.56V9H3.56zM22.23 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.46c.98 0 1.77-.77 1.77-1.72V1.72C24 .77 23.21 0 22.23 0z"/></svg></a>
+              <a href="#" aria-label="YouTube"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M23.5 6.5c-.3-1-1-1.8-2-2C19.7 4 12 4 12 4s-7.7 0-9.5.5c-1 .2-1.7 1-2 2C0 8.3 0 12 0 12s0 3.7.5 5.5c.3 1 1 1.8 2 2C4.3 20 12 20 12 20s7.7 0 9.5-.5c1-.2 1.7-1 2-2 .5-1.8.5-5.5.5-5.5s0-3.7-.5-5.5zM9.5 15.5v-7l6 3.5z"/></svg></a>
+              <a href="#" aria-label="RSS"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M4 4v3a14 14 0 0114 14h3A17 17 0 004 4zm0 6v3a8 8 0 018 8h3a11 11 0 00-11-11zm2.5 8a2.5 2.5 0 110 5 2.5 2.5 0 010-5z"/></svg></a>
+            </div>
+          </div>
+          <div class="footer__col">
+            <h5>플랫폼</h5>
+            <a href="dashboard.html">통합 대시보드</a>
+            <a href="content.html">콘텐츠 관리</a>
+            <a href="knowledge.html">RAG 지식베이스</a>
+            <a href="ontology.html">온톨로지</a>
+            <a href="graph-license.html">그래프 라이선스</a>
+            <a href="chatbot.html">RAG 챗봇</a>
+          </div>
+          <div class="footer__col">
+            <h5>자료</h5>
+            <a href="index.html">개요</a>
+            <a href="channels.html">6개 채널</a>
+            <a href="monetization.html">수익 모델</a>
+            <a href="proposal.html">계약 제안서</a>
+            <a href="structure.html">시스템 구조도</a>
+            <a href="manual.html">운영 매뉴얼</a>
+          </div>
+          <div class="footer__col">
+            <h5>연락처</h5>
+            <p>support@insightbankhub.kr</p>
+            <p>평일 09:00 – 18:00 KST</p>
+            <p>SLA 24/7 비상 라인</p>
+            <a href="proposal.html" class="btn btn--ghost btn--sm" style="margin-top:8px; display:inline-flex;">파트너 문의 →</a>
+          </div>
+        </div>
+
+        <hr class="footer__divider" />
+
+        <div class="footer__bottom">
+          <span>© 2026 Insight Bank Hub. All rights reserved.</span>
+          <div class="footer__legal">
+            <a href="#">이용약관</a>
+            <a href="#">개인정보처리방침</a>
+            <a href="#">llms.txt</a>
+            <span class="footer__seal">v1.0 · Confidential</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/common.js"></script>
+</body>
+</html>

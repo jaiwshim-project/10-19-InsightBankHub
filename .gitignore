@@ -1,0 +1,47 @@
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+ehthumbs.db
+*.lnk
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Local Claude Code config
+.claude/
+
+# Logs / temp
+*.log
+*.tmp
+tmp/
+temp/
+
+# Node (in case dev tooling added later)
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Python (in case scripts added)
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Build / dist
+dist/
+build/
+.cache/
+
+# Local secrets
+.env
+.env.local
+*.key
+*.pem
+
+# Misc
+image-removebg-preview.png

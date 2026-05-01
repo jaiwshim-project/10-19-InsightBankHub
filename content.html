@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0a0e1a" />
+  <title>콘텐츠 관리 — Insight Bank Hub</title>
+  <meta name="description" content="6채널 콘텐츠 통합 관리 · 발행 큐 · 카테고리 · 태그" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="콘텐츠 관리 — Insight Bank Hub" />
+  <meta property="og:image" content="assets/og-image.svg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;700;900&display=swap" />
+  <link rel="stylesheet" href="css/common.css" />
+  <style>
+    .cms-shell { display: grid; grid-template-columns: 240px 1fr; gap: var(--s-4); align-items: flex-start; }
+    .cms-side {
+      background: var(--glass-100);
+      border: 1px solid var(--border-default);
+      border-radius: var(--r-lg);
+      backdrop-filter: blur(12px);
+      padding: var(--s-4);
+      position: sticky;
+      top: calc(var(--header-h) + var(--s-4));
+    }
+    .cms-side__group { margin-bottom: var(--s-5); }
+    .cms-side__label { font-size: 11px; letter-spacing: 0.12em; color: var(--gold-300); text-transform: uppercase; margin-bottom: var(--s-2); }
+    .cms-side__item {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 8px 12px; border-radius: var(--r-sm);
+      font-size: var(--fs-sm); color: var(--text-secondary);
+      cursor: pointer; transition: all 0.18s;
+    }
+    .cms-side__item:hover { background: var(--glass-200); color: var(--text-primary); }
+    .cms-side__item.active { background: var(--glass-gold); color: var(--gold-300); }
+    .cms-side__item small { color: var(--text-muted); font-size: 11px; }
+
+    .toolbar {
+      background: var(--glass-100);
+      border: 1px solid var(--border-default);
+      border-radius: var(--r-lg);
+      padding: var(--s-3) var(--s-4);
+      backdrop-filter: blur(12px);
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: var(--s-3);
+      margin-bottom: var(--s-4);
+    }
+    .search-box {
+      display: flex; align-items: center; gap: var(--s-2);
+      background: var(--bg-elev-2);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--r-md);
+      padding: 8px 14px;
+      min-width: 320px;
+    }
+    .search-box input {
+      flex: 1; background: transparent; border: none; outline: none;
+      color: var(--text-primary); font-size: var(--fs-sm);
+    }
+
+    .article-row {
+      display: grid;
+      grid-template-columns: 32px 1.4fr 100px 110px 90px 70px 70px 60px;
+      gap: var(--s-3);
+      align-items: center;
+      padding: 14px var(--s-4);
+      background: var(--glass-100);
+      border: 1px solid var(--border-default);
+      border-radius: var(--r-md);
+      backdrop-filter: blur(8px);
+      margin-bottom: 8px;
+      transition: all 0.18s;
+    }
+    .article-row:hover { background: var(--glass-200); border-color: var(--border-strong); transform: translateX(2px); }
+    .article-row__title { color: var(--text-primary); font-weight: 500; line-height: 1.4; font-size: var(--fs-sm); }
+    .article-row__meta { color: var(--text-muted); font-size: 11px; margin-top: 2px; }
+    .article-row__check { width: 16px; height: 16px; accent-color: var(--gold-500); }
+
+    .badge-status {
+      display: inline-flex; align-items: center; gap: 4px;
+      padding: 3px 10px; border-radius: var(--r-full);
+      font-size: 10px; font-weight: 600; letter-spacing: 0.05em;
+    }
+    .badge-status--published { background: rgba(74,222,128,0.10); color: var(--success); }
+    .badge-status--draft { background: rgba(154,160,179,0.12); color: var(--text-secondary); }
+    .badge-status--scheduled { background: rgba(74,144,226,0.12); color: var(--blue-300); }
+    .badge-status--review { background: rgba(251,191,36,0.12); color: var(--warning); }
+
+    .geo-score {
+      display: inline-flex; align-items: center; gap: 4px;
+      font-family: 'Noto Serif KR', serif;
+      font-weight: 700;
+      color: var(--gold-300);
+      font-size: var(--fs-sm);
+    }
+    .geo-score__bar {
+      width: 32px; height: 4px; border-radius: 2px;
+      background: rgba(212,165,116,0.20);
+      overflow: hidden;
+    }
+    .geo-score__fill { height: 100%; background: linear-gradient(90deg, var(--gold-500), var(--gold-300)); border-radius: 2px; }
+
+    .row-actions {
+      display: flex; gap: 4px;
+      opacity: 0;
+      transition: opacity 0.18s;
+    }
+    .article-row:hover .row-actions { opacity: 1; }
+    .icon-btn {
+      width: 28px; height: 28px; border-radius: var(--r-sm);
+      background: var(--bg-elev-3);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-secondary);
+      display: grid; place-items: center;
+    }
+    .icon-btn:hover { background: var(--glass-gold); color: var(--gold-300); border-color: var(--border-gold); }
+
+    .col-head {
+      display: grid;
+      grid-template-columns: 32px 1.4fr 100px 110px 90px 70px 70px 60px;
+      gap: var(--s-3);
+      padding: 0 var(--s-4) 8px;
+      font-size: 10px; letter-spacing: 0.12em;
+      color: var(--gold-300); text-transform: uppercase;
+    }
+
+    @media (max-width: 1024px) {
+      .cms-shell { grid-template-columns: 1fr; }
+      .cms-side { position: static; }
+      .article-row { grid-template-columns: 32px 1fr; }
+      .article-row > *:not(:nth-child(1)):not(:nth-child(2)) { grid-column: 2; }
+      .col-head { display:none; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="header">
+    <div class="header__inner">
+      <a class="brand" href="index.html" aria-label="Insight Bank Hub"><img src="assets/logo.svg" alt="Insight Bank Hub" class="brand__logo" /></a>
+      <nav class="nav">
+        <a class="nav__link" href="index.html">개요</a>
+        <a class="nav__link" href="proposal.html">제안서</a>
+        <a class="nav__link" href="channels.html">6개 채널</a>
+        <a class="nav__link" href="monetization.html">수익 모델</a>
+        <a class="nav__link" href="ontology.html">온톨로지</a>
+        <a class="nav__link" href="graph-license.html">그래프 라이선스</a>
+        <a class="nav__link" href="structure.html">구조도</a>
+        <a class="nav__link" href="dashboard.html">대시보드</a>
+        <a class="nav__link" href="content.html">콘텐츠</a>
+        <a class="nav__link" href="knowledge.html">지식베이스</a>
+        <a class="nav__link" href="chatbot.html">챗봇</a>
+        <a class="nav__link" href="manual.html">매뉴얼</a>
+      </nav>
+      <button class="nav-toggle" aria-label="메뉴"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
+    </div>
+  </header>
+
+  <section class="section section--sm">
+    <div class="container">
+      <div class="row" style="justify-content:space-between; align-items:flex-end; flex-wrap:wrap; gap:var(--s-4); margin-bottom: var(--s-5);">
+        <div>
+          <span class="eyebrow">콘텐츠 관리</span>
+          <h1 style="margin:var(--s-2) 0 0; font-size:var(--fs-xl);">통합 발행 콘솔</h1>
+          <p class="text-muted mb-0" style="font-size:var(--fs-sm);">6개 채널 발행 큐 · 카테고리 · 태그 · 상태 관리</p>
+        </div>
+        <div class="row gap-2">
+          <button class="btn btn--ghost btn--sm">CSV 가져오기</button>
+          <button class="btn btn--primary">+ 새 콘텐츠</button>
+        </div>
+      </div>
+
+      <div class="cms-shell">
+
+        <!-- ===== 사이드바 ===== -->
+        <aside class="cms-side">
+          <div class="cms-side__group">
+            <div class="cms-side__label">상태</div>
+            <div class="cms-side__item active"><span>전체</span><small>1,284</small></div>
+            <div class="cms-side__item"><span>발행됨</span><small>1,012</small></div>
+            <div class="cms-side__item"><span>예약</span><small>48</small></div>
+            <div class="cms-side__item"><span>검토 대기</span><small>92</small></div>
+            <div class="cms-side__item"><span>초안</span><small>132</small></div>
+          </div>
+
+          <div class="cms-side__group">
+            <div class="cms-side__label">채널</div>
+            <div class="cms-side__item"><span>바이오타임즈</span><small>312</small></div>
+            <div class="cms-side__item"><span>한국M&A경제신문</span><small>284</small></div>
+            <div class="cms-side__item"><span>스타트업투데이</span><small>248</small></div>
+            <div class="cms-side__item"><span>월간지방세연구</span><small>220</small></div>
+            <div class="cms-side__item"><span>애틀러스리서치</span><small>220</small></div>
+            <div class="cms-side__item"><span>디펜스투데이</span><small>196</small></div>
+          </div>
+
+          <div class="cms-side__group">
+            <div class="cms-side__label">카테고리</div>
+            <div class="cms-side__item"><span>세법</span><small>184</small></div>
+            <div class="cms-side__item"><span>회계</span><small>158</small></div>
+            <div class="cms-side__item"><span>경영</span><small>146</small></div>
+            <div class="cms-side__item"><span>리서치</span><small>132</small></div>
+            <div class="cms-side__item"><span>인터뷰</span><small>96</small></div>
+          </div>
+
+          <div class="cms-side__group">
+            <div class="cms-side__label">태그 (상위)</div>
+            <div class="row" style="flex-wrap:wrap; gap:6px;">
+              <span class="chip">세법개정</span>
+              <span class="chip">R&amp;D</span>
+              <span class="chip">IPO</span>
+              <span class="chip">ESG</span>
+              <span class="chip">M&amp;A</span>
+              <span class="chip">감리</span>
+              <span class="chip">스타트업</span>
+            </div>
+          </div>
+        </aside>
+
+        <!-- ===== 메인 ===== -->
+        <main>
+          <!-- 툴바 -->
+          <div class="toolbar">
+            <div class="search-box">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.5-4.5"/></svg>
+              <input type="text" placeholder="제목·본문·태그·작성자로 검색" />
+            </div>
+            <div class="row gap-2">
+              <button class="btn btn--ghost btn--sm">정렬: 최신순 ▾</button>
+              <button class="btn btn--ghost btn--sm">필터 ▾</button>
+            </div>
+          </div>
+
+          <!-- 컬럼 헤더 -->
+          <div class="col-head">
+            <div></div>
+            <div>제목 / 작성자</div>
+            <div>채널</div>
+            <div>발행일</div>
+            <div>상태</div>
+            <div>인용</div>
+            <div>GEO</div>
+            <div></div>
+          </div>
+
+          <!-- 행: 발행됨 (인용 많음) -->
+          <div class="article-row">
+            <input type="checkbox" class="article-row__check" />
+            <div>
+              <div class="article-row__title">2026 K-반도체 세제 지원 강화, 신성장 R&D 공제 확대</div>
+              <div class="article-row__meta">김정책 기자 · 1,847자 · 첨부 2</div>
+            </div>
+            <span class="chip chip--gold" style="font-size:10px;">한국M&A경제신문</span>
+            <span class="text-secondary" style="font-size:var(--fs-xs);">2026.04.18</span>
+            <span class="badge-status badge-status--published">● 발행됨</span>
+            <strong style="color:var(--gold-300); font-family:'Noto Serif KR',serif;">284</strong>
+            <span class="geo-score">98<span class="geo-score__bar"><span class="geo-score__fill" style="width:98%;"></span></span></span>
+            <div class="row-actions">
+              <button class="icon-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4v16h16v-7M20 4l-9 9M14 4h6v6"/></svg></button>
+              <button class="icon-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
+            </div>
+          </div>
+
+          <div class="article-row">
+            <input type="checkbox" class="article-row__check" />
+            <div>
+              <div class="article-row__title">신성장 4대 분야 R&amp;D 투자 동향 보고서</div>
+              <div class="article-row__meta">리서치센터 · 4,210자 · 차트 8개</div>
+            </div>
+            <span class="chip chip--gold" style="font-size:10px;">애틀러스리서치</span>
+            <span class="text-secondary" style="font-size:var(--fs-xs);">2026.03.30</span>
+            <span class="badge-status badge-status--published">● 발행됨</span>
+            <strong style="color:var(--gold-300); font-family:'Noto Serif KR',serif;">248</strong>
+            <span class="geo-score">95<span class="geo-score__bar"><span class="geo-score__fill" style="width:95%;"></span></span></span>
+            <div class="row-actions">
+              <button class="icon-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4v16h16v-7M20 4l-9 9M14 4h6v6"/></svg></button>
+            </div>
+          </div>
+
+          <div class="article-row">
+            <input type="checkbox" class="article-row__check" />
+            <div>
+              <div class="article-row__title">지방세 부과 처분 취소 판례 분석 (2026 1Q)</div>
+              <div class="article-row__meta">박세무 회계사 · 2,310자 · 시리즈 (2/3)</div>
+            </div>
+            <span class="chip chip--gold" style="font-size:10px;">월간지방세연구</span>
+            <span class="text-secondary" style="font-size:var(--fs-xs);">2026.04.22</span>
+            <span class="badge-status badge-status--published">● 발행됨</span>
+            <strong style="color:var(--gold-300); font-family:'Noto Serif KR',serif;">212</strong>
+            <span class="geo-score">93<span class="geo-score__bar"><span class="geo-score__fill" style="width:93%;"></span></span></span>
+            <div class="row-actions">
+              <button class="icon-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4v16h16v-7M20 4l-9 9M14 4h6v6"/></svg></button>
+            </div>
+          </div>
+
+          <div class="article-row">
+            <input type="checkbox" class="article-row__check" />
+            <div>
+              <div class="article-row__title">K-방산 4Q 수출 22조 돌파, 폴란드·UAE 추가 계약</div>
+              <div class="article-row__meta">이정책 기자 · 1,560자</div>
+            </div>
+            <span class="chip chip--gold" style="font-size:10px;">한국M&A경제신문</span>
+            <span class="text-secondary" style="font-size:var(--fs-xs);">2026.04.10</span>
+            <span class="badge-status badge-status--published">● 발행됨</span>
+            <strong style="color:var(--gold-300); font-family:'Noto Serif KR',serif;">188</strong>
+            <span class="geo-score">90<span class="geo-score__bar"><span class="geo-score__fill" style="width:90%;"></span></span></span>
+            <div class="row-actions">
+              <button class="icon-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4v16h16v-7M20 4l-9 9M14 4h6v6"/></svg></button>
+            </div>
+          </div>
+
+          <!-- 검토 대기 -->
+          <div class="article-row">
+            <input type="checkbox" class="article-row__check" />
+            <div>
+              <div class="article-row__title">KF-21 2차 양산 사업 추가 발주 (편집 진행 중)</div>
+              <div class="article-row__meta">최감리 기자 · 1,920자 · AI 교열 완료</div>
+            </div>
+            <span class="chip chip--gold" style="font-size:10px;">월간지방세연구</span>
+            <span class="text-secondary" style="font-size:var(--fs-xs);">예정 04.30</span>
+            <span class="badge-status badge-status--review">● 검토 대기</span>
+            <span class="text-muted" style="font-family:'Noto Serif KR',serif;">—</span>
+            <span class="geo-score">87<span class="geo-score__bar"><span class="geo-score__fill" style="width:87%;"></span></span></span>
+            <div class="row-actions">
+              <button class="icon-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+            </div>
+          </div>
+
+          <!-- 예약 -->
+          <div class="article-row">
+            <input type="checkbox" class="article-row__check" />
+            <div>
+              <div class="article-row__title">바이오 헬스케어 2Q 전망: 신약 임상 ↑</div>
+              <div class="article-row__meta">한경제 기자 · 2,840자 · 차트 4</div>
+            </div>
+            <span class="chip chip--gold" style="font-size:10px;">바이오타임즈</span>
+            <span class="text-secondary" style="font-size:var(--fs-xs);">예정 05.02 06:00</span>
+            <span class="badge-status badge-status--scheduled">● 예약</span>
+            <span class="text-muted" style="font-family:'Noto Serif KR',serif;">—</span>
+            <span class="geo-score">85<span class="geo-score__bar"><span class="geo-score__fill" style="width:85%;"></span></span></span>
+            <div class="row-actions">
+              <button class="icon-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></button>
+            </div>
+          </div>
+
+          <div class="article-row">
+            <input type="checkbox" class="article-row__check" />
+            <div>
+              <div class="article-row__title">한국 5G 어드밴스드 보급률 분기 보고서</div>
+              <div class="article-row__meta">리서치센터 · 6,420자 · 인포그래픽 12</div>
+            </div>
+            <span class="chip chip--gold" style="font-size:10px;">스타트업투데이</span>
+            <span class="text-secondary" style="font-size:var(--fs-xs);">예정 05.05 09:00</span>
+            <span class="badge-status badge-status--scheduled">● 예약</span>
+            <span class="text-muted" style="font-family:'Noto Serif KR',serif;">—</span>
+            <span class="geo-score">94<span class="geo-score__bar"><span class="geo-score__fill" style="width:94%;"></span></span></span>
+            <div class="row-actions">
+              <button class="icon-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></button>
+            </div>
+          </div>
+
+          <!-- 초안 -->
+          <div class="article-row">
+            <input type="checkbox" class="article-row__check" />
+            <div>
+              <div class="article-row__title">딥테크 스타트업 IPO 시리즈 (3) — 평가 모델</div>
+              <div class="article-row__meta">박세무 회계사 · 작성 중 · 1,240자</div>
+            </div>
+            <span class="chip chip--gold" style="font-size:10px;">월간지방세연구</span>
+            <span class="text-secondary" style="font-size:var(--fs-xs);">미정</span>
+            <span class="badge-status badge-status--draft">● 초안</span>
+            <span class="text-muted" style="font-family:'Noto Serif KR',serif;">—</span>
+            <span class="geo-score" style="color:var(--text-muted);">—<span class="geo-score__bar"><span class="geo-score__fill" style="width:0%;"></span></span></span>
+            <div class="row-actions">
+              <button class="icon-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21l3-1L20 6l-3-3L3 17v4z"/></svg></button>
+            </div>
+          </div>
+
+          <div class="article-row">
+            <input type="checkbox" class="article-row__check" />
+            <div>
+              <div class="article-row__title">ESG 공시 의무화 Q&amp;A (편집 보류)</div>
+              <div class="article-row__meta">이정책 기자 · 작성 중 · 980자</div>
+            </div>
+            <span class="chip chip--gold" style="font-size:10px;">한국M&A경제신문</span>
+            <span class="text-secondary" style="font-size:var(--fs-xs);">미정</span>
+            <span class="badge-status badge-status--draft">● 초안</span>
+            <span class="text-muted" style="font-family:'Noto Serif KR',serif;">—</span>
+            <span class="geo-score" style="color:var(--text-muted);">—<span class="geo-score__bar"><span class="geo-score__fill" style="width:0%;"></span></span></span>
+            <div class="row-actions">
+              <button class="icon-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21l3-1L20 6l-3-3L3 17v4z"/></svg></button>
+            </div>
+          </div>
+
+          <!-- 페이지 -->
+          <div class="row mt-6" style="justify-content:space-between; align-items:center;">
+            <span class="text-muted" style="font-size:var(--fs-sm);">9건 표시 · 전체 1,284건</span>
+            <div class="row gap-2">
+              <button class="btn btn--ghost btn--sm">‹ 이전</button>
+              <button class="btn btn--ghost btn--sm">다음 ›</button>
+            </div>
+          </div>
+
+          <!-- ===== AI 보조 패널 ===== -->
+          <div class="card mt-6" style="background:var(--glass-gold); border-color:var(--border-gold);" data-reveal>
+            <div class="row" style="justify-content:space-between; align-items:center; flex-wrap:wrap; gap:var(--s-3);">
+              <div>
+                <span class="chip chip--gold">AI 보조</span>
+                <h4 style="margin:var(--s-2) 0 4px;">발행 큐 자동 최적화 가능</h4>
+                <p class="text-secondary mb-0" style="font-size:var(--fs-sm);">
+                  검토 대기 92건 중 78건은 AI 교열을 통과했습니다. 일괄 검토 모드로 시간을 단축하세요.
+                </p>
+              </div>
+              <button class="btn btn--primary">일괄 검토 시작</button>
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="footer__cta-strip">
+      <div class="container">
+        <div class="row" style="justify-content:space-between; align-items:center; flex-wrap:wrap; gap:var(--s-4);">
+          <div>
+            <h3>여섯 채널의 권위, 하나의 인사이트 뱅크 허브로</h3>
+            <p>제안서 검토부터 시작하시거나, 데모 모듈을 둘러보세요.</p>
+          </div>
+          <div class="row gap-2">
+            <a class="btn btn--primary" href="proposal.html">제안서 보기</a>
+            <a class="btn btn--ghost" href="dashboard.html">데모 대시보드</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer__main">
+      <div class="container">
+        <div class="footer__grid">
+          <div class="footer__brand-col">
+            <img src="assets/logo.svg" alt="Insight Bank Hub" />
+            <p class="footer__tagline">6개 인터넷 매체를 통합한 GEO-AIO 싱크탱크 허브.<br/>분산된 채널을 인용 가능한 자산으로 전환합니다.</p>
+            <div class="footer__langs">🇰🇷 🇺🇸 🇨🇳 🇯🇵 🇪🇸 🇫🇷 🇩🇪 🇸🇦</div>
+            <div class="footer__social">
+              <a href="#" aria-label="X / Twitter"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+              <a href="#" aria-label="LinkedIn"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67h-3.55V9h3.41v1.56h.05c.48-.9 1.65-1.85 3.4-1.85 3.64 0 4.31 2.4 4.31 5.51zM5.34 7.43A2.06 2.06 0 113.28 5.37a2.06 2.06 0 012.06 2.06zm-1.78 13.02h3.56V9H3.56zM22.23 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.46c.98 0 1.77-.77 1.77-1.72V1.72C24 .77 23.21 0 22.23 0z"/></svg></a>
+              <a href="#" aria-label="YouTube"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M23.5 6.5c-.3-1-1-1.8-2-2C19.7 4 12 4 12 4s-7.7 0-9.5.5c-1 .2-1.7 1-2 2C0 8.3 0 12 0 12s0 3.7.5 5.5c.3 1 1 1.8 2 2C4.3 20 12 20 12 20s7.7 0 9.5-.5c1-.2 1.7-1 2-2 .5-1.8.5-5.5.5-5.5s0-3.7-.5-5.5zM9.5 15.5v-7l6 3.5z"/></svg></a>
+              <a href="#" aria-label="RSS"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M4 4v3a14 14 0 0114 14h3A17 17 0 004 4zm0 6v3a8 8 0 018 8h3a11 11 0 00-11-11zm2.5 8a2.5 2.5 0 110 5 2.5 2.5 0 010-5z"/></svg></a>
+            </div>
+          </div>
+          <div class="footer__col">
+            <h5>플랫폼</h5>
+            <a href="dashboard.html">통합 대시보드</a>
+            <a href="content.html">콘텐츠 관리</a>
+            <a href="knowledge.html">RAG 지식베이스</a>
+            <a href="ontology.html">온톨로지</a>
+            <a href="graph-license.html">그래프 라이선스</a>
+            <a href="chatbot.html">RAG 챗봇</a>
+          </div>
+          <div class="footer__col">
+            <h5>자료</h5>
+            <a href="index.html">개요</a>
+            <a href="channels.html">6개 채널</a>
+            <a href="monetization.html">수익 모델</a>
+            <a href="proposal.html">계약 제안서</a>
+            <a href="structure.html">시스템 구조도</a>
+            <a href="manual.html">운영 매뉴얼</a>
+          </div>
+          <div class="footer__col">
+            <h5>연락처</h5>
+            <p>support@insightbankhub.kr</p>
+            <p>평일 09:00 – 18:00 KST</p>
+            <p>SLA 24/7 비상 라인</p>
+            <a href="proposal.html" class="btn btn--ghost btn--sm" style="margin-top:8px; display:inline-flex;">파트너 문의 →</a>
+          </div>
+        </div>
+
+        <hr class="footer__divider" />
+
+        <div class="footer__bottom">
+          <span>© 2026 Insight Bank Hub. All rights reserved.</span>
+          <div class="footer__legal">
+            <a href="#">이용약관</a>
+            <a href="#">개인정보처리방침</a>
+            <a href="#">llms.txt</a>
+            <span class="footer__seal">v1.0 · Confidential</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/common.js"></script>
+  <script>
+    document.querySelectorAll('.cms-side__item').forEach(it => {
+      it.addEventListener('click', () => {
+        document.querySelectorAll('.cms-side__item').forEach(x => x.classList.remove('active'));
+        it.classList.add('active');
+      });
+    });
+  </script>
+</body>
+</html>

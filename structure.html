@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0a0e1a" />
+  <title>시스템 구조도 — Insight Bank Hub</title>
+  <meta name="description" content="6개 매체 → Insight Bank Hub → AI 레이어 → 사용자 흐름의 SVG 구조도" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="시스템 구조도 — Insight Bank Hub" />
+  <meta property="og:image" content="assets/og-image.svg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;700;900&display=swap" />
+  <link rel="stylesheet" href="css/common.css" />
+  <style>
+    .arch-svg { width: 100%; height: auto; max-width: 1100px; margin: 0 auto; display: block; }
+    .arch-svg .node-box { fill: rgba(255,255,255,0.04); stroke: rgba(255,255,255,0.18); stroke-width: 1.5; transition: all 0.3s; }
+    .arch-svg .node-box:hover { fill: rgba(212,165,116,0.10); stroke: var(--gold-500); cursor: pointer; }
+    .arch-svg .node-box--gold { fill: rgba(212,165,116,0.10); stroke: var(--gold-500); }
+    .arch-svg .node-box--blue { fill: rgba(74,144,226,0.10); stroke: var(--blue-500); }
+    .arch-svg text { fill: #e8eaed; font-family: 'Pretendard', sans-serif; font-size: 13px; }
+    .arch-svg .label-strong { font-weight: 700; font-size: 14px; }
+    .arch-svg .label-muted { fill: #9aa0b3; font-size: 11px; }
+    .arch-svg .flow-line { stroke: rgba(212,165,116,0.45); stroke-width: 1.5; fill: none; stroke-dasharray: 4 4; animation: flow 1.5s linear infinite; }
+    .arch-svg .flow-line--solid { stroke-dasharray: none; stroke: rgba(74,144,226,0.5); }
+    @keyframes flow { to { stroke-dashoffset: -16; } }
+    .layer-card {
+      background: var(--glass-100);
+      border: 1px solid var(--border-default);
+      border-radius: var(--r-lg);
+      padding: var(--s-5);
+      backdrop-filter: blur(12px);
+    }
+    .layer-card h4 { color: var(--gold-300); margin-bottom: var(--s-3); }
+    .tech-grid { display: grid; grid-template-columns: 80px 1fr; gap: var(--s-4); align-items: center; padding: var(--s-3) 0; border-bottom: 1px solid var(--border-subtle); }
+    .tech-grid:last-child { border:none; }
+    .tech-grid strong { color: var(--blue-300); font-size: var(--fs-sm); }
+  </style>
+</head>
+<body>
+
+  <header class="header">
+    <div class="header__inner">
+      <a class="brand" href="index.html" aria-label="Insight Bank Hub"><img src="assets/logo.svg" alt="Insight Bank Hub" class="brand__logo" /></a>
+      <nav class="nav">
+        <a class="nav__link" href="index.html">개요</a>
+        <a class="nav__link" href="proposal.html">제안서</a>
+        <a class="nav__link" href="channels.html">6개 채널</a>
+        <a class="nav__link" href="monetization.html">수익 모델</a>
+        <a class="nav__link" href="ontology.html">온톨로지</a>
+        <a class="nav__link" href="graph-license.html">그래프 라이선스</a>
+        <a class="nav__link" href="structure.html">구조도</a>
+        <a class="nav__link" href="dashboard.html">대시보드</a>
+        <a class="nav__link" href="content.html">콘텐츠</a>
+        <a class="nav__link" href="knowledge.html">지식베이스</a>
+        <a class="nav__link" href="chatbot.html">챗봇</a>
+        <a class="nav__link" href="manual.html">매뉴얼</a>
+      </nav>
+      <button class="nav-toggle" aria-label="메뉴"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
+    </div>
+  </header>
+
+  <section class="hero" style="padding:80px 0 var(--s-6);">
+    <div class="container hero__inner">
+      <span class="eyebrow">시스템 아키텍처</span>
+      <h1 class="display hero__title" style="font-size:clamp(36px,6vw,56px);">6채널 → 허브 → AI → 사용자</h1>
+      <p class="hero__sub">데이터 흐름과 기술 스택을 한눈에. 각 레이어는 독립 모듈로 교체·확장 가능하도록 설계되었습니다.</p>
+    </div>
+  </section>
+
+  <!-- ===== SVG 다이어그램 ===== -->
+  <section class="section">
+    <div class="container">
+      <div class="card" data-reveal style="padding:var(--s-6); overflow-x:auto;">
+        <svg class="arch-svg" viewBox="0 0 1100 720" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Insight Bank Hub 시스템 구조도">
+          <!-- 마커: 화살표 -->
+          <defs>
+            <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M0 0L10 5L0 10z" fill="rgba(212,165,116,0.65)"/>
+            </marker>
+            <marker id="arr2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M0 0L10 5L0 10z" fill="rgba(74,144,226,0.7)"/>
+            </marker>
+            <linearGradient id="hubGrad" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#d4a574" stop-opacity="0.20"/>
+              <stop offset="100%" stop-color="#4a90e2" stop-opacity="0.20"/>
+            </linearGradient>
+          </defs>
+
+          <!-- Layer 1: 6개 매체 (Source) -->
+          <text x="550" y="40" text-anchor="middle" class="label-strong" fill="#d4a574">Layer 1 — Source · 6개 채널 (실제 매체)</text>
+          <g>
+            <rect class="node-box" x="40"  y="60" width="155" height="76" rx="10"/>
+            <text x="117" y="90" text-anchor="middle" class="label-strong">바이오타임즈</text>
+            <text x="117" y="108" text-anchor="middle" class="label-muted">바이오·헬스케어</text>
+            <text x="117" y="124" text-anchor="middle" class="label-muted" font-size="9">biotimes.co.kr</text>
+
+            <rect class="node-box" x="205" y="60" width="155" height="76" rx="10"/>
+            <text x="282" y="90" text-anchor="middle" class="label-strong">애틀러스리서치</text>
+            <text x="282" y="108" text-anchor="middle" class="label-muted">ICT·통신·방송</text>
+            <text x="282" y="124" text-anchor="middle" class="label-muted" font-size="9">arg.co.kr</text>
+
+            <rect class="node-box" x="370" y="60" width="155" height="76" rx="10"/>
+            <text x="447" y="90" text-anchor="middle" class="label-strong">스타트업투데이</text>
+            <text x="447" y="108" text-anchor="middle" class="label-muted">스타트업·VC</text>
+            <text x="447" y="124" text-anchor="middle" class="label-muted" font-size="9">startuptoday.kr</text>
+
+            <rect class="node-box" x="535" y="60" width="155" height="76" rx="10"/>
+            <text x="612" y="90" text-anchor="middle" class="label-strong">한국M&amp;A경제신문</text>
+            <text x="612" y="108" text-anchor="middle" class="label-muted">M&amp;A·자본시장</text>
+            <text x="612" y="124" text-anchor="middle" class="label-muted" font-size="9">kmnanews.com</text>
+
+            <rect class="node-box" x="700" y="60" width="155" height="76" rx="10"/>
+            <text x="777" y="90" text-anchor="middle" class="label-strong">디펜스투데이</text>
+            <text x="777" y="108" text-anchor="middle" class="label-muted">방산·국방</text>
+            <text x="777" y="124" text-anchor="middle" class="label-muted" font-size="9">defensetoday.kr</text>
+
+            <rect class="node-box" x="865" y="60" width="195" height="76" rx="10" stroke="#c084fc" fill="rgba(192,132,252,0.06)"/>
+            <text x="962" y="90" text-anchor="middle" class="label-strong">월간지방세연구</text>
+            <text x="962" y="108" text-anchor="middle" class="label-muted">지방세·조세·세무</text>
+            <text x="962" y="124" text-anchor="middle" class="label-muted" font-size="9">localtaxresearch.com</text>
+          </g>
+
+          <!-- 6채널 → Hub flow lines -->
+          <path class="flow-line" d="M117 136 L515 200" marker-end="url(#arr)"/>
+          <path class="flow-line" d="M282 136 L530 200" marker-end="url(#arr)"/>
+          <path class="flow-line" d="M447 136 L545 200" marker-end="url(#arr)"/>
+          <path class="flow-line" d="M612 136 L555 200" marker-end="url(#arr)"/>
+          <path class="flow-line" d="M777 136 L570 200" marker-end="url(#arr)"/>
+          <path class="flow-line" d="M962 136 L585 200" marker-end="url(#arr)" stroke="rgba(192,132,252,0.5)"/>
+
+          <!-- Layer 2: 통합 허브 (Hub Core) -->
+          <text x="550" y="178" text-anchor="middle" class="label-strong" fill="#d4a574">Layer 2 — Insight Bank Hub Core</text>
+          <rect class="node-box node-box--gold" x="200" y="200" width="700" height="120" rx="14" fill="url(#hubGrad)"/>
+          <text x="550" y="232" text-anchor="middle" class="label-strong" font-size="16">Insight Bank Hub Core</text>
+
+          <g>
+            <rect class="node-box" x="220" y="248" width="150" height="56" rx="8"/>
+            <text x="295" y="272" text-anchor="middle" class="label-strong" font-size="12">수집·정규화</text>
+            <text x="295" y="290" text-anchor="middle" class="label-muted">Ingest · Schema</text>
+
+            <rect class="node-box" x="385" y="248" width="150" height="56" rx="8"/>
+            <text x="460" y="272" text-anchor="middle" class="label-strong" font-size="12">구조화·태깅</text>
+            <text x="460" y="290" text-anchor="middle" class="label-muted">JSON-LD · 엔티티</text>
+
+            <rect class="node-box" x="550" y="248" width="150" height="56" rx="8"/>
+            <text x="625" y="272" text-anchor="middle" class="label-strong" font-size="12">발행·CMS</text>
+            <text x="625" y="290" text-anchor="middle" class="label-muted">Publish · Routing</text>
+
+            <rect class="node-box" x="715" y="248" width="165" height="56" rx="8"/>
+            <text x="797" y="272" text-anchor="middle" class="label-strong" font-size="12">관리자 콘솔</text>
+            <text x="797" y="290" text-anchor="middle" class="label-muted">Admin · 권한</text>
+          </g>
+
+          <!-- Hub → AI flow -->
+          <path class="flow-line flow-line--solid" d="M550 320 L550 380" marker-end="url(#arr2)"/>
+
+          <!-- Layer 3: AI/RAG -->
+          <text x="550" y="402" text-anchor="middle" class="label-strong" fill="#7eb6f5">Layer 3 — AI · RAG · GEO-AIO</text>
+          <rect class="node-box node-box--blue" x="200" y="420" width="700" height="120" rx="14"/>
+
+          <g>
+            <rect class="node-box" x="220" y="448" width="150" height="56" rx="8"/>
+            <text x="295" y="472" text-anchor="middle" class="label-strong" font-size="12">청킹·임베딩</text>
+            <text x="295" y="490" text-anchor="middle" class="label-muted">Chunking · Embed</text>
+
+            <rect class="node-box" x="385" y="448" width="150" height="56" rx="8"/>
+            <text x="460" y="472" text-anchor="middle" class="label-strong" font-size="12">벡터 DB</text>
+            <text x="460" y="490" text-anchor="middle" class="label-muted">Vector Index</text>
+
+            <rect class="node-box" x="550" y="448" width="150" height="56" rx="8"/>
+            <text x="625" y="472" text-anchor="middle" class="label-strong" font-size="12">RAG 엔진</text>
+            <text x="625" y="490" text-anchor="middle" class="label-muted">Retrieval · Citation</text>
+
+            <rect class="node-box" x="715" y="448" width="165" height="56" rx="8"/>
+            <text x="797" y="472" text-anchor="middle" class="label-strong" font-size="12">Gemini API</text>
+            <text x="797" y="490" text-anchor="middle" class="label-muted">Answer Generation</text>
+          </g>
+
+          <!-- AI → Users flow -->
+          <path class="flow-line flow-line--solid" d="M300 540 L240 600" marker-end="url(#arr2)"/>
+          <path class="flow-line flow-line--solid" d="M500 540 L470 600" marker-end="url(#arr2)"/>
+          <path class="flow-line flow-line--solid" d="M700 540 L700 600" marker-end="url(#arr2)"/>
+          <path class="flow-line flow-line--solid" d="M850 540 L900 600" marker-end="url(#arr2)"/>
+
+          <!-- Layer 4: 사용자/AI 엔진 -->
+          <text x="550" y="622" text-anchor="middle" class="label-strong" fill="#d4a574">Layer 4 — Consumer · 사용자 + 외부 AI</text>
+
+          <g>
+            <rect class="node-box" x="100" y="640" width="180" height="60" rx="10"/>
+            <text x="190" y="668" text-anchor="middle" class="label-strong">일반 독자</text>
+            <text x="190" y="684" text-anchor="middle" class="label-muted">웹·모바일</text>
+
+            <rect class="node-box" x="300" y="640" width="180" height="60" rx="10"/>
+            <text x="390" y="668" text-anchor="middle" class="label-strong">RAG 챗봇 사용자</text>
+            <text x="390" y="684" text-anchor="middle" class="label-muted">통합 검색</text>
+
+            <rect class="node-box" x="500" y="640" width="180" height="60" rx="10"/>
+            <text x="590" y="668" text-anchor="middle" class="label-strong">B2B API 고객</text>
+            <text x="590" y="684" text-anchor="middle" class="label-muted">라이선스</text>
+
+            <rect class="node-box node-box--gold" x="700" y="640" width="180" height="60" rx="10"/>
+            <text x="790" y="668" text-anchor="middle" class="label-strong">외부 LLM 인용</text>
+            <text x="790" y="684" text-anchor="middle" class="label-muted">ChatGPT · Claude</text>
+
+            <rect class="node-box node-box--gold" x="900" y="640" width="170" height="60" rx="10"/>
+            <text x="985" y="668" text-anchor="middle" class="label-strong">Gemini · Perplexity</text>
+            <text x="985" y="684" text-anchor="middle" class="label-muted">검색·답변 인용</text>
+          </g>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 레이어별 기술 스택 ===== -->
+  <section class="section">
+    <div class="container">
+      <div data-reveal>
+        <span class="eyebrow">기술 스택</span>
+        <h2 style="margin-top:var(--s-4)">레이어별 구성</h2>
+      </div>
+
+      <div class="grid grid-2 mt-8">
+        <div class="layer-card" data-reveal>
+          <h4>Layer 1 · Source</h4>
+          <div class="tech-grid"><strong>채널</strong><span class="text-secondary">6개 인터넷 매체 (각 도메인 유지)</span></div>
+          <div class="tech-grid"><strong>수집</strong><span class="text-secondary">RSS · API · DB 직결 · 웹훅</span></div>
+          <div class="tech-grid"><strong>주기</strong><span class="text-secondary">실시간 + 배치 (5분 단위)</span></div>
+          <div class="tech-grid"><strong>스키마</strong><span class="text-secondary">단일 통합 스키마 (Article, Author, Tag, Channel)</span></div>
+        </div>
+
+        <div class="layer-card" data-reveal>
+          <h4>Layer 2 · Hub Core</h4>
+          <div class="tech-grid"><strong>프론트</strong><span class="text-secondary">Next.js 14 · TypeScript · Tailwind</span></div>
+          <div class="tech-grid"><strong>백엔드</strong><span class="text-secondary">Node.js (Fastify) · PostgreSQL</span></div>
+          <div class="tech-grid"><strong>스토리지</strong><span class="text-secondary">S3 호환 + CDN (CloudFront)</span></div>
+          <div class="tech-grid"><strong>인증</strong><span class="text-secondary">SSO · OAuth2 · 역할 기반 접근</span></div>
+        </div>
+
+        <div class="layer-card" data-reveal>
+          <h4>Layer 3 · AI / RAG</h4>
+          <div class="tech-grid"><strong>임베딩</strong><span class="text-secondary">Gemini Embeddings · 다국어</span></div>
+          <div class="tech-grid"><strong>벡터 DB</strong><span class="text-secondary">pgvector · Pinecone (옵션)</span></div>
+          <div class="tech-grid"><strong>RAG</strong><span class="text-secondary">하이브리드 검색 · BM25 + 벡터</span></div>
+          <div class="tech-grid"><strong>LLM</strong><span class="text-secondary">Gemini 2.5 Pro · 멀티턴 · 출처 인용</span></div>
+        </div>
+
+        <div class="layer-card" data-reveal>
+          <h4>Layer 4 · Consumer</h4>
+          <div class="tech-grid"><strong>웹</strong><span class="text-secondary">PWA · 모바일 우선 · &lt;2초 LCP</span></div>
+          <div class="tech-grid"><strong>API</strong><span class="text-secondary">REST · GraphQL · 라이선스 키</span></div>
+          <div class="tech-grid"><strong>SEO/GEO</strong><span class="text-secondary">JSON-LD · Sitemap · llms.txt</span></div>
+          <div class="tech-grid"><strong>분석</strong><span class="text-secondary">GA4 + 자체 인용 측정 시스템</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 데이터 플로우 표 ===== -->
+  <section class="section" style="background:var(--bg-elev-1);">
+    <div class="container">
+      <div data-reveal>
+        <span class="eyebrow">데이터 플로우</span>
+        <h2 style="margin-top:var(--s-4)">발행 1건의 24시간 여정</h2>
+      </div>
+
+      <div class="card mt-6" style="padding:0; overflow:hidden;" data-reveal>
+        <table class="table">
+          <thead><tr><th>시점</th><th>단계</th><th>주체</th><th>산출물</th></tr></thead>
+          <tbody>
+            <tr><td>T+0</td><td>기자 작성 → CMS 게시</td><td>편집국</td><td>원문 (HTML)</td></tr>
+            <tr><td>T+1분</td><td>스키마 정규화 + 메타 추출</td><td>Hub Core</td><td>Article 객체</td></tr>
+            <tr><td>T+3분</td><td>JSON-LD · 태그 · 엔티티 자동 생성</td><td>AI 보조</td><td>구조화 데이터</td></tr>
+            <tr><td>T+5분</td><td>청킹 + 임베딩 → 벡터 DB 적재</td><td>RAG 파이프라인</td><td>벡터 인덱스</td></tr>
+            <tr><td>T+10분</td><td>사이트맵·llms.txt 갱신, 외부 검색엔진 핑</td><td>SEO/GEO 모듈</td><td>인용 가능 상태</td></tr>
+            <tr><td>T+1시간</td><td>RAG 챗봇 응답 가능 + 출처 인용</td><td>RAG 엔진</td><td>인용 가능 답변</td></tr>
+            <tr><td>T+24시간</td><td>외부 LLM 인덱스 반영, 노출/인용 측정 시작</td><td>측정 시스템</td><td>인용 KPI</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="footer__cta-strip">
+      <div class="container">
+        <div class="row" style="justify-content:space-between; align-items:center; flex-wrap:wrap; gap:var(--s-4);">
+          <div>
+            <h3>여섯 채널의 권위, 하나의 인사이트 뱅크 허브로</h3>
+            <p>제안서 검토부터 시작하시거나, 데모 모듈을 둘러보세요.</p>
+          </div>
+          <div class="row gap-2">
+            <a class="btn btn--primary" href="proposal.html">제안서 보기</a>
+            <a class="btn btn--ghost" href="dashboard.html">데모 대시보드</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer__main">
+      <div class="container">
+        <div class="footer__grid">
+          <div class="footer__brand-col">
+            <img src="assets/logo.svg" alt="Insight Bank Hub" />
+            <p class="footer__tagline">6개 인터넷 매체를 통합한 GEO-AIO 싱크탱크 허브.<br/>분산된 채널을 인용 가능한 자산으로 전환합니다.</p>
+            <div class="footer__langs">🇰🇷 🇺🇸 🇨🇳 🇯🇵 🇪🇸 🇫🇷 🇩🇪 🇸🇦</div>
+            <div class="footer__social">
+              <a href="#" aria-label="X / Twitter"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+              <a href="#" aria-label="LinkedIn"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67h-3.55V9h3.41v1.56h.05c.48-.9 1.65-1.85 3.4-1.85 3.64 0 4.31 2.4 4.31 5.51zM5.34 7.43A2.06 2.06 0 113.28 5.37a2.06 2.06 0 012.06 2.06zm-1.78 13.02h3.56V9H3.56zM22.23 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.46c.98 0 1.77-.77 1.77-1.72V1.72C24 .77 23.21 0 22.23 0z"/></svg></a>
+              <a href="#" aria-label="YouTube"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M23.5 6.5c-.3-1-1-1.8-2-2C19.7 4 12 4 12 4s-7.7 0-9.5.5c-1 .2-1.7 1-2 2C0 8.3 0 12 0 12s0 3.7.5 5.5c.3 1 1 1.8 2 2C4.3 20 12 20 12 20s7.7 0 9.5-.5c1-.2 1.7-1 2-2 .5-1.8.5-5.5.5-5.5s0-3.7-.5-5.5zM9.5 15.5v-7l6 3.5z"/></svg></a>
+              <a href="#" aria-label="RSS"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M4 4v3a14 14 0 0114 14h3A17 17 0 004 4zm0 6v3a8 8 0 018 8h3a11 11 0 00-11-11zm2.5 8a2.5 2.5 0 110 5 2.5 2.5 0 010-5z"/></svg></a>
+            </div>
+          </div>
+          <div class="footer__col">
+            <h5>플랫폼</h5>
+            <a href="dashboard.html">통합 대시보드</a>
+            <a href="content.html">콘텐츠 관리</a>
+            <a href="knowledge.html">RAG 지식베이스</a>
+            <a href="ontology.html">온톨로지</a>
+            <a href="graph-license.html">그래프 라이선스</a>
+            <a href="chatbot.html">RAG 챗봇</a>
+          </div>
+          <div class="footer__col">
+            <h5>자료</h5>
+            <a href="index.html">개요</a>
+            <a href="channels.html">6개 채널</a>
+            <a href="monetization.html">수익 모델</a>
+            <a href="proposal.html">계약 제안서</a>
+            <a href="structure.html">시스템 구조도</a>
+            <a href="manual.html">운영 매뉴얼</a>
+          </div>
+          <div class="footer__col">
+            <h5>연락처</h5>
+            <p>support@insightbankhub.kr</p>
+            <p>평일 09:00 – 18:00 KST</p>
+            <p>SLA 24/7 비상 라인</p>
+            <a href="proposal.html" class="btn btn--ghost btn--sm" style="margin-top:8px; display:inline-flex;">파트너 문의 →</a>
+          </div>
+        </div>
+
+        <hr class="footer__divider" />
+
+        <div class="footer__bottom">
+          <span>© 2026 Insight Bank Hub. All rights reserved.</span>
+          <div class="footer__legal">
+            <a href="#">이용약관</a>
+            <a href="#">개인정보처리방침</a>
+            <a href="#">llms.txt</a>
+            <span class="footer__seal">v1.0 · Confidential</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/common.js"></script>
+</body>
+</html>

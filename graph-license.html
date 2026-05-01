@@ -1,0 +1,1106 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0a0e1a" />
+  <title>그래프 라이선스 — 6채널 결합 SPARQL API · Insight Bank Hub</title>
+  <meta name="description" content="6개 매체 결합 지식 그래프 라이선스 — 사모펀드·법무법인·정부가 SPARQL로 묻는 의사결정 인사이트 API" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="그래프 라이선스 — Insight Bank Hub" />
+  <meta property="og:image" content="assets/og-image.svg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;700;900&display=swap" />
+  <link rel="stylesheet" href="css/common.css" />
+  <style>
+    /* ===== Asset table per channel ===== */
+    .asset-row {
+      display: grid;
+      grid-template-columns: 180px 1.3fr 1.3fr 1.5fr;
+      gap: var(--s-3);
+      padding: var(--s-4);
+      border-bottom: 1px solid var(--border-subtle);
+      align-items: flex-start;
+    }
+    .asset-row:hover { background: var(--glass-100); }
+    .asset-row__media {
+      font-weight: 700;
+      color: var(--text-primary);
+      font-size: var(--fs-sm);
+    }
+    .asset-row__media small {
+      display: block;
+      color: var(--gold-300);
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-top: 2px;
+      font-weight: 600;
+    }
+    .asset-row__nodes, .asset-row__rels {
+      font-size: var(--fs-xs);
+      color: var(--text-secondary);
+      line-height: 1.7;
+    }
+    .asset-row__nodes code, .asset-row__rels code {
+      display: inline-block;
+      padding: 2px 6px;
+      margin: 1px;
+      background: var(--bg-elev-2);
+      border-radius: 4px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10.5px;
+      color: var(--blue-300);
+    }
+    .asset-row__rels code { color: var(--gold-300); }
+    .asset-row__example {
+      padding: var(--s-2);
+      background: var(--bg-elev-2);
+      border-left: 2px solid var(--gold-500);
+      border-radius: 4px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--text-primary);
+      line-height: 1.6;
+    }
+    .asset-row__example .arr { color: var(--gold-500); padding: 0 4px; }
+    .asset-row__example .ent { color: var(--text-primary); font-weight: 600; }
+    .asset-row__example .rel { color: var(--gold-300); font-style: italic; }
+
+    @media (max-width: 1024px) {
+      .asset-row { grid-template-columns: 1fr; }
+    }
+
+    /* ===== Cross-channel flow ===== */
+    .cross-flow {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr) auto;
+      gap: var(--s-3);
+      align-items: center;
+    }
+    .cross-step {
+      padding: var(--s-4);
+      background: var(--glass-100);
+      border: 1px solid var(--border-default);
+      border-radius: var(--r-md);
+      backdrop-filter: blur(10px);
+      position: relative;
+    }
+    .cross-step::after {
+      content: '↓';
+      position: absolute;
+      right: -16px; top: 50%;
+      transform: translateY(-50%);
+      color: var(--gold-500);
+      font-size: 24px;
+      font-weight: 700;
+      width: 28px; height: 28px;
+      background: var(--bg-base);
+      border-radius: 50%;
+      border: 1px solid var(--border-gold);
+      display: grid; place-items: center;
+      z-index: 2;
+    }
+    .cross-step:last-child::after { display: none; }
+    .cross-step__source {
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      color: var(--gold-300);
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+    .cross-step__entity {
+      font-family: 'Noto Serif KR', serif;
+      font-weight: 700;
+      color: var(--text-primary);
+      font-size: var(--fs-md);
+      margin: 4px 0 6px;
+    }
+    .cross-step__detail {
+      font-size: var(--fs-xs);
+      color: var(--text-secondary);
+    }
+    .cross-step__rel {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--gold-300);
+      font-style: italic;
+      margin-top: 8px;
+      padding-top: 6px;
+      border-top: 1px dashed var(--border-default);
+    }
+    @media (max-width: 1024px) {
+      .cross-flow { grid-template-columns: 1fr; }
+      .cross-step::after { right: 50%; top: auto; bottom: -16px; transform: translateX(50%); }
+    }
+
+    /* ===== Pipeline ===== */
+    .pipe-step {
+      display: grid;
+      grid-template-columns: 60px 1fr;
+      gap: var(--s-4);
+      padding: var(--s-4) 0;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .pipe-step:last-child { border:none; }
+    .pipe-step__num {
+      width: 48px; height: 48px;
+      border-radius: 50%;
+      background: var(--glass-gold);
+      border: 1px solid var(--border-gold);
+      display: grid; place-items: center;
+      font-family: 'Noto Serif KR', serif;
+      font-weight: 900;
+      font-size: var(--fs-lg);
+      color: var(--gold-300);
+    }
+    .pipe-step h4 { color: var(--text-primary); margin-bottom: 4px; }
+    .pipe-step__tech {
+      display: inline-flex;
+      gap: 4px;
+      flex-wrap: wrap;
+      margin-top: 8px;
+    }
+    .pipe-step__tech code {
+      padding: 2px 8px;
+      background: var(--bg-elev-2);
+      border: 1px solid var(--border-subtle);
+      border-radius: 4px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--blue-300);
+    }
+
+    /* ===== SPARQL ===== */
+    .sparql-box {
+      background: #0a0e1a;
+      border: 1px solid var(--border-strong);
+      border-radius: var(--r-md);
+      padding: var(--s-4);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      line-height: 1.7;
+      overflow-x: auto;
+      color: var(--text-primary);
+    }
+    .sparql-box .kw { color: var(--gold-300); font-weight: 600; }
+    .sparql-box .var { color: var(--blue-300); }
+    .sparql-box .lit { color: var(--success); }
+    .sparql-box .cls { color: #c084fc; }
+    .sparql-box .cm { color: var(--text-muted); }
+
+    .use-case {
+      background: var(--glass-100);
+      border: 1px solid var(--border-default);
+      border-radius: var(--r-lg);
+      padding: var(--s-5);
+      backdrop-filter: blur(12px);
+    }
+    .use-case__client {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 4px 12px;
+      background: var(--glass-gold);
+      border: 1px solid var(--border-gold);
+      border-radius: var(--r-full);
+      color: var(--gold-300);
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      font-weight: 700;
+    }
+    .use-case__channels {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin: var(--s-3) 0;
+    }
+    .use-case__channels span {
+      padding: 3px 10px;
+      background: var(--bg-elev-2);
+      border-radius: var(--r-full);
+      font-size: 10px;
+      color: var(--text-secondary);
+      border: 1px solid var(--border-subtle);
+    }
+    .use-case__answer {
+      margin-top: var(--s-3);
+      padding: var(--s-3);
+      background: var(--glass-gold);
+      border-left: 3px solid var(--gold-500);
+      border-radius: var(--r-sm);
+      font-size: var(--fs-sm);
+      color: var(--text-primary);
+    }
+    .use-case__answer strong { color: var(--gold-300); }
+
+    /* ===== Tier table ===== */
+    .tier-card {
+      padding: var(--s-5);
+      background: var(--glass-100);
+      border: 1px solid var(--border-default);
+      border-radius: var(--r-lg);
+      backdrop-filter: blur(10px);
+      transition: all 0.2s;
+    }
+    @media (hover:hover) {
+      .tier-card:hover { transform: translateY(-3px); border-color: var(--border-gold); }
+    }
+    .tier-card--strategic {
+      background: linear-gradient(135deg, var(--glass-gold), var(--glass-blue));
+      border-color: var(--border-gold);
+    }
+    .tier-card__name {
+      font-family: 'Noto Serif KR', serif;
+      font-weight: 700;
+      color: var(--text-primary);
+      font-size: var(--fs-lg);
+      margin-bottom: 4px;
+    }
+    .tier-card__price {
+      font-family: 'Noto Serif KR', serif;
+      font-weight: 700;
+      color: var(--gold-300);
+      font-size: var(--fs-2xl);
+      margin: var(--s-3) 0;
+      line-height: 1;
+    }
+    .tier-card__price small {
+      font-size: var(--fs-sm);
+      color: var(--text-muted);
+      font-weight: 400;
+      letter-spacing: 0;
+    }
+    .tier-card__feat {
+      list-style: none;
+      padding: 0;
+      margin: var(--s-3) 0 0;
+    }
+    .tier-card__feat li {
+      padding: 6px 0;
+      color: var(--text-secondary);
+      font-size: var(--fs-sm);
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+    }
+    .tier-card__feat li::before {
+      content: '✓';
+      color: var(--gold-500);
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    /* ===== Limit / Risk ===== */
+    .limit-card {
+      padding: var(--s-4);
+      background: rgba(248,113,113,0.06);
+      border: 1px solid rgba(248,113,113,0.20);
+      border-radius: var(--r-md);
+    }
+    .limit-card h4 { color: var(--danger); margin-bottom: 4px; }
+    .limit-card .mit {
+      margin-top: var(--s-2);
+      padding-top: var(--s-2);
+      border-top: 1px solid rgba(248,113,113,0.15);
+      font-size: var(--fs-sm);
+      color: var(--text-secondary);
+    }
+    .limit-card .mit strong { color: var(--success); }
+
+    /* ===== Adoption client cards ===== */
+    .client-card {
+      padding: var(--s-4);
+      background: var(--glass-100);
+      border: 1px solid var(--border-default);
+      border-radius: var(--r-md);
+      backdrop-filter: blur(10px);
+      text-align: center;
+    }
+    .client-card__type {
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      color: var(--gold-300);
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+    .client-card__icon { font-size: 32px; margin: 8px 0; }
+    .client-card__list {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: var(--s-2);
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+
+  <header class="header">
+    <div class="header__inner">
+      <a class="brand" href="index.html" aria-label="Insight Bank Hub"><img src="assets/logo.svg" alt="Insight Bank Hub" class="brand__logo" /></a>
+      <nav class="nav">
+        <a class="nav__link" href="index.html">개요</a>
+        <a class="nav__link" href="proposal.html">제안서</a>
+        <a class="nav__link" href="channels.html">6개 채널</a>
+        <a class="nav__link" href="monetization.html">수익 모델</a>
+        <a class="nav__link" href="ontology.html">온톨로지</a>
+        <a class="nav__link" href="graph-license.html">그래프 라이선스</a>
+        <a class="nav__link" href="structure.html">구조도</a>
+        <a class="nav__link" href="dashboard.html">대시보드</a>
+        <a class="nav__link" href="content.html">콘텐츠</a>
+        <a class="nav__link" href="knowledge.html">지식베이스</a>
+        <a class="nav__link" href="chatbot.html">챗봇</a>
+        <a class="nav__link" href="manual.html">매뉴얼</a>
+      </nav>
+      <button class="nav-toggle" aria-label="메뉴"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
+    </div>
+  </header>
+
+  <!-- ===== HERO ===== -->
+  <section class="hero" style="padding:80px 0 var(--s-6);">
+    <div class="container hero__inner">
+      <span class="eyebrow">Stream 09 · Knowledge Graph License</span>
+      <h1 class="display hero__title" style="font-size:clamp(36px,6vw,56px);">
+        6개 매체 결합 <span class="text-gradient">SPARQL 그래프 라이선스</span>
+      </h1>
+      <p class="hero__sub">
+        한 사건/거래/판례를 6개 매체에 걸쳐 추적하는 수직 결합 지식 그래프.
+        사모펀드·법무법인·투자은행·정부가 의미 기반 쿼리로 의사결정 인사이트를 추출 — <strong style="color:var(--text-primary);">경쟁사가 못 주는 영역</strong>.
+      </p>
+    </div>
+  </section>
+
+  <!-- ===== KPI ===== -->
+  <section class="section section--sm">
+    <div class="container">
+      <div class="grid grid-4" data-reveal>
+        <div class="stat card">
+          <div class="stat__value"><span data-count="2.4" data-suffix="M">2.4M</span></div>
+          <div class="stat__label">트리플 (3년 누적)</div>
+        </div>
+        <div class="stat card">
+          <div class="stat__value"><span data-count="6">6</span></div>
+          <div class="stat__label">결합 매체</div>
+        </div>
+        <div class="stat card">
+          <div class="stat__value"><span data-count="1.8" data-suffix="억">1.8억</span></div>
+          <div class="stat__label">평균 ACV</div>
+        </div>
+        <div class="stat card">
+          <div class="stat__value"><span data-count="240" data-suffix="ms">240ms</span></div>
+          <div class="stat__label">SPARQL 평균 응답</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 1. 매체별 그래프 자산 ===== -->
+  <section class="section">
+    <div class="container">
+      <div data-reveal>
+        <span class="eyebrow">01 · Channel Graph Assets</span>
+        <h2 style="margin-top:var(--s-4)">매체별 추출 가능한 노드·관계</h2>
+        <p>각 매체의 도메인 콘텐츠가 어떤 그래프 자산으로 변환되는지. 6개 매체가 정확히 한국 핵심 산업 6축을 분담합니다.</p>
+      </div>
+
+      <div class="card mt-6" data-reveal style="padding:0; overflow:hidden;">
+        <div style="display:grid; grid-template-columns: 180px 1.3fr 1.3fr 1.5fr; gap:var(--s-3); padding:var(--s-4); background:var(--glass-100); font-size:10px; letter-spacing:0.12em; color:var(--gold-300); text-transform:uppercase; font-weight:700; border-bottom:1px solid var(--border-default);">
+          <div>매체</div>
+          <div>핵심 노드 (Class)</div>
+          <div>핵심 관계 (Property)</div>
+          <div>실제 트리플 예시</div>
+        </div>
+
+        <div class="asset-row">
+          <div class="asset-row__media">바이오타임즈<small>BIOTIMES</small></div>
+          <div class="asset-row__nodes"><code>Corporation</code> <code>Drug</code> <code>ClinicalTrial</code> <code>Indication</code> <code>Substance</code> <code>Phase</code> <code>Approval</code></div>
+          <div class="asset-row__rels"><code>develops</code> <code>treats</code> <code>approvedBy</code> <code>phaseOf</code> <code>licensedTo</code></div>
+          <div class="asset-row__example"><span class="ent">SK바이오팜</span><span class="arr">─develops→</span><span class="ent">세노바메이트</span><span class="arr">─treats→</span><span class="ent">뇌전증</span></div>
+        </div>
+
+        <div class="asset-row">
+          <div class="asset-row__media">애틀러스리서치<small>ARG</small></div>
+          <div class="asset-row__nodes"><code>Carrier</code> <code>Broadcaster</code> <code>Tech (5G/6G)</code> <code>Subscribers</code> <code>MarketShare</code> <code>Tariff</code></div>
+          <div class="asset-row__rels"><code>hasSubscribers</code> <code>operates</code> <code>introduces</code> <code>marketShare</code></div>
+          <div class="asset-row__example"><span class="ent">SKT</span><span class="arr">─marketShare(2026Q1)→</span><span class="ent">48.7%</span><span class="arr">─on→</span><span class="ent">5G어드밴스드</span></div>
+        </div>
+
+        <div class="asset-row">
+          <div class="asset-row__media">스타트업투데이<small>STARTUPTODAY</small></div>
+          <div class="asset-row__nodes"><code>Startup</code> <code>Founder</code> <code>VC</code> <code>FundingRound</code> <code>Amount</code> <code>Exit</code></div>
+          <div class="asset-row__rels"><code>invests</code> <code>founded</code> <code>raisedFrom</code> <code>exitedVia</code></div>
+          <div class="asset-row__example"><span class="ent">컬리</span><span class="arr">─raised→</span><span class="ent">시리즈D</span><span class="arr">─from→</span><span class="ent">앵커PE</span> 2,500억</div>
+        </div>
+
+        <div class="asset-row">
+          <div class="asset-row__media">한국M&amp;A경제신문<small>KMNA</small></div>
+          <div class="asset-row__nodes"><code>Acquirer</code> <code>Target</code> <code>Advisor</code> <code>Deal</code> <code>DealValue</code> <code>Conditions</code></div>
+          <div class="asset-row__rels"><code>acquired</code> <code>advisedBy</code> <code>merged</code> <code>soldTo</code> <code>valueOf</code></div>
+          <div class="asset-row__example"><span class="ent">SK스퀘어</span><span class="arr">─acquired→</span><span class="ent">11번가</span><span class="arr">─advisedBy→</span><span class="ent">광장</span> · 1.2조</div>
+        </div>
+
+        <div class="asset-row">
+          <div class="asset-row__media">디펜스투데이<small>DEFENSETODAY</small></div>
+          <div class="asset-row__nodes"><code>DefenseCorp</code> <code>WeaponSystem</code> <code>BuyerCountry</code> <code>Contract</code> <code>Delivery</code></div>
+          <div class="asset-row__rels"><code>exportsTo</code> <code>develops</code> <code>operates</code> <code>contractValue</code></div>
+          <div class="asset-row__example"><span class="ent">한화에어로</span><span class="arr">─exports→</span><span class="ent">K9자주포</span><span class="arr">─to→</span><span class="ent">폴란드</span> · 33억$</div>
+        </div>
+
+        <div class="asset-row" style="background:rgba(192,132,252,0.06);">
+          <div class="asset-row__media" style="color:#c084fc;">월간지방세연구<small>LOCAL TAX RESEARCH</small></div>
+          <div class="asset-row__nodes"><code>CourtRuling</code> <code>LawArticle</code> <code>TaxItem</code> <code>TaxableObject</code> <code>Interpretation</code></div>
+          <div class="asset-row__rels"><code>cites</code> <code>interprets</code> <code>overrules</code> <code>imposedOn</code> <code>ruling</code></div>
+          <div class="asset-row__example"><span class="ent">2024두12345</span><span class="arr">─cites→</span><span class="ent">지방세법§7</span><span class="arr">─applied→</span><span class="ent">부동산명의신탁</span></div>
+        </div>
+      </div>
+
+      <p class="text-muted mt-4" style="font-size:var(--fs-xs);">
+        * 6개 매체 합산 약 <strong style="color:var(--gold-300);">420 클래스 + 180 관계</strong> · 월 발행량 1,300건 → 월 평균 추가 트리플 80,000건
+      </p>
+    </div>
+  </section>
+
+  <!-- ===== 2. Cross-channel 시너지 ===== -->
+  <section class="section" style="background:var(--bg-elev-1);">
+    <div class="container">
+      <div data-reveal>
+        <span class="eyebrow">02 · Cross-Channel Inference</span>
+        <h2 style="margin-top:var(--s-4)">한 사건이 6개 매체에 걸쳐 추적된다</h2>
+        <p>"바이오 신약 임상 통과 → IPO 추진 → 주관사 발표 → 세무 이슈" — 단일 매체로는 절대 못 만드는 수직 결합.</p>
+      </div>
+
+      <div class="card mt-8" data-reveal style="padding:var(--s-6);">
+        <div class="cross-flow">
+          <div class="cross-step">
+            <div class="cross-step__source">바이오타임즈</div>
+            <div class="cross-step__entity">루닛</div>
+            <div class="cross-step__detail">AI 진단 임상 1상 통과<br/>2025.11.18 단독</div>
+            <div class="cross-step__rel">[planning]</div>
+          </div>
+          <div class="cross-step">
+            <div class="cross-step__source">스타트업투데이</div>
+            <div class="cross-step__entity">IPO 2026 Q3</div>
+            <div class="cross-step__detail">상장 추진 단독 보도<br/>2026.01.04</div>
+            <div class="cross-step__rel">[advisedBy]</div>
+          </div>
+          <div class="cross-step">
+            <div class="cross-step__source">KMNA</div>
+            <div class="cross-step__entity">NH투자증권</div>
+            <div class="cross-step__detail">대표 주관사 선정<br/>2026.02.12</div>
+            <div class="cross-step__rel">[taxImpact]</div>
+          </div>
+          <div class="cross-step" style="border-color:rgba(192,132,252,0.30); background:rgba(192,132,252,0.06);">
+            <div class="cross-step__source" style="color:#c084fc;">월간지방세연구</div>
+            <div class="cross-step__entity">이전가격 이슈</div>
+            <div class="cross-step__detail">유사 판례 3건 자동 추출<br/>2024두12345 등</div>
+            <div class="cross-step__rel">[해결방안]</div>
+          </div>
+        </div>
+
+        <div class="card mt-6" style="background:var(--glass-gold); border-color:var(--border-gold); padding:var(--s-4);">
+          <strong style="color:var(--gold-300);">한 SPARQL 쿼리로 답변 가능</strong>
+          <p class="text-secondary mb-0 mt-2" style="font-size:var(--fs-sm);">
+            VC가 "루닛 같은 후속 IPO 후보 + 잠재 세무 리스크 보유 기업"을 묻는다면, 위 그래프를 1초 안에 traverse하여
+            <strong style="color:var(--text-primary);">6개 매체에 흩어진 단서를 통합 답변</strong>합니다.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 3. 4단계 파이프라인 ===== -->
+  <section class="section">
+    <div class="container">
+      <div data-reveal>
+        <span class="eyebrow">03 · Technical Pipeline</span>
+        <h2 style="margin-top:var(--s-4)">텍스트 → 그래프 → API 5단계</h2>
+      </div>
+
+      <div class="card mt-6" data-reveal style="padding:var(--s-5);">
+        <div class="pipe-step">
+          <div class="pipe-step__num">1</div>
+          <div>
+            <h4>수집 (Ingest)</h4>
+            <p class="text-secondary mb-0" style="font-size:var(--fs-sm);">
+              6개 매체 RSS·DB 직결·웹훅 → 월 1,300건 원문. 5분 단위 배치 + 실시간.
+            </p>
+            <div class="pipe-step__tech">
+              <code>RSS</code> <code>REST API</code> <code>Webhook</code> <code>DB Direct</code>
+            </div>
+          </div>
+        </div>
+
+        <div class="pipe-step">
+          <div class="pipe-step__num">2</div>
+          <div>
+            <h4>NER + RE (개체·관계 추출)</h4>
+            <p class="text-secondary mb-0" style="font-size:var(--fs-sm);">
+              인물·기업·금액·날짜·법령·무기체계·신약·판례 자동 인식. Few-shot 프롬프트 + 도메인 사전 결합으로 한국어 도메인 정확도 90~93%.
+            </p>
+            <div class="pipe-step__tech">
+              <code>Gemini 2.5 Pro</code> <code>spaCy</code> <code>KoNLPy</code> <code>Few-shot</code> <code>Domain Dict</code>
+            </div>
+          </div>
+        </div>
+
+        <div class="pipe-step">
+          <div class="pipe-step__num">3</div>
+          <div>
+            <h4>엔티티 정규화 (Coreference + Linking)</h4>
+            <p class="text-secondary mb-0" style="font-size:var(--fs-sm);">
+              동일인·약어·번역어 통합. <code style="color:var(--blue-300);">"SKT" = "SK텔레콤" = "에스케이텔레콤" = wd:Q485424</code>. Wikidata QID 매핑으로 글로벌 호환.
+            </p>
+            <div class="pipe-step__tech">
+              <code>Coref</code> <code>Wikidata Linking</code> <code>FIBO QID</code> <code>XBRL CIK</code>
+            </div>
+          </div>
+        </div>
+
+        <div class="pipe-step">
+          <div class="pipe-step__num">4</div>
+          <div>
+            <h4>그래프 적재 + 추론 (Graph Store + Reasoner)</h4>
+            <p class="text-secondary mb-0" style="font-size:var(--fs-sm);">
+              RDF 트리플 + 출처 메타(매체·날짜·기자) → Apache Jena. OWL2 RL 추론기로 자동 도출 사실 생성. Neo4j는 시각화/탐색용 미러.
+            </p>
+            <div class="pipe-step__tech">
+              <code>Apache Jena (RDF)</code> <code>Neo4j (Graph View)</code> <code>OWL2 RL</code> <code>SHACL</code>
+            </div>
+          </div>
+        </div>
+
+        <div class="pipe-step">
+          <div class="pipe-step__num">5</div>
+          <div>
+            <h4>API 노출 (SPARQL + GraphQL)</h4>
+            <p class="text-secondary mb-0" style="font-size:var(--fs-sm);">
+              SPARQL 1.1 엔드포인트 + GraphQL 미러 + REST shortcut. 인증·과금·rate limit·SLA 99.9%. 응답 평균 240ms.
+            </p>
+            <div class="pipe-step__tech">
+              <code>SPARQL 1.1</code> <code>GraphQL</code> <code>OAuth2</code> <code>Stripe Metered</code> <code>CloudFront</code>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 4. SPARQL 실 사용 사례 ===== -->
+  <section class="section" style="background:var(--bg-elev-1);">
+    <div class="container">
+      <div data-reveal>
+        <span class="eyebrow">04 · Real Use Cases</span>
+        <h2 style="margin-top:var(--s-4)">실 고객이 SPARQL로 묻는 진짜 질문</h2>
+        <p>키워드 검색으로는 절대 답할 수 없는 의사결정용 질의. 컨설턴트 1주일 작업이 1쿼리로.</p>
+      </div>
+
+      <!-- Use Case 1: PEF -->
+      <div class="use-case mt-6" data-reveal>
+        <div class="row" style="justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:var(--s-3);">
+          <div>
+            <div class="use-case__client">💼 사모펀드 (PEF) · IR 부서</div>
+            <h3 style="margin: var(--s-3) 0 4px;">"K-방산 수출 보유 비상장사 중 IPO 가능성 높은 기업 + 잠재 세무 리스크는?"</h3>
+            <div class="use-case__channels">
+              <span>① 디펜스투데이 (수출 계약)</span>
+              <span>② KMNA (IPO 시그널)</span>
+              <span>③ 월간지방세연구 (관련 판례)</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="sparql-box mt-4">
+<span class="kw">PREFIX</span> ibh: <span class="lit">&lt;https://ibh.kr/onto#&gt;</span>
+
+<span class="kw">SELECT</span> <span class="var">?company</span> <span class="var">?contractValue</span>
+       (<span class="kw">GROUP_CONCAT</span>(<span class="var">?ipoSignal</span>; separator=<span class="lit">", "</span>) <span class="kw">AS</span> <span class="var">?signals</span>)
+       (<span class="kw">COUNT</span>(<span class="var">?taxCase</span>) <span class="kw">AS</span> <span class="var">?riskCount</span>)
+<span class="kw">WHERE</span> {
+  <span class="cm"># ① 디펜스투데이: K-방산 수출 계약 보유</span>
+  <span class="var">?company</span> <span class="kw">a</span> ibh:<span class="cls">DefenseCorp</span> ;
+            ibh:status ibh:<span class="cls">Unlisted</span> ;
+            ibh:hasContract <span class="var">?c</span> .
+  <span class="var">?c</span> ibh:source ibh:<span class="cls">DefenseToday</span> ;
+     ibh:contractType ibh:<span class="cls">DefenseExport</span> ;
+     ibh:value <span class="var">?contractValue</span> .
+  <span class="kw">FILTER</span>(<span class="var">?contractValue</span> &gt; <span class="lit">100000000000</span>)  <span class="cm"># 1,000억 이상</span>
+
+  <span class="cm"># ② KMNA: IPO 추진 시그널</span>
+  <span class="kw">OPTIONAL</span> {
+    <span class="var">?company</span> ibh:mentionedIn <span class="var">?ipoSignal</span> .
+    <span class="var">?ipoSignal</span> ibh:source ibh:<span class="cls">KMNA</span> ;
+                ibh:topic ibh:<span class="cls">IPOFiling</span>
+  }
+
+  <span class="cm"># ③ 월간지방세연구: 관련 세무 판례</span>
+  <span class="kw">OPTIONAL</span> {
+    <span class="var">?company</span> ibh:relatedTo <span class="var">?taxCase</span> .
+    <span class="var">?taxCase</span> <span class="kw">a</span> ibh:<span class="cls">CourtRuling</span> ;
+              ibh:source ibh:<span class="cls">LocalTaxResearch</span>
+  }
+}
+<span class="kw">GROUP BY</span> <span class="var">?company</span> <span class="var">?contractValue</span>
+<span class="kw">ORDER BY DESC</span>(<span class="var">?contractValue</span>)
+<span class="kw">LIMIT</span> <span class="lit">20</span></div>
+
+        <div class="use-case__answer">
+          <strong>→ 응답 240ms 이내</strong> · 12개 후보 기업 + 각 기업의 IPO 시그널 + 평균 2.4건의 잠재 세무 리스크. 출처 매체·날짜·기자 모두 인용 가능. <strong style="color:var(--text-primary);">컨설턴트 1주일 작업 → 1쿼리.</strong>
+        </div>
+      </div>
+
+      <!-- Use Case 2: Law Firm -->
+      <div class="use-case mt-5" data-reveal>
+        <div>
+          <div class="use-case__client">⚖️ 법무법인 · 송무팀</div>
+          <h3 style="margin: var(--s-3) 0 4px;">"지방세법 7조 관련 최근 5년 판례 + 그 판례 후 발생한 관련 M&amp;A 거래는?"</h3>
+          <div class="use-case__channels">
+            <span>① 월간지방세연구 (판례)</span>
+            <span>② KMNA (M&A 거래)</span>
+            <span>③ 시계열 추론 (날짜 정렬)</span>
+          </div>
+        </div>
+
+        <div class="sparql-box mt-4">
+<span class="kw">SELECT</span> <span class="var">?ruling</span> <span class="var">?rulingDate</span> <span class="var">?deal</span> <span class="var">?dealDate</span> <span class="var">?dealValue</span>
+<span class="kw">WHERE</span> {
+  <span class="var">?ruling</span> <span class="kw">a</span> ibh:<span class="cls">CourtRuling</span> ;
+          ibh:cites &lt;https://ibh.kr/law/지방세법§7&gt; ;
+          ibh:rulingDate <span class="var">?rulingDate</span> .
+  <span class="kw">FILTER</span>(<span class="var">?rulingDate</span> &gt; <span class="lit">"2021-01-01"^^xsd:date</span>)
+
+  <span class="cm"># 판례 후 발생한 관련 거래 자동 연결</span>
+  <span class="var">?deal</span> <span class="kw">a</span> ibh:<span class="cls">MnaTransaction</span> ;
+        ibh:dealDate <span class="var">?dealDate</span> ;
+        ibh:dealValue <span class="var">?dealValue</span> ;
+        ibh:relatedRuling <span class="var">?ruling</span> .  <span class="cm"># 추론된 관계</span>
+  <span class="kw">FILTER</span>(<span class="var">?dealDate</span> &gt; <span class="var">?rulingDate</span>)
+}
+<span class="kw">ORDER BY</span> <span class="var">?rulingDate</span></div>
+
+        <div class="use-case__answer">
+          <strong>→ 38건 판례 + 평균 1.6건의 후속 거래</strong> 매핑. 변호사가 의뢰인 자문 시 "이 판례 이후 시장이 어떻게 반응했는가"를 즉시 제시 가능. <strong style="color:var(--text-primary);">법률 검토 시간 -73%.</strong>
+        </div>
+      </div>
+
+      <!-- Use Case 3: Government -->
+      <div class="use-case mt-5" data-reveal>
+        <div>
+          <div class="use-case__client">🏛️ 정부 · 과기부 / 기재부 정책 부서</div>
+          <h3 style="margin: var(--s-3) 0 4px;">"AI·바이오 신성장 R&amp;D 세제 혜택을 받은 기업의 후속 5G·6G 산업 동향과 M&amp;A는?"</h3>
+          <div class="use-case__channels">
+            <span>① 월간지방세연구 (세제 적용)</span>
+            <span>② 바이오타임즈 (바이오 R&D)</span>
+            <span>③ 애틀러스리서치 (5G·6G 통계)</span>
+            <span>④ KMNA (후속 M&A)</span>
+          </div>
+        </div>
+
+        <div class="sparql-box mt-4">
+<span class="cm"># 4개 매체 결합 — 정책 효과 추적 (개별 매체로는 불가능)</span>
+<span class="kw">SELECT</span> <span class="var">?company</span> <span class="var">?taxCredit</span> <span class="var">?subsequentMnA</span> <span class="var">?ictMarketShare</span>
+<span class="kw">WHERE</span> {
+  <span class="var">?company</span> ibh:receivedTaxBenefit <span class="var">?credit</span> .
+  <span class="var">?credit</span> ibh:source ibh:<span class="cls">LocalTaxResearch</span> ;
+          ibh:category ibh:<span class="cls">RnDTaxCredit</span> ;
+          ibh:amount <span class="var">?taxCredit</span> .
+
+  <span class="kw">OPTIONAL</span> { <span class="var">?company</span> ibh:relatedTo <span class="var">?bioPipeline</span> .
+              <span class="var">?bioPipeline</span> ibh:source ibh:<span class="cls">BioTimes</span> }
+
+  <span class="kw">OPTIONAL</span> { <span class="var">?company</span> ibh:operatesIn <span class="var">?ictSegment</span> .
+              <span class="var">?ictSegment</span> ibh:source ibh:<span class="cls">ARG</span> ;
+                          ibh:marketShare <span class="var">?ictMarketShare</span> }
+
+  <span class="kw">OPTIONAL</span> { <span class="var">?company</span> ibh:involvedIn <span class="var">?subsequentMnA</span> .
+              <span class="var">?subsequentMnA</span> ibh:source ibh:<span class="cls">KMNA</span> }
+}</div>
+
+        <div class="use-case__answer">
+          <strong>→ 정책 효과 추적 자동화</strong>. 기재부·과기부가 "세제 혜택 → 후속 산업 효과"를 측정하는 데 보통 6개월 걸리던 작업이 1쿼리로. <strong style="color:var(--text-primary);">정부 컨설팅 단가 +150% 정당화.</strong>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 5. 차별화 ===== -->
+  <section class="section">
+    <div class="container">
+      <div data-reveal>
+        <span class="eyebrow">05 · Why We Win</span>
+        <h2 style="margin-top:var(--s-4)">경쟁사가 못 하는 5가지</h2>
+      </div>
+
+      <div class="grid grid-3 mt-6">
+        <div class="card" data-reveal>
+          <span class="badge-num">α</span>
+          <h3 class="card__title mt-3">수직 결합 그래프</h3>
+          <p class="card__desc">개별 매체는 자기 도메인만 그래프화 가능. 우리는 6개 매체를 한 그래프에 결합 — 한 사건의 다층 추적이 유일하게 가능합니다.</p>
+        </div>
+        <div class="card" data-reveal>
+          <span class="badge-num">β</span>
+          <h3 class="card__title mt-3">출처 메타(Provenance)</h3>
+          <p class="card__desc">모든 트리플에 매체·날짜·기자 부착. 법적 인용 강도 최상 — 변호사·회계사가 의뢰인에게 직접 인용 가능한 출처 표기.</p>
+        </div>
+        <div class="card" data-reveal>
+          <span class="badge-num">γ</span>
+          <h3 class="card__title mt-3">시계열 사실 추적</h3>
+          <p class="card__desc">한 거래의 발생→자문→완료→세제이슈 흐름을 시간순 그래프로. 정태적 검색 엔진에서는 절대 못 만드는 동적 자산.</p>
+        </div>
+        <div class="card" data-reveal>
+          <span class="badge-num">δ</span>
+          <h3 class="card__title mt-3">국제 표준 호환</h3>
+          <p class="card__desc">FIBO·XBRL·Schema.org·Wikidata QID 매핑 → ChatGPT·Claude·Gemini가 별도 변환 없이 직접 인식. 글로벌 LLM 인용 가치 1.5~2배.</p>
+        </div>
+        <div class="card" data-reveal>
+          <span class="badge-num">ε</span>
+          <h3 class="card__title mt-3">15년+ 아카이브</h3>
+          <p class="card__desc">월간지방세연구 2009년부터 = 15년 판례 그래프. 5개 매체 2019년부터 = 7년 산업 거래 그래프. 누적 2.4M 트리플 — 신규 진입자가 따라잡는데 5년+.</p>
+        </div>
+        <div class="card card--featured" data-reveal style="border-color:var(--border-gold);">
+          <span class="badge-num">★</span>
+          <h3 class="card__title mt-3" style="color:var(--gold-300);">선명회계 본업 시너지</h3>
+          <p class="card__desc">발행사 신회장(선명회계법인)의 회계·세무 자문 본업 + 그래프 라이선스 결합. 컨설팅 단가 +30~50% — 본업과 자산이 서로 강화.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 6. 가격 / 4 티어 ===== -->
+  <section class="section" style="background:var(--bg-elev-1);">
+    <div class="container">
+      <div data-reveal>
+        <span class="eyebrow">06 · Pricing Tiers</span>
+        <h2 style="margin-top:var(--s-4)">4티어 라이선스</h2>
+        <p>읽기 전용 쿼리부터 LLM 학습 라이선스까지 — 고객 유형별 점진적 가격.</p>
+      </div>
+
+      <div class="grid grid-4 mt-8">
+        <div class="tier-card" data-reveal>
+          <span class="chip">Tier 1</span>
+          <div class="tier-card__name">Read-only Query</div>
+          <div class="tier-card__price">3,600만<small> /년</small></div>
+          <ul class="tier-card__feat">
+            <li>SPARQL 읽기 전용</li>
+            <li>월 100K 쿼리</li>
+            <li>출처 인용 표시</li>
+            <li>이메일 지원</li>
+          </ul>
+        </div>
+
+        <div class="tier-card" data-reveal>
+          <span class="chip chip--blue">Tier 2</span>
+          <div class="tier-card__name">Pro · 추론 포함</div>
+          <div class="tier-card__price">9,600만<small> /년</small></div>
+          <ul class="tier-card__feat">
+            <li>모든 Tier 1 +</li>
+            <li>OWL2 추론 활성화</li>
+            <li>월 500K 쿼리</li>
+            <li>GraphQL 미러 액세스</li>
+            <li>전담 매니저</li>
+          </ul>
+        </div>
+
+        <div class="tier-card" data-reveal>
+          <span class="chip chip--gold">Tier 3</span>
+          <div class="tier-card__name">Enterprise · 전체</div>
+          <div class="tier-card__price">2.8억<small> /년</small></div>
+          <ul class="tier-card__feat">
+            <li>모든 Tier 2 +</li>
+            <li>다국어 8개 언어</li>
+            <li>월 무제한 쿼리</li>
+            <li>커스텀 도메인 확장</li>
+            <li>SLA 99.9%</li>
+            <li>Slack 직통 채널</li>
+          </ul>
+        </div>
+
+        <div class="tier-card tier-card--strategic" data-reveal>
+          <span class="chip chip--gold">Tier 4 · STRATEGIC</span>
+          <div class="tier-card__name">LLM 학습 라이선스</div>
+          <div class="tier-card__price">5억+<small> /년</small></div>
+          <ul class="tier-card__feat">
+            <li>모든 Enterprise +</li>
+            <li>학습 데이터 라이선스</li>
+            <li>전체 트리플 덤프 (월간)</li>
+            <li>우선 공급 (사전 알림)</li>
+            <li>공동 모델 개발</li>
+            <li>임원진 분기 리뷰</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card mt-6" style="background:var(--glass-gold); border-color:var(--border-gold); padding:var(--s-4);" data-reveal>
+        <strong style="color:var(--gold-300);">평균 ACV 1.8억 산정 근거</strong>
+        <p class="text-secondary mb-0 mt-2" style="font-size:var(--fs-sm);">
+          Tier 1 × 8건(2.88억) + Tier 2 × 12건(11.52억) + Tier 3 × 6건(16.8억) + Tier 4 × 2건(10억+) = 약 41억 ARR 잠재.
+          Y3 보수 추정 7억은 점진 확보(전체 15% 확보) 기준.
+          전체 점유 시 Y5 25억+ 가능.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 7. 14개월 도입 일정 ===== -->
+  <section class="section">
+    <div class="container">
+      <div data-reveal>
+        <span class="eyebrow">07 · Adoption Roadmap</span>
+        <h2 style="margin-top:var(--s-4)">14개월 도입 단계</h2>
+      </div>
+
+      <div class="grid grid-4 mt-6">
+        <div class="card" data-reveal>
+          <span class="chip chip--gold">Step 1 · M1~M2</span>
+          <h4 class="mt-3">매체 라이선스 동의</h4>
+          <p class="text-secondary" style="font-size:var(--fs-sm);">
+            (주)비즈뷰 3개사 단일 협상 + (주)채널더블유 + 애틀러스 + 한국지방세연구회.
+            데이터 액세스 + 그래프 라이선스 권리 확보.
+          </p>
+        </div>
+        <div class="card" data-reveal>
+          <span class="chip chip--blue">Step 2 · M3~M6</span>
+          <h4 class="mt-3">MVP — 1개 도메인 PoC</h4>
+          <p class="text-secondary" style="font-size:var(--fs-sm);">
+            <strong style="color:var(--text-primary);">월간지방세연구 판례 그래프</strong>부터 (가장 명확).
+            200K 트리플 + 작동하는 SPARQL 엔드포인트.
+          </p>
+        </div>
+        <div class="card" data-reveal>
+          <span class="chip chip--blue">Step 3 · M7~M8</span>
+          <h4 class="mt-3">얼리 어답터 베타 1~2곳</h4>
+          <p class="text-secondary" style="font-size:var(--fs-sm);">
+            법무법인 1곳 + PEF 1곳 무료 베타 → 피드백 → 첫 유료 계약.
+            성공 사례 확보가 후속 영업의 결정적 무기.
+          </p>
+        </div>
+        <div class="card card--featured" data-reveal>
+          <span class="chip chip--gold">Step 4 · M9~M14</span>
+          <h4 class="mt-3">전체 6개 매체 + 본격 영업</h4>
+          <p class="text-secondary" style="font-size:var(--fs-sm);">
+            5개 매체 추가 적재 → 풀 그래프 (2.4M 트리플).
+            B2B 영업팀 가동 + LLM 회사 4사 동시 협상.
+          </p>
+        </div>
+      </div>
+
+      <div class="card mt-6" data-reveal style="background:var(--glass-gold); border-color:var(--border-gold); padding:var(--s-5);">
+        <div class="row" style="justify-content:space-between; align-items:center; flex-wrap:wrap; gap:var(--s-3);">
+          <div>
+            <strong style="color:var(--gold-300);">총 14개월 · 1.8억 투자(Phase 2.5)</strong>
+            <p class="text-secondary mb-0" style="font-size:var(--fs-sm);">
+              Y3 그래프 라이선스 +7억 + 기존 8개 스트림 단가 상승 +13억 = 단일 투자 항목 ROI ≈ 1,000%
+            </p>
+          </div>
+          <div class="row gap-2">
+            <a class="btn btn--primary" href="proposal.html">제안서 Phase 2.5 →</a>
+            <a class="btn btn--ghost" href="ontology.html">온톨로지 상세 →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 8. 얼리 어답터 후보 ===== -->
+  <section class="section" style="background:var(--bg-elev-1);">
+    <div class="container">
+      <div data-reveal>
+        <span class="eyebrow">08 · Target Adopters</span>
+        <h2 style="margin-top:var(--s-4)">얼리 어답터 후보 카테고리</h2>
+        <p>도메인별 잠재 고객. 첫 1~2곳을 확보하면 후속 영업 사이클이 6개월 → 2개월로 단축.</p>
+      </div>
+
+      <div class="grid grid-4 mt-6">
+        <div class="client-card" data-reveal>
+          <div class="client-card__type">Law Firm</div>
+          <div class="client-card__icon">⚖️</div>
+          <strong style="color:var(--text-primary);">대형 법무법인</strong>
+          <div class="client-card__list">김앤장 · 광장 · 세종 · 율촌 · 화우 · 태평양</div>
+        </div>
+        <div class="client-card" data-reveal>
+          <div class="client-card__type">PE / VC</div>
+          <div class="client-card__icon">💼</div>
+          <strong style="color:var(--text-primary);">사모펀드 / 벤처캐피탈</strong>
+          <div class="client-card__list">MBK · IMM · 한앤컴퍼니 · 스틱인베스트 · KB인베스트먼트</div>
+        </div>
+        <div class="client-card" data-reveal>
+          <div class="client-card__type">IB</div>
+          <div class="client-card__icon">🏦</div>
+          <strong style="color:var(--text-primary);">투자은행 / 증권사</strong>
+          <div class="client-card__list">미래에셋 · NH투자 · 한국투자 · 삼성증권 IBK 부문</div>
+        </div>
+        <div class="client-card" data-reveal>
+          <div class="client-card__type">Government</div>
+          <div class="client-card__icon">🏛️</div>
+          <strong style="color:var(--text-primary);">정부 / 공공기관</strong>
+          <div class="client-card__list">기재부 · 과기부 · 산업부 · 국민연금 · 한국투자공사</div>
+        </div>
+        <div class="client-card" data-reveal>
+          <div class="client-card__type">Corporate IR</div>
+          <div class="client-card__icon">🏢</div>
+          <strong style="color:var(--text-primary);">대기업 IR / 전략</strong>
+          <div class="client-card__list">삼성·SK·LG·현대차 IR · 신사업 추진단</div>
+        </div>
+        <div class="client-card" data-reveal>
+          <div class="client-card__type">LLM / AI</div>
+          <div class="client-card__icon">🤖</div>
+          <strong style="color:var(--text-primary);">LLM 회사 (Tier 4)</strong>
+          <div class="client-card__list">OpenAI · Anthropic · Google · Naver · 카카오</div>
+        </div>
+        <div class="client-card" data-reveal>
+          <div class="client-card__type">Defense</div>
+          <div class="client-card__icon">🛡️</div>
+          <strong style="color:var(--text-primary);">방산 / 안보</strong>
+          <div class="client-card__list">한화·LIG넥스원·KAI·국방연구원·방위사업청</div>
+        </div>
+        <div class="client-card" data-reveal>
+          <div class="client-card__type">Bio</div>
+          <div class="client-card__icon">🧬</div>
+          <strong style="color:var(--text-primary);">바이오 / 헬스케어</strong>
+          <div class="client-card__list">삼성바이오·셀트리온·SK바이오팜·한미·녹십자</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 9. 한계 / 트레이드오프 ===== -->
+  <section class="section">
+    <div class="container">
+      <div data-reveal>
+        <span class="eyebrow">09 · Limits &amp; Trade-offs</span>
+        <h2 style="margin-top:var(--s-4)">솔직한 한계</h2>
+      </div>
+
+      <div class="grid grid-3 mt-6">
+        <div class="limit-card" data-reveal>
+          <h4>NER 정확도 한계</h4>
+          <p class="text-secondary" style="font-size:var(--fs-sm);">한국어 도메인 NER은 90~93%. 7~10%는 잘못된 추출이 발생.</p>
+          <div class="mit"><strong>완화</strong> · 큐레이터 2명 상시 검증 + 사용자 피드백 루프 + 매주 도메인 사전 보강.</div>
+        </div>
+
+        <div class="limit-card" data-reveal>
+          <h4>저작권 / 데이터 주권</h4>
+          <p class="text-secondary" style="font-size:var(--fs-sm);">6개 매체 모두 라이선스 동의 필요. 거부 시 해당 채널은 결합 제외.</p>
+          <div class="mit"><strong>완화</strong> · (주)비즈뷰 3개는 단일 협상. 신회장 보유 매체이므로 본질적 갈등 없음. 외부 2개는 수익 분배 모델로 협상.</div>
+        </div>
+
+        <div class="limit-card" data-reveal>
+          <h4>B2B 영업 사이클</h4>
+          <p class="text-secondary" style="font-size:var(--fs-sm);">1억+ 라이선스 계약은 영업 6~12개월. Tier 4(5억+)는 12~18개월.</p>
+          <div class="mit"><strong>완화</strong> · 얼리 어답터 1~2곳 확보 후 사례 마케팅. 첫 사례 후 사이클 6개월 → 2개월.</div>
+        </div>
+
+        <div class="limit-card" data-reveal>
+          <h4>유지 비용</h4>
+          <p class="text-secondary" style="font-size:var(--fs-sm);">매월 큐레이션·검증 인력 2~3명 필수. 그래프 DB 호스팅 비용.</p>
+          <div class="mit"><strong>완화</strong> · 운영비 월 600만 (Phase 2.5 운영비)에 이미 반영. 매출 7억 대비 비용 비율 10% 미만.</div>
+        </div>
+
+        <div class="limit-card" data-reveal>
+          <h4>추론 환각 가능성</h4>
+          <p class="text-secondary" style="font-size:var(--fs-sm);">OWL2 추론기가 잘못된 클래스 정의로 인해 부정확한 사실 도출 가능.</p>
+          <div class="mit"><strong>완화</strong> · SHACL shape 제약 + 검증 룰 + 자동 알림. 추론 사실은 명시 사실과 시각적으로 분리(파란색).</div>
+        </div>
+
+        <div class="limit-card" data-reveal>
+          <h4>경쟁 진입 가능성</h4>
+          <p class="text-secondary" style="font-size:var(--fs-sm);">대형 미디어가 같은 모델 시도 가능. 단, 매체 수직 결합이 핵심 해자.</p>
+          <div class="mit"><strong>완화</strong> · 6개 매체 통합은 흉내내기 어려움. 5년+ 아카이브 + 도메인 전문성 누적이 진입 장벽.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CTA ===== -->
+  <section class="section section--lg">
+    <div class="container">
+      <div class="card card--featured text-center" style="padding:var(--s-8);" data-reveal>
+        <span class="eyebrow">Bottom Line</span>
+        <h2 style="margin: var(--s-4) 0;">1.8억 투자 → 3년 +20억 매출 + 영구 자산</h2>
+        <p style="max-width:680px; margin: 0 auto var(--s-6);">
+          그래프 라이선스 신규 매출(+7억/년)은 시작.
+          진짜 가치는 <strong style="color:var(--text-primary);">한국 산업·자본·조세의 단일 인용 그래프</strong>를 영구 자산으로 보유한다는 것.
+          5년 후 이 자산의 시장가는 50억+로 평가될 가능성이 높습니다.
+        </p>
+        <div class="hero__cta">
+          <a class="btn btn--primary btn--lg" href="proposal.html">제안서 Phase 2.5 검토</a>
+          <a class="btn btn--ghost btn--lg" href="ontology.html">온톨로지 기술 상세</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="footer__cta-strip">
+      <div class="container">
+        <div class="row" style="justify-content:space-between; align-items:center; flex-wrap:wrap; gap:var(--s-4);">
+          <div>
+            <h3>한국 산업·자본·조세 6대 매체의 권위, 하나의 인사이트 뱅크 허브로</h3>
+            <p>제안서 검토부터 시작하시거나, 데모 모듈을 둘러보세요.</p>
+          </div>
+          <div class="row gap-2">
+            <a class="btn btn--primary" href="proposal.html">제안서 보기</a>
+            <a class="btn btn--ghost" href="dashboard.html">데모 대시보드</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer__main">
+      <div class="container">
+        <div class="footer__grid">
+          <div class="footer__brand-col">
+            <img src="assets/logo.svg" alt="Insight Bank Hub" />
+            <p class="footer__tagline">바이오·ICT·스타트업·M&amp;A·방산·지방세 — 한국 산업·자본·조세 6대 매체 통합 GEO-AIO 싱크탱크.</p>
+            <div class="footer__langs">🇰🇷 🇺🇸 🇨🇳 🇯🇵 🇪🇸 🇫🇷 🇩🇪 🇸🇦</div>
+            <div class="footer__social">
+              <a href="#" aria-label="X / Twitter"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+              <a href="#" aria-label="LinkedIn"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67h-3.55V9h3.41v1.56h.05c.48-.9 1.65-1.85 3.4-1.85 3.64 0 4.31 2.4 4.31 5.51zM5.34 7.43A2.06 2.06 0 113.28 5.37a2.06 2.06 0 012.06 2.06zm-1.78 13.02h3.56V9H3.56zM22.23 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.46c.98 0 1.77-.77 1.77-1.72V1.72C24 .77 23.21 0 22.23 0z"/></svg></a>
+              <a href="#" aria-label="YouTube"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M23.5 6.5c-.3-1-1-1.8-2-2C19.7 4 12 4 12 4s-7.7 0-9.5.5c-1 .2-1.7 1-2 2C0 8.3 0 12 0 12s0 3.7.5 5.5c.3 1 1 1.8 2 2C4.3 20 12 20 12 20s7.7 0 9.5-.5c1-.2 1.7-1 2-2 .5-1.8.5-5.5.5-5.5s0-3.7-.5-5.5zM9.5 15.5v-7l6 3.5z"/></svg></a>
+              <a href="#" aria-label="RSS"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M4 4v3a14 14 0 0114 14h3A17 17 0 004 4zm0 6v3a8 8 0 018 8h3a11 11 0 00-11-11zm2.5 8a2.5 2.5 0 110 5 2.5 2.5 0 010-5z"/></svg></a>
+            </div>
+          </div>
+          <div class="footer__col">
+            <h5>플랫폼</h5>
+            <a href="dashboard.html">통합 대시보드</a>
+            <a href="content.html">콘텐츠 관리</a>
+            <a href="knowledge.html">RAG 지식베이스</a>
+            <a href="ontology.html">온톨로지</a>
+            <a href="graph-license.html">그래프 라이선스</a>
+            <a href="chatbot.html">RAG 챗봇</a>
+          </div>
+          <div class="footer__col">
+            <h5>자료</h5>
+            <a href="index.html">개요</a>
+            <a href="channels.html">6개 채널</a>
+            <a href="monetization.html">수익 모델</a>
+            <a href="proposal.html">계약 제안서</a>
+            <a href="manual.html">운영 매뉴얼</a>
+          </div>
+          <div class="footer__col">
+            <h5>연락처</h5>
+            <p>support@insightbankhub.kr</p>
+            <p>평일 09:00 – 18:00 KST</p>
+            <p>SLA 24/7 비상 라인</p>
+            <a href="proposal.html" class="btn btn--ghost btn--sm" style="margin-top:8px; display:inline-flex;">파트너 문의 →</a>
+          </div>
+        </div>
+
+        <hr class="footer__divider" />
+
+        <div class="footer__bottom">
+          <span>© 2026 Insight Bank Hub. All rights reserved.</span>
+          <div class="footer__legal">
+            <a href="#">이용약관</a>
+            <a href="#">개인정보처리방침</a>
+            <a href="#">llms.txt</a>
+            <span class="footer__seal">v1.0 · Confidential</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/common.js"></script>
+</body>
+</html>

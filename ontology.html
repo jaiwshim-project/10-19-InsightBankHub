@@ -1,0 +1,979 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0a0e1a" />
+  <title>온톨로지 레이어 — Insight Bank Hub</title>
+  <meta name="description" content="텍스트를 추론 가능한 지식 그래프로 — 도메인 온톨로지 + FIBO/XBRL 호환 + SPARQL API" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="온톨로지 레이어 — Insight Bank Hub" />
+  <meta property="og:image" content="assets/og-image.svg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;700;900&display=swap" />
+  <link rel="stylesheet" href="css/common.css" />
+  <style>
+    /* ===== 4-Layer 모델 ===== */
+    .layer4 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0;
+      position: relative;
+    }
+    .layer4__step {
+      padding: var(--s-5);
+      background: var(--glass-100);
+      border: 1px solid var(--border-default);
+      backdrop-filter: blur(12px);
+      position: relative;
+    }
+    .layer4__step:not(:last-child)::after {
+      content: '→';
+      position: absolute;
+      right: -14px; top: 50%;
+      transform: translateY(-50%);
+      color: var(--gold-500);
+      font-size: 24px;
+      font-weight: 700;
+      z-index: 2;
+      background: var(--bg-base);
+      width: 28px; height: 28px;
+      display: grid; place-items: center;
+      border-radius: 50%;
+      border: 1px solid var(--border-gold);
+    }
+    .layer4__step:first-child { border-radius: var(--r-lg) 0 0 var(--r-lg); }
+    .layer4__step:last-child { border-radius: 0 var(--r-lg) var(--r-lg) 0; }
+    .layer4__num {
+      font-family: 'Noto Serif KR', serif;
+      font-weight: 900;
+      font-size: 48px;
+      color: var(--gold-300);
+      line-height: 1;
+      opacity: 0.6;
+    }
+    .layer4__title { font-size: var(--fs-md); font-weight: 700; margin: var(--s-3) 0 var(--s-2); color: var(--text-primary); }
+    .layer4__desc { color: var(--text-secondary); font-size: var(--fs-sm); }
+    .layer4__tech {
+      margin-top: var(--s-3);
+      padding-top: var(--s-3);
+      border-top: 1px solid var(--border-subtle);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--blue-300);
+    }
+
+    @media (max-width: 1024px) {
+      .layer4 { grid-template-columns: 1fr; }
+      .layer4__step { border-radius: var(--r-md) !important; }
+      .layer4__step:not(:last-child)::after {
+        content: '↓';
+        right: 50%; top: auto; bottom: -14px;
+        transform: translateX(50%);
+      }
+    }
+
+    /* ===== 클래스 트리 ===== */
+    .ontology-tree {
+      background: var(--glass-100);
+      border: 1px solid var(--border-default);
+      border-radius: var(--r-lg);
+      padding: var(--s-5);
+      backdrop-filter: blur(12px);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      line-height: 1.9;
+    }
+    .ontology-tree .root { color: var(--gold-300); font-weight: 700; }
+    .ontology-tree .l1 { color: var(--text-primary); }
+    .ontology-tree .l2 { color: var(--text-secondary); }
+    .ontology-tree .l3 { color: var(--text-muted); }
+    .ontology-tree .branch { color: var(--gold-700); }
+    .ontology-tree .prop { color: var(--blue-300); font-style: italic; }
+
+    /* ===== 트리플 카드 ===== */
+    .triple {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr auto 1fr;
+      gap: var(--s-2);
+      padding: var(--s-3);
+      background: var(--bg-elev-2);
+      border-radius: var(--r-md);
+      align-items: center;
+      margin-bottom: var(--s-2);
+      border-left: 3px solid var(--gold-500);
+    }
+    .triple__node {
+      padding: 6px 12px;
+      background: var(--glass-100);
+      border: 1px solid var(--border-default);
+      border-radius: var(--r-sm);
+      color: var(--text-primary);
+      font-size: var(--fs-sm);
+      font-weight: 600;
+      text-align: center;
+    }
+    .triple__rel {
+      color: var(--gold-300);
+      font-size: 11px;
+      letter-spacing: 0.05em;
+      font-style: italic;
+      text-align: center;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .triple__arr { color: var(--gold-500); font-weight: 700; }
+    .triple--inferred {
+      border-left-color: var(--blue-500);
+      background: linear-gradient(135deg, var(--glass-blue), var(--bg-elev-2));
+    }
+    .triple--inferred .triple__rel { color: var(--blue-300); }
+    .triple--inferred .triple__arr { color: var(--blue-500); }
+
+    /* ===== SPARQL 코드 ===== */
+    .sparql-box {
+      background: #0a0e1a;
+      border: 1px solid var(--border-strong);
+      border-radius: var(--r-md);
+      padding: var(--s-4);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      line-height: 1.7;
+      overflow-x: auto;
+      color: var(--text-primary);
+    }
+    .sparql-box .kw { color: var(--gold-300); font-weight: 600; }
+    .sparql-box .var { color: var(--blue-300); }
+    .sparql-box .lit { color: var(--success); }
+    .sparql-box .cls { color: #c084fc; }
+    .sparql-box .cm { color: var(--text-muted); }
+
+    /* ===== 그래프 시각화 SVG ===== */
+    .graph-viz { width: 100%; height: auto; max-width: 720px; margin: 0 auto; display: block; }
+    .graph-viz .node circle { fill: var(--bg-elev-3); stroke: var(--gold-500); stroke-width: 2; transition: all 0.25s; }
+    .graph-viz .node text { fill: var(--text-primary); font-family: 'Pretendard', sans-serif; font-size: 12px; font-weight: 600; text-anchor: middle; }
+    .graph-viz .node:hover circle { fill: var(--glass-gold); r: 38; }
+    .graph-viz .node--center circle { fill: rgba(212,165,116,0.20); stroke: var(--gold-300); stroke-width: 2.5; }
+    .graph-viz .edge { stroke: rgba(212,165,116,0.45); stroke-width: 1.5; fill: none; }
+    .graph-viz .edge-label { fill: var(--text-muted); font-size: 10px; font-family: 'JetBrains Mono', monospace; font-style: italic; }
+
+    /* ===== ROI ===== */
+    .roi-pair {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: var(--s-4);
+      align-items: center;
+      padding: var(--s-4) 0;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .roi-pair:last-child { border:none; }
+    .roi-pair__before, .roi-pair__after {
+      padding: var(--s-3);
+      border-radius: var(--r-md);
+      background: var(--bg-elev-2);
+    }
+    .roi-pair__after { background: var(--glass-gold); border: 1px solid var(--border-gold); }
+    .roi-pair__label { font-size: 10px; letter-spacing: 0.12em; color: var(--text-muted); text-transform: uppercase; }
+    .roi-pair__val { font-family: 'Noto Serif KR', serif; font-weight: 700; color: var(--text-primary); font-size: var(--fs-md); margin-top: 4px; }
+    .roi-pair__after .roi-pair__val { color: var(--gold-300); }
+    .roi-pair__arrow { color: var(--gold-500); font-size: 24px; font-weight: 700; }
+
+    .standard-card {
+      display: flex;
+      align-items: center;
+      gap: var(--s-3);
+      padding: var(--s-4);
+      background: var(--glass-100);
+      border: 1px solid var(--border-default);
+      border-radius: var(--r-md);
+      backdrop-filter: blur(8px);
+    }
+    .standard-card__logo {
+      width: 48px; height: 48px;
+      border-radius: var(--r-sm);
+      background: var(--glass-gold);
+      border: 1px solid var(--border-gold);
+      display: grid; place-items: center;
+      font-family: 'Noto Serif KR', serif;
+      font-weight: 900;
+      font-size: 16px;
+      color: var(--gold-300);
+      flex-shrink: 0;
+    }
+  </style>
+</head>
+<body>
+
+  <header class="header">
+    <div class="header__inner">
+      <a class="brand" href="index.html" aria-label="Insight Bank Hub"><img src="assets/logo.svg" alt="Insight Bank Hub" class="brand__logo" /></a>
+      <nav class="nav">
+        <a class="nav__link" href="index.html">개요</a>
+        <a class="nav__link" href="proposal.html">제안서</a>
+        <a class="nav__link" href="channels.html">6개 채널</a>
+        <a class="nav__link" href="monetization.html">수익 모델</a>
+        <a class="nav__link" href="ontology.html">온톨로지</a>
+        <a class="nav__link" href="structure.html">구조도</a>
+        <a class="nav__link" href="dashboard.html">대시보드</a>
+        <a class="nav__link" href="content.html">콘텐츠</a>
+        <a class="nav__link" href="knowledge.html">지식베이스</a>
+        <a class="nav__link" href="chatbot.html">챗봇</a>
+        <a class="nav__link" href="manual.html">매뉴얼</a>
+      </nav>
+      <button class="nav-toggle" aria-label="메뉴"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
+    </div>
+  </header>
+
+  <!-- ===== HERO ===== -->
+  <section class="hero" style="padding:80px 0 var(--s-6);">
+    <div class="container hero__inner">
+      <span class="eyebrow">Ontology Layer</span>
+      <h1 class="display hero__title" style="font-size:clamp(36px,6vw,56px);">
+        텍스트가 아닌 <span class="text-gradient">추론 가능한 지식</span>으로
+      </h1>
+      <p class="hero__sub">
+        6채널 콘텐츠를 회계·세무 도메인 온톨로지에 매핑하여,
+        AI가 환각 없이 인용·추론할 수 있는 단일 지식 그래프로 전환합니다.
+        FIBO·XBRL 국제 표준 호환.
+      </p>
+    </div>
+  </section>
+
+  <!-- ===== KPI ===== -->
+  <section class="section section--sm">
+    <div class="container">
+      <div class="grid grid-4" data-reveal>
+        <div class="stat card">
+          <div class="stat__value"><span data-count="420">420</span></div>
+          <div class="stat__label">도메인 클래스</div>
+        </div>
+        <div class="stat card">
+          <div class="stat__value"><span data-count="180">180</span></div>
+          <div class="stat__label">관계(Property)</div>
+        </div>
+        <div class="stat card">
+          <div class="stat__value"><span data-count="2.4" data-suffix="M">2.4M</span></div>
+          <div class="stat__label">트리플 (3년)</div>
+        </div>
+        <div class="stat card">
+          <div class="stat__value"><span data-count="96" data-suffix="%">96%</span></div>
+          <div class="stat__label">추론 정확도</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 왜 온톨로지인가 ===== -->
+  <section class="section">
+    <div class="container">
+      <div class="grid grid-2" style="gap:var(--s-7); align-items:center;">
+        <div data-reveal>
+          <span class="eyebrow">Why Ontology</span>
+          <h2 style="margin-top:var(--s-4)">RAG만으로는 부족한 이유</h2>
+          <p>
+            현재 RAG는 <strong style="color:var(--text-primary)">"비슷한 문장을 찾아 LLM에 전달"</strong>하는 수준입니다.
+            반면 온톨로지는 <strong style="color:var(--text-primary)">"이 사실은 무엇이며 다른 사실과 어떤 관계인가"</strong>를 명시합니다.
+          </p>
+          <p>
+            "삼성전자가 반도체 산업에 속한다"는 사실이 그래프에 들어 있으면,
+            반도체 정책이 발표될 때 LLM은 자동으로 삼성전자를 연결합니다.
+            <strong style="color:var(--gold-300)">텍스트 매칭이 아니라 의미 추론</strong>입니다.
+          </p>
+          <div class="row gap-2 mt-5">
+            <span class="chip chip--gold">FIBO 호환</span>
+            <span class="chip chip--gold">XBRL 호환</span>
+            <span class="chip chip--blue">RDF/OWL</span>
+            <span class="chip chip--blue">SPARQL 1.1</span>
+          </div>
+        </div>
+
+        <div data-reveal>
+          <div class="card" style="padding:var(--s-5);">
+            <strong style="color:var(--gold-300); font-size:11px; letter-spacing:0.12em; text-transform:uppercase;">차이점</strong>
+            <h3 style="margin: var(--s-2) 0 var(--s-4);">RAG vs Ontology</h3>
+            <table class="table">
+              <thead><tr><th></th><th>RAG only</th><th>+ Ontology</th></tr></thead>
+              <tbody>
+                <tr><td>검색 방식</td><td class="text-secondary">유사 문장</td><td style="color:var(--gold-300);">의미 관계</td></tr>
+                <tr><td>추론</td><td class="text-secondary">불가</td><td style="color:var(--gold-300);">자동</td></tr>
+                <tr><td>환각</td><td class="text-secondary">중간</td><td style="color:var(--gold-300);">최소</td></tr>
+                <tr><td>다국어</td><td class="text-secondary">언어별 인덱스</td><td style="color:var(--gold-300);">개념 단일</td></tr>
+                <tr><td>출처 추적</td><td class="text-secondary">청크 단위</td><td style="color:var(--gold-300);">사실 단위</td></tr>
+                <tr><td>B2B 가치</td><td class="text-secondary">검색 API</td><td style="color:var(--gold-300);">SPARQL API</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 4-Layer 모델 ===== -->
+  <section class="section" style="background:var(--bg-elev-1);">
+    <div class="container">
+      <div data-reveal>
+        <span class="eyebrow">4-Layer Pipeline</span>
+        <h2 style="margin-top:var(--s-4)">텍스트에서 그래프까지 4단계</h2>
+      </div>
+
+      <div class="layer4 mt-8" data-reveal>
+        <div class="layer4__step">
+          <div class="layer4__num">01</div>
+          <div class="layer4__title">Source Text</div>
+          <p class="layer4__desc">6개 채널의 원문 기사·칼럼·리포트. 일반 자연어 텍스트.</p>
+          <div class="layer4__tech">RAW · 1,284건/월</div>
+        </div>
+        <div class="layer4__step">
+          <div class="layer4__num">02</div>
+          <div class="layer4__title">NER + RE</div>
+          <p class="layer4__desc">Gemini 기반 엔티티 인식(NER) + 관계 추출(RE). 인물·기업·정책·사건·금액·날짜 추출.</p>
+          <div class="layer4__tech">spaCy · KoNLPy · Gemini</div>
+        </div>
+        <div class="layer4__step">
+          <div class="layer4__num">03</div>
+          <div class="layer4__title">Ontology Graph</div>
+          <p class="layer4__desc">추출된 엔티티를 도메인 온톨로지 클래스에 매핑하여 RDF 트리플로 적재.</p>
+          <div class="layer4__tech">Apache Jena · GraphDB · Neo4j</div>
+        </div>
+        <div class="layer4__step">
+          <div class="layer4__num">04</div>
+          <div class="layer4__title">Inference</div>
+          <p class="layer4__desc">OWL 추론기로 명시되지 않은 사실을 자동 도출. AI 응답에 검증 가능한 근거 제공.</p>
+          <div class="layer4__tech">OWL2 RL · SHACL · Reasoner</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 도메인 온톨로지 트리 ===== -->
+  <section class="section">
+    <div class="container">
+      <div class="grid grid-2" style="gap:var(--s-7);">
+        <div data-reveal>
+          <span class="eyebrow">Domain Ontology</span>
+          <h2 style="margin-top:var(--s-4)">회계·세무·기업 클래스 트리</h2>
+          <p>FIBO(금융) + XBRL(회계 보고) 표준을 확장하여 한국 도메인 특화 클래스를 추가합니다.</p>
+
+          <div class="ontology-tree mt-6">
+<span class="root">▸ ibh:Thing</span>
+  <span class="branch">├──</span> <span class="l1">ibh:Entity</span>
+  <span class="branch">│    ├──</span> <span class="l2">ibh:Organization</span>
+  <span class="branch">│    │     ├──</span> <span class="l3">ibh:Corporation</span> <span class="prop">(extends fibo:Corporation)</span>
+  <span class="branch">│    │     ├──</span> <span class="l3">ibh:GovernmentAgency</span>
+  <span class="branch">│    │     └──</span> <span class="l3">ibh:AccountingFirm</span>
+  <span class="branch">│    ├──</span> <span class="l2">ibh:Person</span>
+  <span class="branch">│    │     ├──</span> <span class="l3">ibh:Executive</span>
+  <span class="branch">│    │     └──</span> <span class="l3">ibh:Professional</span> <span class="prop">(회계사·세무사·변호사)</span>
+  <span class="branch">│    └──</span> <span class="l2">ibh:Industry</span>
+  <span class="branch">│           ├──</span> <span class="l3">ibh:Semiconductor</span>
+  <span class="branch">│           ├──</span> <span class="l3">ibh:Bio</span>
+  <span class="branch">│           └──</span> <span class="l3">ibh:Finance</span>
+  <span class="branch">├──</span> <span class="l1">ibh:Event</span>
+  <span class="branch">│    ├──</span> <span class="l2">ibh:CorporateEvent</span>
+  <span class="branch">│    │     ├──</span> <span class="l3">ibh:Acquisition</span> <span class="prop">(M&A)</span>
+  <span class="branch">│    │     ├──</span> <span class="l3">ibh:IPO</span>
+  <span class="branch">│    │     └──</span> <span class="l3">ibh:EarningsRelease</span>
+  <span class="branch">│    └──</span> <span class="l2">ibh:RegulatoryEvent</span>
+  <span class="branch">│           ├──</span> <span class="l3">ibh:LawAmendment</span> <span class="prop">(세법 개정)</span>
+  <span class="branch">│           └──</span> <span class="l3">ibh:CourtRuling</span> <span class="prop">(판례)</span>
+  <span class="branch">├──</span> <span class="l1">ibh:Document</span>
+  <span class="branch">│    ├──</span> <span class="l2">ibh:Article</span> <span class="prop">(채널별 기사)</span>
+  <span class="branch">│    ├──</span> <span class="l2">ibh:ResearchReport</span>
+  <span class="branch">│    └──</span> <span class="l2">ibh:LegalText</span> <span class="prop">(법령·판례)</span>
+  <span class="branch">└──</span> <span class="l1">ibh:Concept</span>
+       <span class="branch">├──</span> <span class="l2">ibh:TaxCredit</span> <span class="prop">(세액공제)</span>
+       <span class="branch">├──</span> <span class="l2">ibh:AccountingStandard</span> <span class="prop">(K-IFRS)</span>
+       <span class="branch">└──</span> <span class="l2">ibh:Policy</span>
+          </div>
+          <p class="text-muted mt-4" style="font-size:var(--fs-xs);">
+            * 위는 핵심 클래스 발췌. 실제 온톨로지는 약 420 클래스 + 180 속성으로 구성.
+          </p>
+        </div>
+
+        <div data-reveal>
+          <span class="eyebrow">국제 표준</span>
+          <h2 style="margin-top:var(--s-4)">FIBO + XBRL 호환 설계</h2>
+          <p>처음부터 새로 만들지 않고, 검증된 국제 표준을 확장합니다. 글로벌 LLM 회사가 인식할 수 있는 호환 그래프.</p>
+
+          <div style="display:flex; flex-direction:column; gap:var(--s-3); margin-top:var(--s-5);">
+            <div class="standard-card">
+              <div class="standard-card__logo">FB</div>
+              <div>
+                <strong style="color:var(--text-primary);">FIBO</strong> · Financial Industry Business Ontology
+                <p class="text-muted mb-0" style="font-size:var(--fs-xs);">EDM Council 관리. 금융·기업·계약 1,300+ 클래스. 우리 클래스 60% 차용.</p>
+              </div>
+            </div>
+            <div class="standard-card">
+              <div class="standard-card__logo">XB</div>
+              <div>
+                <strong style="color:var(--text-primary);">XBRL</strong> · Extensible Business Reporting Language
+                <p class="text-muted mb-0" style="font-size:var(--fs-xs);">국세청·금감원 공시 표준. 재무제표 항목을 그래프 노드로 직접 연결.</p>
+              </div>
+            </div>
+            <div class="standard-card">
+              <div class="standard-card__logo">SK</div>
+              <div>
+                <strong style="color:var(--text-primary);">Schema.org</strong> · NewsArticle / Person / Organization
+                <p class="text-muted mb-0" style="font-size:var(--fs-xs);">Google·Bing 인식 표준. SEO + AI 인용 양쪽 호환.</p>
+              </div>
+            </div>
+            <div class="standard-card">
+              <div class="standard-card__logo">DB</div>
+              <div>
+                <strong style="color:var(--text-primary);">DBpedia / Wikidata</strong> · 글로벌 엔티티 ID 연결
+                <p class="text-muted mb-0" style="font-size:var(--fs-xs);">"삼성전자" → Q14773 (Wikidata) 매핑으로 글로벌 인식 가능.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="card mt-5" style="background:var(--glass-gold); border-color:var(--border-gold); padding:var(--s-4);">
+            <strong style="color:var(--gold-300);">왜 표준 호환이 결정적인가</strong>
+            <p class="text-secondary mt-2 mb-0" style="font-size:var(--fs-sm);">
+              자체 온톨로지만 만들면 "우리만의 갈라파고스". FIBO·XBRL 호환이면 OpenAI·Anthropic·Google이 별도 변환 없이 바로 인용 가능 — <strong style="color:var(--text-primary);">AI 인용 라이선스 단가가 1.5~2배 상승</strong>합니다.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 트리플 예시 ===== -->
+  <section class="section" style="background:var(--bg-elev-1);">
+    <div class="container">
+      <div data-reveal>
+        <span class="eyebrow">RDF Triple</span>
+        <h2 style="margin-top:var(--s-4)">실제 트리플 예시</h2>
+        <p>"2026 R&amp;D 세제 개정 발표" 기사 한 건이 그래프에 어떻게 적재되는지.</p>
+      </div>
+
+      <div class="card mt-6" data-reveal style="padding:var(--s-5);">
+        <strong style="color:var(--gold-300); font-size:11px; letter-spacing:0.12em; text-transform:uppercase;">명시 사실 (기사에서 직접 추출)</strong>
+
+        <div class="mt-3">
+          <div class="triple">
+            <div class="triple__node">ibh:Article_2026_04_18_001</div>
+            <div class="triple__rel">ibh:reports</div>
+            <div class="triple__arr">→</div>
+            <div class="triple__node">ibh:LawAmendment_2026_RD_TaxCredit</div>
+          </div>
+          <div class="triple">
+            <div class="triple__node">ibh:LawAmendment_2026_RD_TaxCredit</div>
+            <div class="triple__rel">ibh:effectiveDate</div>
+            <div class="triple__arr">→</div>
+            <div class="triple__node">"2026-07-01"^^xsd:date</div>
+          </div>
+          <div class="triple">
+            <div class="triple__node">ibh:LawAmendment_2026_RD_TaxCredit</div>
+            <div class="triple__rel">ibh:appliesTo</div>
+            <div class="triple__arr">→</div>
+            <div class="triple__node">ibh:Industry_Semiconductor</div>
+          </div>
+          <div class="triple">
+            <div class="triple__node">ibh:LawAmendment_2026_RD_TaxCredit</div>
+            <div class="triple__rel">ibh:creditRate</div>
+            <div class="triple__arr">→</div>
+            <div class="triple__node">"0.18"^^xsd:decimal</div>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <strong style="color:var(--blue-300); font-size:11px; letter-spacing:0.12em; text-transform:uppercase;">자동 추론 (사실로부터 도출)</strong>
+
+        <div class="mt-3">
+          <div class="triple triple--inferred">
+            <div class="triple__node">ibh:Corporation_SamsungElectronics</div>
+            <div class="triple__rel">ibh:affectedBy</div>
+            <div class="triple__arr">→</div>
+            <div class="triple__node">ibh:LawAmendment_2026_RD_TaxCredit</div>
+          </div>
+          <div class="triple triple--inferred">
+            <div class="triple__node">ibh:Corporation_SKHynix</div>
+            <div class="triple__rel">ibh:affectedBy</div>
+            <div class="triple__arr">→</div>
+            <div class="triple__node">ibh:LawAmendment_2026_RD_TaxCredit</div>
+          </div>
+        </div>
+
+        <p class="text-muted mt-4 mb-0" style="font-size:var(--fs-xs);">
+          ▸ 추론 근거: <code style="color:var(--blue-300); font-family:'JetBrains Mono',monospace;">{?x rdf:type Semiconductor} ∧ {?law appliesTo Semiconductor} ⇒ {?x affectedBy ?law}</code>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 그래프 시각화 ===== -->
+  <section class="section">
+    <div class="container">
+      <div data-reveal>
+        <span class="eyebrow">Knowledge Graph</span>
+        <h2 style="margin-top:var(--s-4)">한 사실, 다층 연결</h2>
+      </div>
+
+      <div class="card mt-6" data-reveal style="padding:var(--s-6); overflow-x:auto;">
+        <svg class="graph-viz" viewBox="0 0 720 480" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="지식 그래프 예시">
+          <!-- Edges -->
+          <g class="edge-group">
+            <line class="edge" x1="360" y1="240" x2="180" y2="120"/>
+            <text class="edge-label" x="250" y="170">reports</text>
+
+            <line class="edge" x1="360" y1="240" x2="540" y2="120"/>
+            <text class="edge-label" x="475" y="170">appliesTo</text>
+
+            <line class="edge" x1="360" y1="240" x2="180" y2="360"/>
+            <text class="edge-label" x="250" y="320">effectiveDate</text>
+
+            <line class="edge" x1="360" y1="240" x2="540" y2="360"/>
+            <text class="edge-label" x="465" y="320">creditRate</text>
+
+            <line class="edge" x1="540" y1="120" x2="640" y2="60" stroke-dasharray="4 4"/>
+            <text class="edge-label" x="620" y="100" font-size="9">includes</text>
+
+            <line class="edge" x1="540" y1="120" x2="640" y2="200" stroke-dasharray="4 4"/>
+            <text class="edge-label" x="640" y="180" font-size="9">includes</text>
+
+            <line class="edge" x1="640" y1="60" x2="700" y2="20" stroke-dasharray="4 4" stroke="rgba(74,144,226,0.5)"/>
+            <line class="edge" x1="640" y1="200" x2="700" y2="240" stroke-dasharray="4 4" stroke="rgba(74,144,226,0.5)"/>
+          </g>
+
+          <!-- Nodes -->
+          <g class="node node--center" transform="translate(360,240)">
+            <circle r="64"/>
+            <text y="-8" font-size="11" fill="#d4a574">LawAmendment</text>
+            <text y="8" font-size="11">2026_RD</text>
+            <text y="22" font-size="10" fill="#9aa0b3">TaxCredit</text>
+          </g>
+
+          <g class="node" transform="translate(180,120)">
+            <circle r="40"/>
+            <text y="-2" font-size="10">Article_</text>
+            <text y="12" font-size="10">2026_04_18</text>
+          </g>
+
+          <g class="node" transform="translate(540,120)">
+            <circle r="40"/>
+            <text y="-2" font-size="10">Industry_</text>
+            <text y="12" font-size="10">Semiconductor</text>
+          </g>
+
+          <g class="node" transform="translate(180,360)">
+            <circle r="36"/>
+            <text y="4" font-size="10">2026-07-01</text>
+          </g>
+
+          <g class="node" transform="translate(540,360)">
+            <circle r="36"/>
+            <text y="4" font-size="11">18%</text>
+          </g>
+
+          <g class="node" transform="translate(640,60)">
+            <circle r="32" fill="rgba(74,144,226,0.10)" stroke="#4a90e2"/>
+            <text y="-2" font-size="9">Samsung</text>
+            <text y="10" font-size="9">Electronics</text>
+          </g>
+
+          <g class="node" transform="translate(640,200)">
+            <circle r="32" fill="rgba(74,144,226,0.10)" stroke="#4a90e2"/>
+            <text y="4" font-size="9">SK Hynix</text>
+          </g>
+
+          <g class="node" transform="translate(700,20)">
+            <circle r="14" fill="rgba(74,144,226,0.10)" stroke="#4a90e2"/>
+            <text y="3" font-size="8">…</text>
+          </g>
+
+          <g class="node" transform="translate(700,240)">
+            <circle r="14" fill="rgba(74,144,226,0.10)" stroke="#4a90e2"/>
+            <text y="3" font-size="8">…</text>
+          </g>
+        </svg>
+        <p class="text-muted text-center mt-4 mb-0" style="font-size:var(--fs-xs);">
+          중앙: 명시 사실 · 우측 점선: <span style="color:var(--blue-300);">자동 추론된 영향 관계</span> · 추론으로 도달 가능한 노드 자동 확장
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 6채널 결합 시너지 ===== -->
+  <section class="section">
+    <div class="container">
+      <div data-reveal>
+        <span class="eyebrow">Cross-Channel Inference</span>
+        <h2 style="margin-top:var(--s-4)">6개 매체 결합 — 한 사건의 다층 추적</h2>
+        <p>단일 매체의 그래프는 자기 도메인만 답한다. 6개 매체를 결합하면 <strong style="color:var(--text-primary);">하나의 거래/사건/판례가 4~6개 매체에 걸쳐 시간 순으로 추적</strong>된다 — 경쟁사가 절대 못 만드는 수직 결합 자산.</p>
+      </div>
+
+      <div class="card mt-6" data-reveal style="padding:var(--s-6);">
+        <strong style="color:var(--gold-300); font-size:11px; letter-spacing:0.12em; text-transform:uppercase;">시나리오 · "AI 진단 스타트업 루닛의 IPO 여정"</strong>
+
+        <div style="display:grid; grid-template-columns: repeat(4, 1fr); gap:var(--s-3); margin-top:var(--s-4); position:relative;">
+          <div style="padding:var(--s-4); background:var(--glass-100); border:1px solid var(--border-default); border-radius:var(--r-md); position:relative;">
+            <div style="font-size:10px; letter-spacing:0.12em; color:var(--gold-300); font-weight:700; text-transform:uppercase;">바이오타임즈</div>
+            <div style="font-family:'Noto Serif KR',serif; font-weight:700; color:var(--text-primary); font-size:var(--fs-md); margin:6px 0;">루닛</div>
+            <div class="text-secondary" style="font-size:var(--fs-xs);">AI 진단 임상 1상 통과<br/>2025.11.18 단독</div>
+            <code style="display:block; margin-top:8px; padding-top:6px; border-top:1px dashed var(--border-default); color:var(--gold-300); font-size:11px; font-style:italic; font-family:'JetBrains Mono',monospace;">[planning →]</code>
+          </div>
+          <div style="padding:var(--s-4); background:var(--glass-100); border:1px solid var(--border-default); border-radius:var(--r-md);">
+            <div style="font-size:10px; letter-spacing:0.12em; color:var(--gold-300); font-weight:700; text-transform:uppercase;">스타트업투데이</div>
+            <div style="font-family:'Noto Serif KR',serif; font-weight:700; color:var(--text-primary); font-size:var(--fs-md); margin:6px 0;">IPO 2026 Q3</div>
+            <div class="text-secondary" style="font-size:var(--fs-xs);">상장 추진 단독 보도<br/>2026.01.04</div>
+            <code style="display:block; margin-top:8px; padding-top:6px; border-top:1px dashed var(--border-default); color:var(--gold-300); font-size:11px; font-style:italic; font-family:'JetBrains Mono',monospace;">[advisedBy →]</code>
+          </div>
+          <div style="padding:var(--s-4); background:var(--glass-100); border:1px solid var(--border-default); border-radius:var(--r-md);">
+            <div style="font-size:10px; letter-spacing:0.12em; color:var(--gold-300); font-weight:700; text-transform:uppercase;">한국M&amp;A경제신문</div>
+            <div style="font-family:'Noto Serif KR',serif; font-weight:700; color:var(--text-primary); font-size:var(--fs-md); margin:6px 0;">NH투자증권</div>
+            <div class="text-secondary" style="font-size:var(--fs-xs);">대표 주관사 선정<br/>2026.02.12</div>
+            <code style="display:block; margin-top:8px; padding-top:6px; border-top:1px dashed var(--border-default); color:var(--gold-300); font-size:11px; font-style:italic; font-family:'JetBrains Mono',monospace;">[taxImpact →]</code>
+          </div>
+          <div style="padding:var(--s-4); background:rgba(192,132,252,0.06); border:1px solid rgba(192,132,252,0.30); border-radius:var(--r-md);">
+            <div style="font-size:10px; letter-spacing:0.12em; color:#c084fc; font-weight:700; text-transform:uppercase;">월간지방세연구</div>
+            <div style="font-family:'Noto Serif KR',serif; font-weight:700; color:var(--text-primary); font-size:var(--fs-md); margin:6px 0;">이전가격 이슈</div>
+            <div class="text-secondary" style="font-size:var(--fs-xs);">유사 판례 3건 자동 추출<br/>2024두12345 등</div>
+            <code style="display:block; margin-top:8px; padding-top:6px; border-top:1px dashed rgba(192,132,252,0.30); color:#c084fc; font-size:11px; font-style:italic; font-family:'JetBrains Mono',monospace;">[해결방안]</code>
+          </div>
+        </div>
+
+        <div class="card mt-5" style="background:var(--glass-gold); border-color:var(--border-gold); padding:var(--s-4);">
+          <strong style="color:var(--gold-300);">한 SPARQL 쿼리로 4채널 답변 가능</strong>
+          <p class="text-secondary mb-0 mt-2" style="font-size:var(--fs-sm);">
+            VC가 "루닛 같은 후속 IPO 후보 + 잠재 세무 리스크 보유 기업"을 묻는다면, 위 그래프를 1초 안에 traverse하여
+            <strong style="color:var(--text-primary);">4개 매체에 흩어진 단서를 통합 답변</strong>합니다 — 단일 매체로는 불가능.
+          </p>
+        </div>
+      </div>
+
+      <!-- 매체별 결합 자산 표 -->
+      <div data-reveal style="margin-top:var(--s-7);">
+        <h3 style="margin-bottom:var(--s-4);">매체별 그래프 자산 요약</h3>
+        <div class="card" style="padding:0; overflow:hidden;">
+          <table class="table">
+            <thead>
+              <tr><th>매체</th><th>핵심 노드</th><th>핵심 관계</th><th>인용 가치</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><strong style="color:var(--text-primary);">바이오타임즈</strong></td><td><code style="background:var(--bg-elev-2); padding:2px 6px; border-radius:4px; color:var(--blue-300); font-family:'JetBrains Mono',monospace; font-size:11px;">Drug · ClinicalTrial · Indication</code></td><td><code style="background:var(--bg-elev-2); padding:2px 6px; border-radius:4px; color:var(--gold-300); font-family:'JetBrains Mono',monospace; font-size:11px;">develops · treats · approvedBy</code></td><td style="color:var(--gold-300); font-weight:700;">88</td></tr>
+              <tr><td><strong style="color:var(--text-primary);">애틀러스리서치</strong></td><td><code style="background:var(--bg-elev-2); padding:2px 6px; border-radius:4px; color:var(--blue-300); font-family:'JetBrains Mono',monospace; font-size:11px;">Carrier · Tech · Subscribers</code></td><td><code style="background:var(--bg-elev-2); padding:2px 6px; border-radius:4px; color:var(--gold-300); font-family:'JetBrains Mono',monospace; font-size:11px;">marketShare · operates · introduces</code></td><td style="color:var(--gold-300); font-weight:700;">95</td></tr>
+              <tr><td><strong style="color:var(--text-primary);">스타트업투데이</strong></td><td><code style="background:var(--bg-elev-2); padding:2px 6px; border-radius:4px; color:var(--blue-300); font-family:'JetBrains Mono',monospace; font-size:11px;">Startup · VC · FundingRound</code></td><td><code style="background:var(--bg-elev-2); padding:2px 6px; border-radius:4px; color:var(--gold-300); font-family:'JetBrains Mono',monospace; font-size:11px;">invests · raisedFrom · exitedVia</code></td><td style="color:var(--gold-300); font-weight:700;">82</td></tr>
+              <tr><td><strong style="color:var(--text-primary);">한국M&amp;A경제신문</strong></td><td><code style="background:var(--bg-elev-2); padding:2px 6px; border-radius:4px; color:var(--blue-300); font-family:'JetBrains Mono',monospace; font-size:11px;">Acquirer · Target · Advisor · Deal</code></td><td><code style="background:var(--bg-elev-2); padding:2px 6px; border-radius:4px; color:var(--gold-300); font-family:'JetBrains Mono',monospace; font-size:11px;">acquired · advisedBy · valueOf</code></td><td style="color:var(--gold-300); font-weight:700;">92</td></tr>
+              <tr><td><strong style="color:var(--text-primary);">디펜스투데이</strong></td><td><code style="background:var(--bg-elev-2); padding:2px 6px; border-radius:4px; color:var(--blue-300); font-family:'JetBrains Mono',monospace; font-size:11px;">DefenseCorp · WeaponSystem · Country</code></td><td><code style="background:var(--bg-elev-2); padding:2px 6px; border-radius:4px; color:var(--gold-300); font-family:'JetBrains Mono',monospace; font-size:11px;">exportsTo · operates · contractValue</code></td><td style="color:var(--gold-300); font-weight:700;">90</td></tr>
+              <tr style="background:rgba(192,132,252,0.06);"><td><strong style="color:#c084fc;">월간지방세연구</strong></td><td><code style="background:var(--bg-elev-2); padding:2px 6px; border-radius:4px; color:var(--blue-300); font-family:'JetBrains Mono',monospace; font-size:11px;">CourtRuling · LawArticle · TaxItem</code></td><td><code style="background:var(--bg-elev-2); padding:2px 6px; border-radius:4px; color:var(--gold-300); font-family:'JetBrains Mono',monospace; font-size:11px;">cites · interprets · overrules</code></td><td style="color:#c084fc; font-weight:700;">94</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="text-muted mt-3" style="font-size:var(--fs-xs);">
+          * 6개 매체 합산 ≈ 420 클래스 + 180 관계 + 월 80,000+ 신규 트리플 →
+          <a href="graph-license.html" style="color:var(--gold-300);">전체 라이선스 설계 보기 →</a>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SPARQL ===== -->
+  <section class="section" style="background:var(--bg-elev-1);">
+    <div class="container">
+      <div data-reveal>
+        <span class="eyebrow">Query API</span>
+        <h2 style="margin-top:var(--s-4)">B2B는 SPARQL로 질문한다</h2>
+        <p>경쟁사가 못 주는 차별화 — 의미 기반 그래프 쿼리. 키워드 검색 시대 종료. <a href="graph-license.html" style="color:var(--gold-300);">3개 실 사용 사례 →</a></p>
+      </div>
+
+      <div class="grid grid-2 mt-6" style="gap:var(--s-5);">
+        <div data-reveal>
+          <strong style="color:var(--gold-300); font-size:11px; letter-spacing:0.12em; text-transform:uppercase;">예시 1 · 영향받는 기업 자동 추출</strong>
+          <p class="text-secondary" style="font-size:var(--fs-sm); margin: var(--s-2) 0 var(--s-3);">"2026 R&amp;D 세제 개정으로 영향받는 시총 1조 이상 기업은?"</p>
+          <div class="sparql-box">
+<span class="kw">PREFIX</span> ibh: <span class="lit">&lt;https://insightbankhub.com/ontology#&gt;</span>
+<span class="kw">PREFIX</span> fibo: <span class="lit">&lt;https://spec.edmcouncil.org/fibo#&gt;</span>
+
+<span class="kw">SELECT</span> <span class="var">?company</span> <span class="var">?name</span> <span class="var">?marketCap</span>
+<span class="kw">WHERE</span> {
+  <span class="var">?law</span> <span class="kw">a</span> ibh:<span class="cls">LawAmendment</span> ;
+       ibh:effectiveDate <span class="lit">"2026-07-01"^^xsd:date</span> ;
+       ibh:appliesTo <span class="var">?industry</span> .
+  <span class="var">?company</span> <span class="kw">a</span> ibh:<span class="cls">Corporation</span> ;
+            ibh:operatesIn <span class="var">?industry</span> ;
+            fibo:hasName <span class="var">?name</span> ;
+            ibh:marketCap <span class="var">?marketCap</span> .
+  <span class="kw">FILTER</span>(<span class="var">?marketCap</span> &gt; <span class="lit">1000000000000</span>)
+}
+<span class="kw">ORDER BY DESC</span>(<span class="var">?marketCap</span>)</div>
+        </div>
+
+        <div data-reveal>
+          <strong style="color:var(--gold-300); font-size:11px; letter-spacing:0.12em; text-transform:uppercase;">예시 2 · 시계열 정책 변화 추적</strong>
+          <p class="text-secondary" style="font-size:var(--fs-sm); margin: var(--s-2) 0 var(--s-3);">"가업승계 세제 개정 히스토리 + 각 시점 영향 기업"</p>
+          <div class="sparql-box">
+<span class="cm"># 가업승계(BusinessSuccession) 관련 모든 개정 시점</span>
+<span class="kw">SELECT</span> <span class="var">?law</span> <span class="var">?date</span> <span class="var">?rate</span>
+       (<span class="kw">COUNT</span>(<span class="var">?affected</span>) <span class="kw">AS</span> <span class="var">?count</span>)
+<span class="kw">WHERE</span> {
+  <span class="var">?law</span> <span class="kw">a</span> ibh:<span class="cls">LawAmendment</span> ;
+       ibh:topic ibh:<span class="cls">BusinessSuccession</span> ;
+       ibh:effectiveDate <span class="var">?date</span> ;
+       ibh:taxRate <span class="var">?rate</span> .
+
+  <span class="kw">OPTIONAL</span> {
+    <span class="var">?affected</span> ibh:affectedBy <span class="var">?law</span>
+  }
+}
+<span class="kw">GROUP BY</span> <span class="var">?law</span> <span class="var">?date</span> <span class="var">?rate</span>
+<span class="kw">ORDER BY</span> <span class="var">?date</span></div>
+        </div>
+      </div>
+
+      <div class="card mt-6" style="background:var(--glass-gold); border-color:var(--border-gold); padding:var(--s-4);" data-reveal>
+        <strong style="color:var(--gold-300);">B2B 차별화 가치</strong>
+        <p class="text-secondary mt-2 mb-0" style="font-size:var(--fs-sm);">
+          이런 질문은 <strong style="color:var(--text-primary);">키워드 검색으로 답할 수 없습니다.</strong>
+          기업 IR/리스크 관리 부서·투자은행·법무법인이 매월 비용을 낼 가치가 있는 영역. <strong style="color:var(--text-primary);">B2B API ARR 1.4배 상승</strong>의 직접 동인.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 비즈니스 임팩트 (Before/After) ===== -->
+  <section class="section">
+    <div class="container">
+      <div data-reveal>
+        <span class="eyebrow">Business Impact</span>
+        <h2 style="margin-top:var(--s-4)">온톨로지 도입 전후 비교</h2>
+      </div>
+
+      <div class="card mt-6" data-reveal style="padding:var(--s-5);">
+        <div class="row" style="justify-content:space-between; align-items:center; padding:var(--s-3) 0; font-size:11px; letter-spacing:0.12em; color:var(--text-muted); text-transform:uppercase;">
+          <span style="flex:1;">지표</span>
+          <span style="flex:1; text-align:center;">현재 (RAG only)</span>
+          <span></span>
+          <span style="flex:1; text-align:center; color:var(--gold-300);">+ Ontology</span>
+        </div>
+
+        <div class="roi-pair">
+          <div class="roi-pair__before">
+            <div class="roi-pair__label">AI 인용 점수</div>
+            <div class="roi-pair__val">평균 78점</div>
+          </div>
+          <span class="roi-pair__arrow">→</span>
+          <div class="roi-pair__after">
+            <div class="roi-pair__label">AI 인용 점수</div>
+            <div class="roi-pair__val">평균 94점 (+16)</div>
+          </div>
+        </div>
+
+        <div class="roi-pair">
+          <div class="roi-pair__before">
+            <div class="roi-pair__label">AI 인용 라이선스 단가</div>
+            <div class="roi-pair__val">Strategic 5억</div>
+          </div>
+          <span class="roi-pair__arrow">→</span>
+          <div class="roi-pair__after">
+            <div class="roi-pair__label">AI 인용 라이선스 단가</div>
+            <div class="roi-pair__val">Strategic 8~10억 (+60~100%)</div>
+          </div>
+        </div>
+
+        <div class="roi-pair">
+          <div class="roi-pair__before">
+            <div class="roi-pair__label">B2B API ARR</div>
+            <div class="roi-pair__val">월 320만원/계정</div>
+          </div>
+          <span class="roi-pair__arrow">→</span>
+          <div class="roi-pair__after">
+            <div class="roi-pair__label">B2B API ARR</div>
+            <div class="roi-pair__val">월 450만원/계정 (+40%)</div>
+          </div>
+        </div>
+
+        <div class="roi-pair">
+          <div class="roi-pair__before">
+            <div class="roi-pair__label">RAG 환각률</div>
+            <div class="roi-pair__val">8.2%</div>
+          </div>
+          <span class="roi-pair__arrow">→</span>
+          <div class="roi-pair__after">
+            <div class="roi-pair__label">RAG 환각률</div>
+            <div class="roi-pair__val">1.4% (-83%)</div>
+          </div>
+        </div>
+
+        <div class="roi-pair">
+          <div class="roi-pair__before">
+            <div class="roi-pair__label">기자 작성 시 자료 검색 시간</div>
+            <div class="roi-pair__val">평균 22분/건</div>
+          </div>
+          <span class="roi-pair__arrow">→</span>
+          <div class="roi-pair__after">
+            <div class="roi-pair__label">기자 작성 시 자료 검색 시간</div>
+            <div class="roi-pair__val">평균 6분/건 (-73%)</div>
+          </div>
+        </div>
+
+        <div class="roi-pair">
+          <div class="roi-pair__before">
+            <div class="roi-pair__label">컨설팅 단가</div>
+            <div class="roi-pair__val">건당 800만~3,000만</div>
+          </div>
+          <span class="roi-pair__arrow">→</span>
+          <div class="roi-pair__after">
+            <div class="roi-pair__label">컨설팅 단가</div>
+            <div class="roi-pair__val">건당 2,000만~8,000만 (+150%)</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 도입 일정 + 비용 ===== -->
+  <section class="section" style="background:var(--bg-elev-1);">
+    <div class="container">
+      <div data-reveal>
+        <span class="eyebrow">Implementation</span>
+        <h2 style="margin-top:var(--s-4)">Phase 2.5 — 6개월 도입 일정</h2>
+        <p>RAG Layer 구축이 끝난 직후, 그 위에 온톨로지 레이어를 얹는 방식. 기존 시스템에 비파괴.</p>
+      </div>
+
+      <div class="grid grid-3 mt-6">
+        <div class="card" data-reveal>
+          <span class="badge-num">1</span>
+          <h4 class="mt-3">M9~M10 · 표준 도입</h4>
+          <p class="text-secondary" style="font-size:var(--fs-sm);">FIBO·XBRL·Schema.org 도입 + 한국 도메인 확장 클래스 설계 (도메인 전문가 + 온톨로지 엔지니어 2명).</p>
+          <div class="row gap-2 mt-3">
+            <span class="chip">표준 매핑</span>
+            <span class="chip">클래스 설계</span>
+          </div>
+        </div>
+        <div class="card" data-reveal>
+          <span class="badge-num">2</span>
+          <h4 class="mt-3">M10~M12 · NER/RE 파이프라인</h4>
+          <p class="text-secondary" style="font-size:var(--fs-sm);">Gemini + spaCy 기반 엔티티/관계 추출 자동화. 6채널 콘텐츠 → RDF 트리플 자동 생성.</p>
+          <div class="row gap-2 mt-3">
+            <span class="chip chip--blue">NER</span>
+            <span class="chip chip--blue">관계 추출</span>
+          </div>
+        </div>
+        <div class="card" data-reveal>
+          <span class="badge-num">3</span>
+          <h4 class="mt-3">M12~M14 · 그래프 + 추론</h4>
+          <p class="text-secondary" style="font-size:var(--fs-sm);">Apache Jena/GraphDB에 적재, OWL2 RL 추론기 가동. SPARQL 엔드포인트 공개 + B2B API.</p>
+          <div class="row gap-2 mt-3">
+            <span class="chip chip--gold">그래프 DB</span>
+            <span class="chip chip--gold">SPARQL</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card mt-6" data-reveal style="padding:var(--s-5);">
+        <div class="grid grid-3" style="gap:var(--s-4);">
+          <div>
+            <small style="color:var(--text-muted); font-size:11px; letter-spacing:0.1em; text-transform:uppercase;">추가 개발비</small>
+            <div style="font-family:'Noto Serif KR',serif; font-weight:700; font-size:var(--fs-xl); color:var(--gold-300); margin-top:4px;">+1.8억원</div>
+            <p class="text-muted mb-0" style="font-size:var(--fs-xs);">Phase 2.5 · 6개월 · VAT 별도</p>
+          </div>
+          <div>
+            <small style="color:var(--text-muted); font-size:11px; letter-spacing:0.1em; text-transform:uppercase;">추가 운영비</small>
+            <div style="font-family:'Noto Serif KR',serif; font-weight:700; font-size:var(--fs-xl); color:var(--gold-300); margin-top:4px;">+월 600만원</div>
+            <p class="text-muted mb-0" style="font-size:var(--fs-xs);">그래프 DB 호스팅 + 큐레이션</p>
+          </div>
+          <div>
+            <small style="color:var(--text-muted); font-size:11px; letter-spacing:0.1em; text-transform:uppercase;">예상 추가 매출 (Y3)</small>
+            <div style="font-family:'Noto Serif KR',serif; font-weight:700; font-size:var(--fs-xl); color:var(--success); margin-top:4px;">+7억/년</div>
+            <p class="text-muted mb-0" style="font-size:var(--fs-xs);">그래프 라이선스 신규 스트림</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== ROI ===== -->
+  <section class="section">
+    <div class="container">
+      <div class="bep-card text-center" data-reveal style="padding:var(--s-7); background:linear-gradient(135deg, var(--glass-gold), var(--glass-blue)); border:1px solid var(--border-gold); border-radius:var(--r-lg);">
+        <span class="eyebrow">Bottom Line</span>
+        <h2 style="margin: var(--s-3) 0;">1.8억 투자 → 3년 누적 +20억 매출</h2>
+        <p style="max-width:680px; margin:0 auto;">
+          그래프 라이선스 신규 매출 <strong style="color:var(--gold-300);">+7억/년</strong> ·
+          AI 인용 라이선스 단가 상승 <strong style="color:var(--gold-300);">+3억/년</strong> ·
+          B2B API 단가 상승 <strong style="color:var(--gold-300);">+2억/년</strong>.
+          <br/>1.8억 투자 대비 <strong style="color:var(--text-primary);">3년 ROI 약 1,000%</strong> — 단일 투자 항목 중 최고 효율.
+        </p>
+        <div class="hero__cta mt-6">
+          <a class="btn btn--primary btn--lg" href="proposal.html">제안서에서 Phase 2.5 보기</a>
+          <a class="btn btn--ghost btn--lg" href="monetization.html">Stream 09 그래프 라이선스</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="footer__cta-strip">
+      <div class="container">
+        <div class="row" style="justify-content:space-between; align-items:center; flex-wrap:wrap; gap:var(--s-4);">
+          <div>
+            <h3>여섯 채널의 권위, 하나의 인사이트 뱅크 허브로</h3>
+            <p>제안서 검토부터 시작하시거나, 데모 모듈을 둘러보세요.</p>
+          </div>
+          <div class="row gap-2">
+            <a class="btn btn--primary" href="proposal.html">제안서 보기</a>
+            <a class="btn btn--ghost" href="dashboard.html">데모 대시보드</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer__main">
+      <div class="container">
+        <div class="footer__grid">
+          <div class="footer__brand-col">
+            <img src="assets/logo.svg" alt="Insight Bank Hub" />
+            <p class="footer__tagline">6개 인터넷 매체를 통합한 GEO-AIO 싱크탱크 허브.<br/>분산된 채널을 인용 가능한 자산으로 전환합니다.</p>
+            <div class="footer__langs">🇰🇷 🇺🇸 🇨🇳 🇯🇵 🇪🇸 🇫🇷 🇩🇪 🇸🇦</div>
+            <div class="footer__social">
+              <a href="#" aria-label="X / Twitter"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+              <a href="#" aria-label="LinkedIn"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67h-3.55V9h3.41v1.56h.05c.48-.9 1.65-1.85 3.4-1.85 3.64 0 4.31 2.4 4.31 5.51zM5.34 7.43A2.06 2.06 0 113.28 5.37a2.06 2.06 0 012.06 2.06zm-1.78 13.02h3.56V9H3.56zM22.23 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.46c.98 0 1.77-.77 1.77-1.72V1.72C24 .77 23.21 0 22.23 0z"/></svg></a>
+              <a href="#" aria-label="YouTube"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M23.5 6.5c-.3-1-1-1.8-2-2C19.7 4 12 4 12 4s-7.7 0-9.5.5c-1 .2-1.7 1-2 2C0 8.3 0 12 0 12s0 3.7.5 5.5c.3 1 1 1.8 2 2C4.3 20 12 20 12 20s7.7 0 9.5-.5c1-.2 1.7-1 2-2 .5-1.8.5-5.5.5-5.5s0-3.7-.5-5.5zM9.5 15.5v-7l6 3.5z"/></svg></a>
+              <a href="#" aria-label="RSS"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M4 4v3a14 14 0 0114 14h3A17 17 0 004 4zm0 6v3a8 8 0 018 8h3a11 11 0 00-11-11zm2.5 8a2.5 2.5 0 110 5 2.5 2.5 0 010-5z"/></svg></a>
+            </div>
+          </div>
+          <div class="footer__col">
+            <h5>플랫폼</h5>
+            <a href="dashboard.html">통합 대시보드</a>
+            <a href="content.html">콘텐츠 관리</a>
+            <a href="knowledge.html">RAG 지식베이스</a>
+            <a href="ontology.html">온톨로지</a>
+            <a href="chatbot.html">RAG 챗봇</a>
+          </div>
+          <div class="footer__col">
+            <h5>자료</h5>
+            <a href="index.html">개요</a>
+            <a href="channels.html">6개 채널</a>
+            <a href="monetization.html">수익 모델</a>
+            <a href="proposal.html">계약 제안서</a>
+            <a href="manual.html">운영 매뉴얼</a>
+          </div>
+          <div class="footer__col">
+            <h5>연락처</h5>
+            <p>support@insightbankhub.kr</p>
+            <p>평일 09:00 – 18:00 KST</p>
+            <p>SLA 24/7 비상 라인</p>
+            <a href="proposal.html" class="btn btn--ghost btn--sm" style="margin-top:8px; display:inline-flex;">파트너 문의 →</a>
+          </div>
+        </div>
+
+        <hr class="footer__divider" />
+
+        <div class="footer__bottom">
+          <span>© 2026 Insight Bank Hub. All rights reserved.</span>
+          <div class="footer__legal">
+            <a href="#">이용약관</a>
+            <a href="#">개인정보처리방침</a>
+            <a href="#">llms.txt</a>
+            <span class="footer__seal">v1.0 · Confidential</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/common.js"></script>
+</body>
+</html>
