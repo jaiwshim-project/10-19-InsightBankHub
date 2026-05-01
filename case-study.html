@@ -452,6 +452,19 @@
           </div>
         </article>
       </div>
+
+      <!-- 02 해설 -->
+      <div class="card mt-6" data-reveal style="background: var(--glass-100); padding: var(--s-5); max-width: 980px; margin-left: auto; margin-right: auto;">
+        <strong style="color: var(--gold-300); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;">해설 · 6채널 시그널이 어떻게 결합되는가</strong>
+        <p class="text-secondary mt-3 mb-0" style="font-size: var(--fs-sm); line-height: 1.8;">
+          위 여섯 카드는 각 매체의 발행 본문에서 NER(개체명 인식)과 RE(관계 추출) 파이프라인이 자동으로 뽑아낸 핵심 시그널입니다.
+          디펜스투데이는 <strong style="color: var(--text-primary);">기술 모트와 군 도입 임박도</strong>를, 스타트업투데이는 <strong style="color: var(--text-primary);">펀딩 단계와 valuation step-up</strong>을, 한국M&amp;A경제신문은 <strong style="color: var(--text-primary);">M&amp;A·IPO 임박 단독 보도</strong>를 제공합니다.
+          애틀러스리서치의 통신 표준 통계는 무인화 기업의 듀얼유스 매출 잠재력을 정량화하고, 바이오타임즈는 일반 시장 분석에서 놓치기 쉬운 <strong style="color: var(--text-primary);">군용 의료·바이오 응용</strong>을 발굴합니다.
+          월간지방세연구는 조특법 10·12·22조 적용 가능성과 IPO 전 세무 리스크를 매핑하여 세후 valuation 보정 계수를 제공합니다.
+          단일 매체로는 한 면만 보이지만, 6채널이 동시에 같은 사건을 추적하면 산업·기술·자본·세제·규제·응용이라는 6개 축이 한 좌표 위에서 정렬됩니다.
+          이렇게 모인 신호가 다음 섹션의 <strong style="color: var(--gold-300);">통합 IPO 평가 점수(R-Alpha)</strong>로 환원되며, 단일 매체 기반 분석이 절대 도달할 수 없는 입체적 인사이트를 만들어냅니다.
+        </p>
+      </div>
     </div>
   </section>
 
@@ -538,6 +551,19 @@
 
         <p class="text-muted mt-4 mb-0" style="font-size: var(--fs-xs);">
           * 본 데이터는 사례 시연용 합성 예시입니다. 실 데이터는 6채널 발행물 NER+RE 결과 + B2B 그래프 라이선스(Stream 09)를 통해 SPARQL 1.1 endpoint로 제공됩니다.
+        </p>
+      </div>
+
+      <!-- 03 해설 -->
+      <div class="card mt-6" data-reveal style="background: var(--glass-100); padding: var(--s-5);">
+        <strong style="color: var(--gold-300); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;">해설 · R-Alpha 점수의 구조와 의미</strong>
+        <p class="text-secondary mt-3 mb-0" style="font-size: var(--fs-sm); line-height: 1.8;">
+          R-Alpha는 단순 가중평균이 아니라 <strong style="color: var(--text-primary);">위험조정 후 초과수익(Risk-adjusted Alpha)</strong> 개념을 차용한 통합 평가 점수입니다.
+          기술 모트(0.30)는 디펜스투데이의 TRL·양산성 데이터에서, 펀딩·valuation step(0.20)은 스타트업투데이의 라운드 추적에서, M&amp;A·IPO 임박도(0.20)는 한국M&amp;A경제신문의 단독 보도에서 입력됩니다.
+          듀얼유스 매출(0.15)은 바이오타임즈와 애틀러스리서치 데이터의 교차 검증으로 산정되며, 세후 보정(0.15)은 월간지방세연구의 조특법 적용 분석을 통해 계산됩니다.
+          UAV-Alpha가 86.4점으로 1위를 차지한 것은 한화CVC 시리즈 C와 한화 인수 협상이 동시 시그널로 잡혔고, 5G mesh + SLAM 기술 모트가 군 도입 임박도까지 결합되었기 때문입니다.
+          MED-Delta(79.5)는 듀얼유스 의료 응용으로 valuation 프리미엄을 받지만 단독 인수 시그널이 약하고, SAT-Charlie(73.8)는 외인 인수 차단(방산법 14조)과 SPAC 실패가 감점 요인입니다.
+          기관 고객은 이 표를 그대로 듀일리전스 1차 스크리너로 사용해 200+ 후보를 5종으로 압축하며, 평균 6주가 걸리던 작업을 <strong style="color: var(--gold-300);">2일 이내</strong>에 끝냅니다.
         </p>
       </div>
     </div>
@@ -764,6 +790,19 @@
         실제 그래프 라이선스 고객은 위 노드/엣지를 SPARQL 1.1로 직접 쿼리하며, OWL2 추론을 통해 자동 생성된 함의 사실까지 받아갑니다 →
         <a href="graph-license.html" style="color: var(--gold-300);">Stream 09 그래프 라이선스 자세히</a>
       </p>
+
+      <!-- 04 해설 -->
+      <div class="card mt-6" data-reveal style="background: var(--glass-100); padding: var(--s-5);">
+        <strong style="color: var(--gold-300); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;">해설 · 그래프 구조와 추론 가능성</strong>
+        <p class="text-secondary mt-3 mb-0" style="font-size: var(--fs-sm); line-height: 1.8;">
+          이 지식 그래프는 4개 레이어로 구성됩니다. 최상단의 <strong style="color: var(--text-primary);">6개 채널 노드</strong>는 출처(Provenance)를 의미하며, 점선 엣지로 각 사실이 어느 매체에서 추출되었는지 추적할 수 있습니다.
+          중앙의 <strong style="color: var(--gold-300);">"K-방산 무인화 IPO 통합 평가"</strong> 노드는 결합 산출물이고, 그 주변에 5종의 IPO 후보 기업이 R-Alpha 점수와 함께 배치됩니다.
+          중간 레이어의 기술(SLAM·5G mesh·EO/IR), VC(한화CVC·KIC), M&amp;A 인수 후보(한화·LIG·현대로템), 규제(방산법 14조), 세제(조특법 10·12·22조), 듀얼유스 의료 응용은 기업 노드와 다대다로 연결되어 한 사건의 다층 단면을 동시에 보여줍니다.
+          엣지에는 <code style="color: var(--purple-500); background: var(--glass-purple-soft); padding: 1px 5px; border-radius: 3px; font-size: 11px;">funded_by</code>, <code style="color: var(--purple-500); background: var(--glass-purple-soft); padding: 1px 5px; border-radius: 3px; font-size: 11px;">m&amp;a_target_of</code>, <code style="color: var(--purple-500); background: var(--glass-purple-soft); padding: 1px 5px; border-radius: 3px; font-size: 11px;">tax_eligible</code>, <code style="color: var(--purple-500); background: var(--glass-purple-soft); padding: 1px 5px; border-radius: 3px; font-size: 11px;">aggregated_in</code> 등 의미 라벨이 붙어, 구조 자체가 SPARQL 쿼리 가능한 형태가 됩니다.
+          단순 시각화가 아니라 <strong style="color: var(--text-primary);">RDF 트리플로 직렬화 가능한 추론 자산</strong>이라는 점이 핵심입니다.
+          OWL2 RL 추론기를 통과시키면 명시되지 않은 함의 사실(예: "방산법 14조 적용 기업의 외국인 지분율 한도 + 조특법 10조 적용 시 세후 valuation")이 자동 도출됩니다.
+        </p>
+      </div>
     </div>
   </section>
 
@@ -774,6 +813,42 @@
         <span class="eyebrow">05 · Ontology Mapping</span>
         <h2 style="margin-top: var(--s-4);">FIBO·XBRL·도메인 클래스 매핑</h2>
         <p>이 사례 그래프의 노드·관계가 어떤 국제 표준 클래스에 매핑되는지 — 글로벌 LLM 회사가 추가 변환 없이 인용 가능한 형태입니다.</p>
+      </div>
+
+      <!-- 3D 온톨로지 그래프 -->
+      <div class="card mt-6" data-reveal style="padding: var(--s-4);">
+        <div class="row" style="justify-content:space-between; align-items:center; flex-wrap:wrap; gap:var(--s-2); margin-bottom: var(--s-3);">
+          <div>
+            <strong style="color: var(--gold-300); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;">3D Ontology Graph</strong>
+            <p class="text-muted mb-0" style="font-size: 11px; margin-top: 2px;">드래그 회전 · 휠 줌 · 노드 클릭으로 강조</p>
+          </div>
+          <div class="row gap-2" style="font-size: 10px;">
+            <span class="chip" style="background: var(--glass-purple); color: var(--purple-500); border-color: var(--border-purple);">FIBO</span>
+            <span class="chip chip--blue">XBRL</span>
+            <span class="chip" style="background: rgba(74,222,128,0.10); color: var(--success); border-color: rgba(74,222,128,0.30);">Schema.org</span>
+            <span class="chip chip--gold">IBH 도메인</span>
+            <span class="chip" style="background: rgba(248,113,113,0.10); color: var(--danger); border-color: rgba(248,113,113,0.30);">인스턴스</span>
+          </div>
+        </div>
+        <div id="ont3d" style="width: 100%; height: 540px; background: radial-gradient(circle at 50% 50%, #131829 0%, #0a0e1a 80%); border-radius: var(--r-md); position: relative; overflow: hidden;">
+          <div id="ont3dLoading" style="position:absolute; inset:0; display:grid; place-items:center; color: var(--text-muted); font-size: var(--fs-sm); letter-spacing: 0.1em;">3D 그래프 로딩 중…</div>
+        </div>
+        <div class="row mt-3" style="gap: var(--s-2); justify-content:center;">
+          <button class="btn btn--ghost btn--sm" id="ont3dRotate">자동 회전 ▶</button>
+          <button class="btn btn--ghost btn--sm" id="ont3dCenter">시점 초기화</button>
+        </div>
+
+        <!-- 3D 그래프 해설 -->
+        <div class="mt-4" style="padding: var(--s-4); background: var(--bg-elev-2); border-radius: var(--r-md); border-left: 3px solid var(--purple-500);">
+          <strong style="color: var(--purple-500); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;">해설 · 3D 그래프가 보여주는 4계층 온톨로지</strong>
+          <p class="text-secondary mt-3 mb-0" style="font-size: var(--fs-sm); line-height: 1.8;">
+            3D 공간의 노드는 색으로 4개 계층을 구분합니다. <span style="color: var(--purple-500);">보라색 FIBO</span>(금융 산업 표준), <span style="color: #7eb6f5;">파란색 XBRL</span>(회계 보고 표준), <span style="color: var(--success);">녹색 Schema.org</span>(구조화 데이터·prov), <span style="color: var(--gold-300);">금색 IBH 도메인</span>(우리 확장 클래스), <span style="color: var(--danger);">붉은색 인스턴스</span>(실제 사례 데이터)로 구성되어 있으며, 노드를 클릭하면 카메라가 자동으로 해당 노드를 중심에 배치하고 라벨이 강조됩니다.
+            엣지의 흐르는 입자는 <code style="color: var(--gold-300); background: var(--glass-gold); padding: 1px 5px; border-radius: 3px; font-size: 11px;">eligibleFor</code>, <code style="color: var(--gold-300); background: var(--glass-gold); padding: 1px 5px; border-radius: 3px; font-size: 11px;">potentiallyAcquires</code>, <code style="color: var(--gold-300); background: var(--glass-gold); padding: 1px 5px; border-radius: 3px; font-size: 11px;">wasDerivedFrom</code> 같은 도메인 관계의 방향성을 시각화합니다.
+            이 구조의 결정적 가치는 <strong style="color: var(--text-primary);">FIBO·XBRL·Schema.org 같은 국제 표준 클래스의 하위로 IBH 도메인 클래스가 정의</strong>되어 있다는 점입니다.
+            글로벌 LLM 회사가 우리 데이터를 학습할 때 별도 변환 레이어 없이 이미 자기 시스템의 표준 클래스에 정렬된 트리플을 받아갑니다.
+            마우스 드래그로 자유롭게 회전시키거나 휠로 줌하면 평면 다이어그램에서 보이지 않던 <strong style="color: var(--gold-300);">계층 깊이와 클러스터 밀도</strong>가 직관적으로 드러납니다.
+          </p>
+        </div>
       </div>
 
       <div class="card mt-6" data-reveal style="padding: 0; overflow-x: auto;">
@@ -837,6 +912,19 @@
           </tbody>
         </table>
       </div>
+
+      <!-- 05 매핑 표 해설 -->
+      <div class="card mt-6" data-reveal style="background: var(--glass-100); padding: var(--s-5);">
+        <strong style="color: var(--gold-300); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;">해설 · 표준 매핑이 LLM 학습 라이선스의 핵심</strong>
+        <p class="text-secondary mt-3 mb-0" style="font-size: var(--fs-sm); line-height: 1.8;">
+          이 표는 우리 도메인 클래스(<code style="color: var(--gold-300); background: var(--glass-gold); padding: 1px 5px; border-radius: 3px; font-size: 11px;">ibh:*</code>)가 어떤 국제 표준 클래스에 정렬되는지 보여줍니다.
+          비상장 기업은 <code style="color: var(--gold-300); background: var(--glass-gold); padding: 1px 5px; border-radius: 3px; font-size: 11px;">fibo:PrivatelyHeldCompany</code>의 하위로, VC 펀딩은 <code style="color: var(--gold-300); background: var(--glass-gold); padding: 1px 5px; border-radius: 3px; font-size: 11px;">fibo:Equity</code>의 하위로, R&amp;D 세제 혜택은 <code style="color: var(--gold-300); background: var(--glass-gold); padding: 1px 5px; border-radius: 3px; font-size: 11px;">xbrl:TaxCreditAmount</code>의 하위로 매핑됩니다.
+          예시 트리플 컬럼을 보면 <code style="color: var(--gold-300); background: var(--glass-gold); padding: 1px 5px; border-radius: 3px; font-size: 11px;">ibh:UAV-Alpha rdf:type ibh:DefenseStartup</code> 같이 RDF 표준 형식으로 직렬화 가능한 형태임을 확인할 수 있습니다.
+          가장 중요한 마지막 행은 <code style="color: var(--gold-300); background: var(--glass-gold); padding: 1px 5px; border-radius: 3px; font-size: 11px;">prov:wasDerivedFrom</code>으로, <strong style="color: var(--text-primary);">모든 트리플이 어느 매체의 어느 발행물에서 파생되었는지를 영구 기록</strong>합니다.
+          이 구조 덕분에 AI가 우리 데이터를 학습한 뒤에도 답변에 출처를 자동으로 인용할 수 있고, 무단 학습 분쟁이 발생했을 때 데이터 주권을 명확히 주장할 수 있습니다.
+          글로벌 LLM 회사가 한국 데이터 학습 라이선스를 살 때 단순 텍스트가 아니라 <strong style="color: var(--gold-300);">표준 호환 + Provenance 보장 + 추론 가능한 그래프</strong>를 받는다는 점이 5억 원 이상 Strategic Tier 가격을 정당화하는 핵심 차별화입니다.
+        </p>
+      </div>
     </div>
   </section>
 
@@ -888,6 +976,21 @@
             → 의사결정 가능 자산. <strong style="color: var(--text-primary);">사모펀드·IB·정부가 1쿼리로 컨설턴트 1주일 작업을 대체.</strong>
           </p>
         </div>
+      </div>
+
+      <!-- 06 해설 -->
+      <div class="card mt-6" data-reveal style="background: var(--glass-100); padding: var(--s-5);">
+        <strong style="color: var(--gold-300); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;">해설 · "산업 동향 보고" vs "의사결정 가능 자산"</strong>
+        <p class="text-secondary mt-3 mb-0" style="font-size: var(--fs-sm); line-height: 1.8;">
+          좌측 단일 매체 응답은 디펜스투데이가 줄 수 있는 최선의 답입니다. 양산 단가 하락, 군 도입 임박 건수, 기술 보유 기업 목록 — 모두 정확한 정보지만 <strong style="color: var(--danger);">투자·자문 의사결정에는 결정적으로 부족</strong>합니다.
+          어느 기업이 자본을 받았는지, M&amp;A 협상 중인지, 세제 혜택을 받는지, 듀얼유스로 매출을 다각화했는지에 대한 답이 빠져 있기 때문입니다.
+          우측의 6채널 결합 응답은 같은 14개 기업 중 5개를 골라 <strong style="color: var(--text-primary);">기업 단위로 다층 사실을 결합</strong>합니다.
+          UAV-Alpha 한 줄에 펀딩(스타트업투데이) + M&amp;A 시그널(KMNA) + 세제(지방세) + 기술 모트(디펜스투데이)가 동시에 들어가고, R-Alpha 점수까지 부여됩니다.
+          MED-Delta는 바이오타임즈의 의료 듀얼유스 시그널이 결합되어야만 valuation 프리미엄 +40% 같은 정량 결론에 도달할 수 있습니다.
+          이 차이는 <strong style="color: var(--gold-300);">매체별 가격의 단순 합이 아니라 결합 가격의 본질적 우위</strong>를 만듭니다.
+          PitchBook 30,000달러 + 디펜스투데이 구독 + 세무 자문 시간을 따로 사도 같은 결과는 나오지 않습니다.
+          교차 검증과 시간순 사실 추적이 단일 매체 시스템에서는 구조적으로 불가능하기 때문입니다.
+        </p>
       </div>
     </div>
   </section>
@@ -1021,5 +1124,183 @@
   </footer>
 
   <script src="js/common.js"></script>
+
+  <!-- 3D Ontology Graph (Three.js + 3d-force-graph) -->
+  <script src="https://cdn.jsdelivr.net/npm/3d-force-graph@1.73.4/dist/3d-force-graph.min.js"></script>
+  <script>
+    (function () {
+      function init3DOntology() {
+        if (typeof ForceGraph3D !== 'function') { setTimeout(init3DOntology, 200); return; }
+
+        const container = document.getElementById('ont3d');
+        const loadingEl = document.getElementById('ont3dLoading');
+        if (!container) return;
+
+        // Color palette
+        const COLOR = {
+          fibo:   '#c084fc',  // FIBO 표준
+          xbrl:   '#7eb6f5',  // XBRL 표준
+          schema: '#4ade80',  // Schema.org 표준
+          ibh:    '#d4a574',  // IBH 도메인
+          inst:   '#f87171',  // 인스턴스
+          prov:   '#fbbf24',  // Provenance
+        };
+
+        // Ontology graph data (사례 기반)
+        const nodes = [
+          // ===== 표준 루트 =====
+          { id: 'owl:Thing',           group: 'fibo', val: 14, label: 'owl:Thing' },
+          { id: 'fibo:LegalEntity',    group: 'fibo', val: 10, label: 'fibo:LegalEntity' },
+          { id: 'fibo:Equity',         group: 'fibo', val: 8,  label: 'fibo:Equity' },
+          { id: 'fibo:M&A',            group: 'fibo', val: 8,  label: 'fibo:MergerAndAcquisition' },
+          { id: 'fibo:MonetaryAmount', group: 'fibo', val: 6,  label: 'fibo:MonetaryAmount' },
+
+          // ===== XBRL =====
+          { id: 'xbrl:TaxCreditAmount', group: 'xbrl', val: 8, label: 'xbrl:TaxCreditAmount' },
+
+          // ===== Schema.org =====
+          { id: 'schema:Legislation',   group: 'schema', val: 8, label: 'schema:Legislation' },
+          { id: 'schema:MedicalDevice', group: 'schema', val: 7, label: 'schema:MedicalDevice' },
+          { id: 'prov:Entity',          group: 'prov',   val: 6, label: 'prov:Entity' },
+
+          // ===== IBH 도메인 클래스 (FIBO 확장) =====
+          { id: 'ibh:DefenseStartup',      group: 'ibh', val: 12, label: 'ibh:DefenseStartup' },
+          { id: 'ibh:FundingRound',        group: 'ibh', val: 9,  label: 'ibh:FundingRound' },
+          { id: 'ibh:AcquisitionInterest', group: 'ibh', val: 9,  label: 'ibh:AcquisitionInterest' },
+          { id: 'ibh:TaxCreditScheme',     group: 'ibh', val: 9,  label: 'ibh:TaxCreditScheme' },
+          { id: 'ibh:DefenseRegulation',   group: 'ibh', val: 9,  label: 'ibh:DefenseRegulation' },
+          { id: 'ibh:DualUseApplication',  group: 'ibh', val: 9,  label: 'ibh:DualUseApplication' },
+          { id: 'ibh:NewsArticle',         group: 'ibh', val: 8,  label: 'ibh:NewsArticle' },
+
+          // ===== 인스턴스 (실제 사례 데이터) =====
+          { id: 'UAV-Alpha',   group: 'inst', val: 7, label: 'UAV-Alpha' },
+          { id: 'UGV-Bravo',   group: 'inst', val: 7, label: 'UGV-Bravo' },
+          { id: 'SAT-Charlie', group: 'inst', val: 6, label: 'SAT-Charlie' },
+          { id: 'MED-Delta',   group: 'inst', val: 7, label: 'MED-Delta' },
+          { id: 'SEN-Echo',    group: 'inst', val: 5, label: 'SEN-Echo' },
+          { id: 'TXCS-art10',  group: 'inst', val: 5, label: 'TXCS-art10 (R&D)' },
+          { id: 'DefAct-14',   group: 'inst', val: 5, label: 'DefAct §14' },
+          { id: 'Hanwha',      group: 'inst', val: 6, label: 'Hanwha' },
+          { id: 'EmergMedDrone', group: 'inst', val: 5, label: 'EmergMedDrone' },
+          { id: 'Article-ST-2026-04-12', group: 'inst', val: 4, label: 'Article#ST·2026-04-12' },
+        ];
+
+        // 관계: subClassOf, type, equivalentClass, hasFundingRound 등
+        const links = [
+          // 표준 계층
+          { source: 'owl:Thing',       target: 'fibo:LegalEntity',    rel: 'subClassOf' },
+          { source: 'owl:Thing',       target: 'schema:Legislation',  rel: 'subClassOf' },
+          { source: 'owl:Thing',       target: 'schema:MedicalDevice',rel: 'subClassOf' },
+          { source: 'owl:Thing',       target: 'prov:Entity',         rel: 'subClassOf' },
+          { source: 'fibo:LegalEntity',target: 'fibo:Equity',         rel: 'related' },
+          { source: 'fibo:Equity',     target: 'fibo:MonetaryAmount', rel: 'related' },
+
+          // IBH 확장 (FIBO subClassOf)
+          { source: 'fibo:LegalEntity', target: 'ibh:DefenseStartup',      rel: 'subClassOf' },
+          { source: 'fibo:Equity',      target: 'ibh:FundingRound',        rel: 'subClassOf' },
+          { source: 'fibo:M&A',         target: 'ibh:AcquisitionInterest', rel: 'subClassOf' },
+          { source: 'xbrl:TaxCreditAmount', target: 'ibh:TaxCreditScheme', rel: 'subClassOf' },
+          { source: 'schema:Legislation',   target: 'ibh:DefenseRegulation',rel: 'subClassOf' },
+          { source: 'schema:MedicalDevice', target: 'ibh:DualUseApplication',rel:'subClassOf' },
+          { source: 'prov:Entity',          target: 'ibh:NewsArticle',     rel: 'subClassOf' },
+
+          // 인스턴스 → 클래스
+          { source: 'ibh:DefenseStartup', target: 'UAV-Alpha',   rel: 'rdf:type' },
+          { source: 'ibh:DefenseStartup', target: 'UGV-Bravo',   rel: 'rdf:type' },
+          { source: 'ibh:DefenseStartup', target: 'SAT-Charlie', rel: 'rdf:type' },
+          { source: 'ibh:DefenseStartup', target: 'MED-Delta',   rel: 'rdf:type' },
+          { source: 'ibh:DefenseStartup', target: 'SEN-Echo',    rel: 'rdf:type' },
+          { source: 'ibh:TaxCreditScheme',    target: 'TXCS-art10',     rel: 'rdf:type' },
+          { source: 'ibh:DefenseRegulation',  target: 'DefAct-14',      rel: 'rdf:type' },
+          { source: 'ibh:DualUseApplication', target: 'EmergMedDrone',  rel: 'rdf:type' },
+          { source: 'ibh:NewsArticle',        target: 'Article-ST-2026-04-12', rel: 'rdf:type' },
+          { source: 'ibh:AcquisitionInterest',target: 'Hanwha',         rel: 'related' },
+
+          // 인스턴스 간 도메인 관계
+          { source: 'UAV-Alpha', target: 'TXCS-art10',     rel: 'eligibleFor' },
+          { source: 'UGV-Bravo', target: 'TXCS-art10',     rel: 'eligibleFor' },
+          { source: 'SEN-Echo',  target: 'TXCS-art10',     rel: 'eligibleFor' },
+          { source: 'MED-Delta', target: 'EmergMedDrone',  rel: 'hasApplication' },
+          { source: 'SAT-Charlie', target: 'DefAct-14',    rel: 'restrictedBy' },
+          { source: 'Hanwha', target: 'UAV-Alpha',         rel: 'potentiallyAcquires' },
+          { source: 'Hanwha', target: 'UGV-Bravo',         rel: 'potentiallyAcquires' },
+          { source: 'UAV-Alpha', target: 'Article-ST-2026-04-12', rel: 'wasDerivedFrom' },
+        ];
+
+        const graph = ForceGraph3D({ controlType: 'orbit' })(container)
+          .graphData({ nodes, links })
+          .backgroundColor('rgba(0,0,0,0)')
+          .nodeLabel(n => `<div style="font-family:'KoPubWorld Dotum',sans-serif; padding:6px 10px; background:rgba(10,14,26,0.92); border:1px solid rgba(212,165,116,0.4); border-radius:6px; color:#f1f3f7; font-size:12px;">${n.label}<br><span style="color:#95a0b8; font-size:10px;">${n.group}</span></div>`)
+          .nodeColor(n => COLOR[n.group] || '#888')
+          .nodeVal(n => n.val || 5)
+          .nodeOpacity(0.92)
+          .nodeResolution(16)
+          .linkColor(l => 'rgba(212,165,116,0.45)')
+          .linkOpacity(0.55)
+          .linkWidth(0.6)
+          .linkDirectionalArrowLength(2.2)
+          .linkDirectionalArrowRelPos(0.95)
+          .linkDirectionalArrowColor(() => 'rgba(232,202,148,0.7)')
+          .linkDirectionalParticles(l => (l.rel === 'rdf:type' || l.rel === 'subClassOf') ? 0 : 1)
+          .linkDirectionalParticleSpeed(0.005)
+          .linkDirectionalParticleColor(() => '#d4a574')
+          .linkDirectionalParticleWidth(1.6)
+          .linkLabel(l => `<span style="font-family:'JetBrains Mono',monospace; font-size:10px; color:#e6c895; background:rgba(10,14,26,0.85); padding:3px 6px; border-radius:4px;">${l.rel}</span>`)
+          .showNavInfo(false)
+          .width(container.clientWidth)
+          .height(540);
+
+        graph.d3Force('charge').strength(-180);
+        graph.d3Force('link').distance(48);
+
+        if (loadingEl) loadingEl.style.display = 'none';
+
+        // Auto-rotate toggle
+        let rotating = false;
+        const btnRot = document.getElementById('ont3dRotate');
+        const angularSpeed = 0.0024;
+        let last = Date.now();
+        function tick() {
+          if (!rotating) return;
+          const now = Date.now();
+          const t = (now - last) * angularSpeed;
+          last = now;
+          const cam = graph.cameraPosition();
+          const r = Math.hypot(cam.x, cam.z);
+          const a = Math.atan2(cam.z, cam.x) + t;
+          graph.cameraPosition({ x: r * Math.cos(a), y: cam.y, z: r * Math.sin(a) }, undefined, 0);
+          requestAnimationFrame(tick);
+        }
+        if (btnRot) btnRot.addEventListener('click', () => {
+          rotating = !rotating;
+          btnRot.textContent = rotating ? '자동 회전 ❚❚' : '자동 회전 ▶';
+          if (rotating) { last = Date.now(); requestAnimationFrame(tick); }
+        });
+
+        // Recenter
+        const btnCenter = document.getElementById('ont3dCenter');
+        if (btnCenter) btnCenter.addEventListener('click', () => {
+          graph.zoomToFit(800, 60);
+        });
+
+        // Highlight on click
+        graph.onNodeClick(node => {
+          const distance = 80;
+          const dist = Math.hypot(node.x, node.y, node.z) || 1;
+          const ratio = 1 + distance / dist;
+          graph.cameraPosition({ x: node.x * ratio, y: node.y * ratio, z: node.z * ratio }, node, 800);
+        });
+
+        // Resize 대응
+        let rt;
+        window.addEventListener('resize', () => {
+          clearTimeout(rt);
+          rt = setTimeout(() => graph.width(container.clientWidth), 200);
+        });
+      }
+      if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init3DOntology);
+      else init3DOntology();
+    })();
+  </script>
 </body>
 </html>
