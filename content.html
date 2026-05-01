@@ -205,13 +205,16 @@
           </div>
 
           <div class="cms-side__group">
-            <div class="cms-side__label">채널</div>
-            <div class="cms-side__item"><span>바이오타임즈</span><small>312</small></div>
-            <div class="cms-side__item"><span>한국M&A경제신문</span><small>284</small></div>
-            <div class="cms-side__item"><span>스타트업투데이</span><small>248</small></div>
-            <div class="cms-side__item"><span>월간지방세연구</span><small>220</small></div>
-            <div class="cms-side__item"><span>애틀러스리서치</span><small>220</small></div>
-            <div class="cms-side__item"><span>디펜스투데이</span><small>196</small></div>
+            <div class="cms-side__label">
+              채널
+              <span id="feedStatus" style="font-size:9px; color:var(--text-muted); margin-left:6px; letter-spacing:0;">·</span>
+            </div>
+            <div class="cms-side__item" data-channel-key="biotimes"><span>바이오타임즈</span><small data-channel-count>312</small></div>
+            <div class="cms-side__item" data-channel-key="kmna"><span>한국M&A경제신문</span><small data-channel-count>284</small></div>
+            <div class="cms-side__item" data-channel-key="startuptoday"><span>스타트업투데이</span><small data-channel-count>248</small></div>
+            <div class="cms-side__item" data-channel-key="localtax"><span>월간지방세연구</span><small data-channel-count>220</small></div>
+            <div class="cms-side__item" data-channel-key="arg"><span>애틀러스리서치</span><small data-channel-count>220</small></div>
+            <div class="cms-side__item" data-channel-key="defensetoday"><span>디펜스투데이</span><small data-channel-count>196</small></div>
           </div>
 
           <div class="cms-side__group">
@@ -262,6 +265,9 @@
             <div>GEO</div>
             <div></div>
           </div>
+
+          <!-- 동적 렌더 영역 시작 (id="articleList") -->
+          <div id="articleList">
 
           <!-- 행: 발행됨 (인용 많음) -->
           <div class="article-row">
@@ -412,12 +418,14 @@
             </div>
           </div>
 
+          </div><!-- /#articleList -->
+
           <!-- 페이지 -->
           <div class="row mt-6" style="justify-content:space-between; align-items:center;">
-            <span class="text-muted" style="font-size:var(--fs-sm);">9건 표시 · 전체 1,284건</span>
+            <span class="text-muted" id="paginationLabel" style="font-size:var(--fs-sm);">9건 표시 · 전체 1,284건</span>
             <div class="row gap-2">
-              <button class="btn btn--ghost btn--sm">‹ 이전</button>
-              <button class="btn btn--ghost btn--sm">다음 ›</button>
+              <button class="btn btn--ghost btn--sm" id="pagePrev">‹ 이전</button>
+              <button class="btn btn--ghost btn--sm" id="pageNext">다음 ›</button>
             </div>
           </div>
 
@@ -515,12 +523,152 @@
 
   <script src="js/common.js"></script>
   <script>
+    /* ===== 사이드바 채널 활성 토글 (필터링) ===== */
+    let activeChannel = null;
     document.querySelectorAll('.cms-side__item').forEach(it => {
       it.addEventListener('click', () => {
         document.querySelectorAll('.cms-side__item').forEach(x => x.classList.remove('active'));
         it.classList.add('active');
+        activeChannel = it.dataset.channelKey || null;
+        if (window.__rerenderArticles) window.__rerenderArticles();
       });
     });
+
+    /* ===== /api/feeds 동적 로드 + 렌더 ===== */
+    (function () {
+      const PAGE_SIZE = 12;
+      let allItems = [];
+      let currentPage = 1;
+      let searchQuery = '';
+
+      const listEl = document.getElementById('articleList');
+      const labelEl = document.getElementById('paginationLabel');
+      const statusEl = document.getElementById('feedStatus');
+      const searchInput = document.querySelector('.search-box input');
+      const btnPrev = document.getElementById('pagePrev');
+      const btnNext = document.getElementById('pageNext');
+
+      function escapeHtml(s) {
+        return String(s == null ? '' : s)
+          .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+      }
+      function fmtDate(s) {
+        if (!s) return '—';
+        const d = new Date(s);
+        if (isNaN(d.getTime())) return s.slice(0, 10);
+        const yyyy = d.getFullYear();
+        const mm = String(d.getMonth() + 1).padStart(2, '0');
+        const dd = String(d.getDate()).padStart(2, '0');
+        return `${yyyy}.${mm}.${dd}`;
+      }
+      function deriveGeo(item) {
+        const len = (item.title?.length || 0) + (item.description?.length || 0);
+        const base = 70 + Math.min(25, Math.floor(len / 12));
+        const bonus = item.category ? 3 : 0;
+        return Math.min(99, base + bonus);
+      }
+      function deriveCitations(item) {
+        const ageDays = Math.max(1, (Date.now() - (item.pubDateMs || Date.parse(item.pubDate) || Date.now())) / 86400000);
+        return Math.max(8, Math.round(220 / Math.sqrt(ageDays)));
+      }
+
+      function rowHtml(item) {
+        const geo = deriveGeo(item);
+        const cites = deriveCitations(item);
+        const meta = [item.author, item.category].filter(Boolean).join(' · ');
+        const titleSafe = escapeHtml(item.title);
+        const linkSafe = escapeHtml(item.link || '#');
+        const channelSafe = escapeHtml(item.channelName || '');
+        return `
+          <a class="article-row" href="${linkSafe}" target="_blank" rel="noopener" style="text-decoration:none; color:inherit;">
+            <input type="checkbox" class="article-row__check" onclick="event.stopPropagation()" />
+            <div>
+              <div class="article-row__title">${titleSafe}</div>
+              <div class="article-row__meta">${escapeHtml(meta) || '실시간 RSS'}</div>
+            </div>
+            <span class="chip chip--gold" style="font-size:10px;">${channelSafe}</span>
+            <span class="text-secondary" style="font-size:var(--fs-xs);">${fmtDate(item.pubDate)}</span>
+            <span class="badge-status badge-status--published">● 발행됨</span>
+            <strong style="color:var(--gold-300); font-family:'KoPubWorld Dotum',sans-serif;">${cites}</strong>
+            <span class="geo-score">${geo}<span class="geo-score__bar"><span class="geo-score__fill" style="width:${geo}%;"></span></span></span>
+            <div class="row-actions">
+              <span class="icon-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4v16h16v-7M20 4l-9 9M14 4h6v6"/></svg></span>
+            </div>
+          </a>`;
+      }
+
+      function getFiltered() {
+        let arr = allItems;
+        if (activeChannel) arr = arr.filter(x => x.channelId === activeChannel);
+        if (searchQuery) {
+          const q = searchQuery.toLowerCase();
+          arr = arr.filter(x =>
+            (x.title || '').toLowerCase().includes(q) ||
+            (x.description || '').toLowerCase().includes(q) ||
+            (x.channelName || '').toLowerCase().includes(q)
+          );
+        }
+        return arr;
+      }
+
+      function render() {
+        const filtered = getFiltered();
+        const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+        if (currentPage > totalPages) currentPage = totalPages;
+        const start = (currentPage - 1) * PAGE_SIZE;
+        const slice = filtered.slice(start, start + PAGE_SIZE);
+        if (slice.length === 0) {
+          listEl.innerHTML = `<div style="padding:var(--s-7); text-align:center; color:var(--text-muted); font-size:var(--fs-sm);">표시할 발행물이 없습니다.</div>`;
+        } else {
+          listEl.innerHTML = slice.map(rowHtml).join('');
+        }
+        if (labelEl) {
+          labelEl.textContent = `${slice.length}건 표시 · 전체 ${filtered.length}건${activeChannel ? ' (필터 적용)' : ''}`;
+        }
+        if (btnPrev) btnPrev.disabled = currentPage <= 1;
+        if (btnNext) btnNext.disabled = currentPage >= totalPages;
+      }
+      window.__rerenderArticles = () => { currentPage = 1; render(); };
+
+      if (btnPrev) btnPrev.addEventListener('click', () => { if (currentPage > 1) { currentPage--; render(); } });
+      if (btnNext) btnNext.addEventListener('click', () => { currentPage++; render(); });
+
+      if (searchInput) {
+        let t;
+        searchInput.addEventListener('input', e => {
+          clearTimeout(t);
+          t = setTimeout(() => { searchQuery = e.target.value.trim(); currentPage = 1; render(); }, 200);
+        });
+      }
+
+      function applyChannelCounts(channels) {
+        if (!Array.isArray(channels)) return;
+        channels.forEach(ch => {
+          const el = document.querySelector(`.cms-side__item[data-channel-key="${ch.id}"] [data-channel-count]`);
+          if (el) el.textContent = ch.count != null ? ch.count.toLocaleString() : '—';
+        });
+      }
+
+      async function load() {
+        try {
+          const r = await fetch('/api/feeds', { cache: 'no-store' });
+          if (!r.ok) throw new Error('HTTP ' + r.status);
+          const data = await r.json();
+          if (!data.ok) throw new Error(data.error || 'unknown');
+          allItems = Array.isArray(data.items) ? data.items : [];
+          applyChannelCounts(data.channels);
+          if (statusEl) statusEl.textContent = '🟢 LIVE · ' + (allItems.length) + '건';
+          render();
+        } catch (err) {
+          console.warn('[feeds] live fetch failed → 데모 데이터 유지', err);
+          if (statusEl) statusEl.textContent = '⚪ 데모';
+        }
+      }
+
+      if (statusEl) statusEl.textContent = '⏳ 로딩…';
+      load();
+    })();
   </script>
 </body>
 </html>

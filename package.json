@@ -1,0 +1,10 @@
+{
+  "name": "insight-bank-hub",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Insight Bank Hub — 6채널 통합 GEO-AIO 싱크탱크 허브",
+  "type": "module",
+  "engines": {
+    "node": ">=18"
+  }
+}
