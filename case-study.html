@@ -1125,12 +1125,15 @@
 
   <script src="js/common.js"></script>
 
-  <!-- 3D Ontology Graph (Three.js + 3d-force-graph) -->
+  <!-- 3D Ontology Graph (Three.js + 3d-force-graph + three-spritetext) -->
   <script src="https://cdn.jsdelivr.net/npm/3d-force-graph@1.73.4/dist/3d-force-graph.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three-spritetext@1.9.0/dist/three-spritetext.min.js"></script>
   <script>
     (function () {
       function init3DOntology() {
-        if (typeof ForceGraph3D !== 'function') { setTimeout(init3DOntology, 200); return; }
+        if (typeof ForceGraph3D !== 'function' || typeof SpriteText !== 'function') {
+          setTimeout(init3DOntology, 200); return;
+        }
 
         const container = document.getElementById('ont3d');
         const loadingEl = document.getElementById('ont3dLoading');
@@ -1230,11 +1233,27 @@
         const graph = ForceGraph3D({ controlType: 'orbit' })(container)
           .graphData({ nodes, links })
           .backgroundColor('rgba(0,0,0,0)')
-          .nodeLabel(n => `<div style="font-family:'KoPubWorld Dotum',sans-serif; padding:6px 10px; background:rgba(10,14,26,0.92); border:1px solid rgba(212,165,116,0.4); border-radius:6px; color:#f1f3f7; font-size:12px;">${n.label}<br><span style="color:#95a0b8; font-size:10px;">${n.group}</span></div>`)
           .nodeColor(n => COLOR[n.group] || '#888')
           .nodeVal(n => n.val || 5)
           .nodeOpacity(0.92)
           .nodeResolution(16)
+          .nodeThreeObjectExtend(true)
+          .nodeThreeObject(n => {
+            const sprite = new SpriteText(n.label);
+            sprite.color = '#f1f3f7';
+            sprite.backgroundColor = 'rgba(10,14,26,0.78)';
+            sprite.borderColor = COLOR[n.group] || '#888';
+            sprite.borderWidth = 0.4;
+            sprite.borderRadius = 2;
+            sprite.padding = [2, 4];
+            sprite.textHeight = n.group === 'inst' ? 3.2 : 3.8;
+            sprite.fontFace = "KoPubWorld Dotum, Pretendard, sans-serif";
+            sprite.fontWeight = '700';
+            // 라벨을 노드 위쪽에 띄움 (구체와 겹치지 않도록)
+            const r = Math.cbrt(n.val || 5) * 4 + 4;
+            sprite.position.set(0, r, 0);
+            return sprite;
+          })
           .linkColor(l => 'rgba(212,165,116,0.45)')
           .linkOpacity(0.55)
           .linkWidth(0.6)
@@ -1245,13 +1264,33 @@
           .linkDirectionalParticleSpeed(0.005)
           .linkDirectionalParticleColor(() => '#d4a574')
           .linkDirectionalParticleWidth(1.6)
-          .linkLabel(l => `<span style="font-family:'JetBrains Mono',monospace; font-size:10px; color:#e6c895; background:rgba(10,14,26,0.85); padding:3px 6px; border-radius:4px;">${l.rel}</span>`)
+          .linkThreeObjectExtend(true)
+          .linkThreeObject(l => {
+            const sprite = new SpriteText(l.rel);
+            sprite.color = '#e6c895';
+            sprite.backgroundColor = 'rgba(10,14,26,0.7)';
+            sprite.borderColor = 'rgba(212,165,116,0.5)';
+            sprite.borderWidth = 0.3;
+            sprite.borderRadius = 1.5;
+            sprite.padding = [1.5, 3];
+            sprite.textHeight = 2.4;
+            sprite.fontFace = 'JetBrains Mono, ui-monospace, monospace';
+            return sprite;
+          })
+          .linkPositionUpdate((sprite, { start, end }) => {
+            // 엣지 라벨을 양 끝점 중간에 위치
+            const mid = ['x', 'y', 'z'].reduce((acc, c) => {
+              acc[c] = start[c] + (end[c] - start[c]) / 2;
+              return acc;
+            }, {});
+            Object.assign(sprite.position, mid);
+          })
           .showNavInfo(false)
           .width(container.clientWidth)
           .height(540);
 
-        graph.d3Force('charge').strength(-180);
-        graph.d3Force('link').distance(48);
+        graph.d3Force('charge').strength(-260);
+        graph.d3Force('link').distance(60);
 
         if (loadingEl) loadingEl.style.display = 'none';
 
