@@ -12,7 +12,6 @@
   <meta name="twitter:card" content="summary_large_image" />
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;700;900&display=swap" />
   <link rel="stylesheet" href="css/common.css" />
   <style>
     /* ===== Asset table per channel ===== */
@@ -112,7 +111,7 @@
       font-weight: 700;
     }
     .cross-step__entity {
-      font-family: 'Noto Serif KR', serif;
+      font-family: 'KoPubWorld Dotum', serif;
       font-weight: 700;
       color: var(--text-primary);
       font-size: var(--fs-md);
@@ -151,7 +150,7 @@
       background: var(--glass-gold);
       border: 1px solid var(--border-gold);
       display: grid; place-items: center;
-      font-family: 'Noto Serif KR', serif;
+      font-family: 'KoPubWorld Dotum', serif;
       font-weight: 900;
       font-size: var(--fs-lg);
       color: var(--gold-300);
@@ -188,7 +187,7 @@
     .sparql-box .kw { color: var(--gold-300); font-weight: 600; }
     .sparql-box .var { color: var(--blue-300); }
     .sparql-box .lit { color: var(--success); }
-    .sparql-box .cls { color: #c084fc; }
+    .sparql-box .cls { color: var(--purple-500); }
     .sparql-box .cm { color: var(--text-muted); }
 
     .use-case {
@@ -253,14 +252,14 @@
       border-color: var(--border-gold);
     }
     .tier-card__name {
-      font-family: 'Noto Serif KR', serif;
+      font-family: 'KoPubWorld Dotum', serif;
       font-weight: 700;
       color: var(--text-primary);
       font-size: var(--fs-lg);
       margin-bottom: 4px;
     }
     .tier-card__price {
-      font-family: 'Noto Serif KR', serif;
+      font-family: 'KoPubWorld Dotum', serif;
       font-weight: 700;
       color: var(--gold-300);
       font-size: var(--fs-2xl);
@@ -468,8 +467,8 @@
           <div class="asset-row__example"><span class="ent">한화에어로</span><span class="arr">─exports→</span><span class="ent">K9자주포</span><span class="arr">─to→</span><span class="ent">폴란드</span> · 33억$</div>
         </div>
 
-        <div class="asset-row" style="background:rgba(192,132,252,0.06);">
-          <div class="asset-row__media" style="color:#c084fc;">월간지방세연구<small>LOCAL TAX RESEARCH</small></div>
+        <div class="asset-row" style="background:var(--glass-purple-soft);">
+          <div class="asset-row__media" style="color:var(--purple-500);">월간지방세연구<small>LOCAL TAX RESEARCH</small></div>
           <div class="asset-row__nodes"><code>CourtRuling</code> <code>LawArticle</code> <code>TaxItem</code> <code>TaxableObject</code> <code>Interpretation</code></div>
           <div class="asset-row__rels"><code>cites</code> <code>interprets</code> <code>overrules</code> <code>imposedOn</code> <code>ruling</code></div>
           <div class="asset-row__example"><span class="ent">2024두12345</span><span class="arr">─cites→</span><span class="ent">지방세법§7</span><span class="arr">─applied→</span><span class="ent">부동산명의신탁</span></div>
@@ -511,8 +510,8 @@
             <div class="cross-step__detail">대표 주관사 선정<br/>2026.02.12</div>
             <div class="cross-step__rel">[taxImpact]</div>
           </div>
-          <div class="cross-step" style="border-color:rgba(192,132,252,0.30); background:rgba(192,132,252,0.06);">
-            <div class="cross-step__source" style="color:#c084fc;">월간지방세연구</div>
+          <div class="cross-step" style="border-color:var(--border-purple); background:var(--glass-purple-soft);">
+            <div class="cross-step__source" style="color:var(--purple-500);">월간지방세연구</div>
             <div class="cross-step__entity">이전가격 이슈</div>
             <div class="cross-step__detail">유사 판례 3건 자동 추출<br/>2024두12345 등</div>
             <div class="cross-step__rel">[해결방안]</div>

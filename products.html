@@ -12,7 +12,6 @@
   <meta name="twitter:card" content="summary_large_image" />
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;700;900&display=swap" />
   <link rel="stylesheet" href="css/common.css" />
   <style>
     /* ===== Category section ===== */
@@ -32,7 +31,7 @@
       width: 64px; height: 64px;
       border-radius: var(--r-lg);
       display: grid; place-items: center;
-      font-family: 'Noto Serif KR', serif;
+      font-family: 'KoPubWorld Dotum', serif;
       font-weight: 900;
       font-size: 32px;
       background: linear-gradient(135deg, var(--gold-500), var(--gold-700));
@@ -40,7 +39,7 @@
       box-shadow: var(--shadow-gold);
     }
     .cat-letter--b { background: linear-gradient(135deg, var(--blue-500), var(--blue-700)); color: white; box-shadow: 0 8px 32px rgba(74,144,226,0.18); }
-    .cat-letter--c { background: linear-gradient(135deg, #c084fc, #7e22ce); color: white; box-shadow: 0 8px 32px rgba(192,132,252,0.20); }
+    .cat-letter--c { background: linear-gradient(135deg, var(--purple-500), #7e22ce); color: white; box-shadow: 0 8px 32px rgba(192,132,252,0.20); }
     .cat-letter--d { background: linear-gradient(135deg, var(--success), #16a34a); color: white; }
     .cat-letter--e { background: linear-gradient(135deg, var(--warning), #b45309); color: white; }
     .cat-letter--f { background: linear-gradient(135deg, var(--danger), #b91c1c); color: white; }
@@ -51,7 +50,7 @@
     .cat-title small { color: var(--gold-300); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; font-weight: 600; }
     .cat-stat {
       text-align: right;
-      font-family: 'Noto Serif KR', serif;
+      font-family: 'KoPubWorld Dotum', serif;
     }
     .cat-stat__count {
       font-weight: 700;
@@ -86,7 +85,7 @@
     .prod-card__num {
       position: absolute;
       top: 10px; right: 12px;
-      font-family: 'Noto Serif KR', serif;
+      font-family: 'KoPubWorld Dotum', serif;
       font-weight: 900;
       font-size: 36px;
       color: var(--gold-300);
@@ -123,7 +122,7 @@
       align-items: baseline;
     }
     .prod-card__price-amt {
-      font-family: 'Noto Serif KR', serif;
+      font-family: 'KoPubWorld Dotum', serif;
       font-weight: 700;
       color: var(--gold-300);
       font-size: var(--fs-md);
@@ -193,7 +192,7 @@
     .legend-name small { display:block; color: var(--text-muted); font-size: 11px; margin-top: 2px; }
     .legend-pct {
       color: var(--gold-300);
-      font-family: 'Noto Serif KR', serif;
+      font-family: 'KoPubWorld Dotum', serif;
       font-weight: 700;
       text-align: right;
       min-width: 50px;
@@ -456,7 +455,7 @@
               <!-- B. 25% → 109.96 (start at 158.34) -->
               <circle cx="100" cy="100" r="70" stroke="#4a90e2" stroke-dasharray="109.96 439.82" stroke-dashoffset="-158.34"/>
               <!-- C. 22% → 96.76 (start at 268.30) -->
-              <circle cx="100" cy="100" r="70" stroke="#c084fc" stroke-dasharray="96.76 439.82" stroke-dashoffset="-268.30"/>
+              <circle cx="100" cy="100" r="70" stroke="var(--purple-500)" stroke-dasharray="96.76 439.82" stroke-dashoffset="-268.30"/>
               <!-- D. 7% → 30.79 -->
               <circle cx="100" cy="100" r="70" stroke="#4ade80" stroke-dasharray="30.79 439.82" stroke-dashoffset="-365.06"/>
               <!-- E. 3% → 13.19 -->
@@ -470,7 +469,7 @@
             </g>
             <!-- Center text -->
             <text x="100" y="92" text-anchor="middle" fill="#9aa0b3" font-size="9" font-family="Pretendard" letter-spacing="2">Y3 매출</text>
-            <text x="100" y="115" text-anchor="middle" fill="#d4a574" font-size="22" font-family="'Noto Serif KR'" font-weight="700">55억</text>
+            <text x="100" y="115" text-anchor="middle" fill="#d4a574" font-size="22" font-family="'KoPubWorld Dotum'" font-weight="700">55억</text>
           </svg>
 
           <!-- Legend -->
@@ -488,7 +487,7 @@
               <span class="legend-rev">~14억</span>
             </div>
             <div class="legend-row">
-              <span class="legend-color" style="background:#c084fc;"></span>
+              <span class="legend-color" style="background:var(--purple-500);"></span>
               <span class="legend-name">C. AI / LLM 라이선스 <small>인용 + 그래프 + Enterprise RAG</small></span>
               <span class="legend-pct">22%</span>
               <span class="legend-rev">~12억</span>
@@ -638,9 +637,9 @@
           <article class="prod-card prod-card--star">
             <span class="prod-card__star-tag">STAR</span>
             <span class="prod-card__num">06</span>
-            <div class="prod-card__sub" style="color:#c084fc;">SPARQL 그래프</div>
+            <div class="prod-card__sub" style="color:var(--purple-500);">SPARQL 그래프</div>
             <div class="prod-card__name">지식 그래프 라이선스</div>
-            <p class="prod-card__desc">6채널 결합 RDF 그래프 + SPARQL API + 자동 추론. <strong style="color:#c084fc;">국내 최초</strong>.</p>
+            <p class="prod-card__desc">6채널 결합 RDF 그래프 + SPARQL API + 자동 추론. <strong style="color:var(--purple-500);">국내 최초</strong>.</p>
             <div class="prod-card__price">
               <span class="prod-card__price-amt">3,600만~5억+</span>
               <span class="prod-card__price-unit">/년 · 4티어</span>
@@ -801,9 +800,9 @@
           <article class="prod-card prod-card--star">
             <span class="prod-card__star-tag">5억+</span>
             <span class="prod-card__num">18</span>
-            <div class="prod-card__sub" style="color:#c084fc;">AI 인용 · Strategic</div>
+            <div class="prod-card__sub" style="color:var(--purple-500);">AI 인용 · Strategic</div>
             <div class="prod-card__name">LLM 학습 라이선스</div>
-            <p class="prod-card__desc">전체 트리플 덤프 + 공동 모델 개발 + 임원 분기 리뷰. <strong style="color:#c084fc;">OpenAI/Anthropic/Google급</strong>.</p>
+            <p class="prod-card__desc">전체 트리플 덤프 + 공동 모델 개발 + 임원 분기 리뷰. <strong style="color:var(--purple-500);">OpenAI/Anthropic/Google급</strong>.</p>
             <div class="prod-card__price">
               <span class="prod-card__price-amt">5억+</span>
               <span class="prod-card__price-unit">/년</span>

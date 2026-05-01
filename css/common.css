@@ -1,8 +1,50 @@
 /* ============================================================
    Insight Bank Hub — Design System
-   "5개 신문사 통합 지식 뱅크 + GEO-AIO 싱크탱크"
+   "6개 매체 통합 지식 뱅크 + GEO-AIO 싱크탱크"
    Premium Dark · Glass Morphism · Mobile-First
+   Font: KoPubWorld Dotum (한국출판인회의)
    ============================================================ */
+
+/* ---------- 0. KoPubWorld Dotum @font-face ---------- */
+/* 1순위: 로컬 설치 폰트 / 2순위: jsDelivr CDN / 3순위: 시스템 sans-serif */
+@font-face {
+  font-family: 'KoPubWorld Dotum';
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+  src: local('KoPubWorld Dotum Light'),
+       local('KoPubWorldDotum-Light'),
+       local('KoPubWorldDotumLight'),
+       url('https://cdn.jsdelivr.net/gh/webfontworld/kopub@1.0/KoPubWorld_Dotum_Light.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'KoPubWorld Dotum';
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+  src: local('KoPubWorld Dotum Medium'),
+       local('KoPubWorldDotum-Medium'),
+       local('KoPubWorldDotumMedium'),
+       url('https://cdn.jsdelivr.net/gh/webfontworld/kopub@1.0/KoPubWorld_Dotum_Medium.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'KoPubWorld Dotum';
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+  src: local('KoPubWorld Dotum Bold'),
+       local('KoPubWorldDotum-Bold'),
+       local('KoPubWorldDotumBold'),
+       url('https://cdn.jsdelivr.net/gh/webfontworld/kopub@1.0/KoPubWorld_Dotum_Bold.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'KoPubWorld Dotum';
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+  src: local('KoPubWorld Dotum Bold'),
+       url('https://cdn.jsdelivr.net/gh/webfontworld/kopub@1.0/KoPubWorld_Dotum_Bold.woff2') format('woff2');
+}
 
 /* ---------- 1. 색상 토큰 ---------- */
 :root {
@@ -27,6 +69,11 @@
   --blue-600: #2c6fc2;
   --blue-700: #1d4f93;
 
+  /* Accent — Royal Purple (NEW · Phase 2.5 · Stream 09 · Strategic Tier · 월간지방세연구) */
+  --purple-300: #d8a4fd;
+  --purple-500: #c084fc;
+  --purple-700: #7e22ce;
+
   /* Semantic */
   --success: #4ade80;
   --warning: #fbbf24;
@@ -44,6 +91,7 @@
   --border-default: rgba(255,255,255,0.10);
   --border-strong:  rgba(255,255,255,0.18);
   --border-gold:    rgba(212,165,116,0.35);
+  --border-purple:  rgba(192,132,252,0.30);
 
   /* Glass — 투명도 최적화 (투명도 시스템 토큰) */
   --glass-50:  rgba(255,255,255,0.02);
@@ -51,8 +99,11 @@
   --glass-200: rgba(255,255,255,0.06);
   --glass-300: rgba(255,255,255,0.09);
   --glass-400: rgba(255,255,255,0.13);
-  --glass-gold: rgba(212,165,116,0.08);
-  --glass-blue: rgba(74,144,226,0.10);
+  --glass-gold:   rgba(212,165,116,0.08);
+  --glass-blue:   rgba(74,144,226,0.10);
+  --glass-purple: rgba(192,132,252,0.10);
+  --glass-purple-soft: rgba(192,132,252,0.06);
+  --glass-purple-strong: rgba(192,132,252,0.15);
 
   /* Shadow */
   --shadow-sm: 0 2px 6px rgba(0,0,0,0.25);
@@ -106,8 +157,8 @@ html, body { margin: 0; padding: 0; }
 html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
 
 body {
-  font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo',
-               'Noto Sans KR', system-ui, sans-serif;
+  font-family: 'KoPubWorld Dotum', 'Pretendard', -apple-system, BlinkMacSystemFont,
+               'Apple SD Gothic Neo', 'Noto Sans KR', system-ui, sans-serif;
   font-size: var(--fs-base);
   line-height: 1.65;
   color: var(--text-primary);
@@ -130,7 +181,7 @@ input, textarea, select, button { font-family: inherit; color: inherit; }
 
 /* ---------- 3. Typography ---------- */
 .display, .h-display {
-  font-family: 'Noto Serif KR', 'Times New Roman', serif;
+  font-family: 'KoPubWorld Dotum', 'Pretendard', 'Noto Sans KR', system-ui, sans-serif;
   font-weight: 700;
   letter-spacing: -0.02em;
   line-height: 1.1;
@@ -244,7 +295,7 @@ p { margin: 0 0 var(--s-4); color: var(--text-secondary); }
   background: linear-gradient(135deg, var(--gold-500), var(--gold-700));
   display: grid; place-items: center;
   color: var(--text-on-gold);
-  font-family: 'Noto Serif KR', serif;
+  font-family: 'KoPubWorld Dotum', 'Pretendard', 'Noto Sans KR', system-ui, sans-serif;
   font-size: 18px;
   font-weight: 700;
   box-shadow: var(--shadow-gold);
@@ -485,7 +536,7 @@ p { margin: 0 0 var(--s-4); color: var(--text-secondary); }
   background: var(--glass-gold);
   color: var(--gold-300);
   font-weight: 700;
-  font-family: 'Noto Serif KR', serif;
+  font-family: 'KoPubWorld Dotum', 'Pretendard', 'Noto Sans KR', system-ui, sans-serif;
   border: 1px solid var(--border-gold);
 }
 
@@ -751,7 +802,7 @@ p { margin: 0 0 var(--s-4); color: var(--text-secondary); }
   padding: var(--s-5);
 }
 .stat__value {
-  font-family: 'Noto Serif KR', serif;
+  font-family: 'KoPubWorld Dotum', 'Pretendard', 'Noto Sans KR', system-ui, sans-serif;
   font-size: var(--fs-3xl);
   font-weight: 700;
   background: linear-gradient(135deg, var(--gold-300), var(--gold-500));
