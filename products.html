@@ -1,0 +1,1281 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0a0e1a" />
+  <title>상품·서비스 카탈로그 — Insight Bank Hub</title>
+  <meta name="description" content="8개 카테고리 36종 상품 — 콘텐츠·데이터API·AI라이선스·리서치·이벤트·컨설팅·교육·글로벌" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="상품·서비스 카탈로그 — Insight Bank Hub" />
+  <meta property="og:image" content="assets/og-image.svg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;700;900&display=swap" />
+  <link rel="stylesheet" href="css/common.css" />
+  <style>
+    /* ===== Category section ===== */
+    .cat-section {
+      padding: var(--s-7) 0;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .cat-section:last-child { border:none; }
+    .cat-head {
+      display: grid;
+      grid-template-columns: 80px 1fr auto;
+      gap: var(--s-4);
+      align-items: center;
+      margin-bottom: var(--s-5);
+    }
+    .cat-letter {
+      width: 64px; height: 64px;
+      border-radius: var(--r-lg);
+      display: grid; place-items: center;
+      font-family: 'Noto Serif KR', serif;
+      font-weight: 900;
+      font-size: 32px;
+      background: linear-gradient(135deg, var(--gold-500), var(--gold-700));
+      color: var(--text-on-gold);
+      box-shadow: var(--shadow-gold);
+    }
+    .cat-letter--b { background: linear-gradient(135deg, var(--blue-500), var(--blue-700)); color: white; box-shadow: 0 8px 32px rgba(74,144,226,0.18); }
+    .cat-letter--c { background: linear-gradient(135deg, #c084fc, #7e22ce); color: white; box-shadow: 0 8px 32px rgba(192,132,252,0.20); }
+    .cat-letter--d { background: linear-gradient(135deg, var(--success), #16a34a); color: white; }
+    .cat-letter--e { background: linear-gradient(135deg, var(--warning), #b45309); color: white; }
+    .cat-letter--f { background: linear-gradient(135deg, var(--danger), #b91c1c); color: white; }
+    .cat-letter--g { background: linear-gradient(135deg, #14b8a6, #0f766e); color: white; }
+    .cat-letter--h { background: linear-gradient(135deg, var(--gold-500), var(--blue-500)); color: white; }
+
+    .cat-title h2 { margin: 0 0 4px; font-size: var(--fs-xl); }
+    .cat-title small { color: var(--gold-300); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; font-weight: 600; }
+    .cat-stat {
+      text-align: right;
+      font-family: 'Noto Serif KR', serif;
+    }
+    .cat-stat__count {
+      font-weight: 700;
+      color: var(--gold-300);
+      font-size: var(--fs-xl);
+      line-height: 1;
+    }
+    .cat-stat__label {
+      color: var(--text-muted);
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-top: 4px;
+      font-family: 'Pretendard', sans-serif;
+      font-weight: 600;
+    }
+
+    /* ===== Product card ===== */
+    .prod-card {
+      position: relative;
+      padding: var(--s-4);
+      background: var(--glass-100);
+      border: 1px solid var(--border-default);
+      border-radius: var(--r-md);
+      backdrop-filter: blur(10px);
+      transition: all 0.2s var(--ease-out);
+      overflow: hidden;
+    }
+    @media (hover:hover) {
+      .prod-card:hover { transform: translateY(-3px); border-color: var(--border-gold); box-shadow: var(--shadow-md); }
+    }
+    .prod-card__num {
+      position: absolute;
+      top: 10px; right: 12px;
+      font-family: 'Noto Serif KR', serif;
+      font-weight: 900;
+      font-size: 36px;
+      color: var(--gold-300);
+      opacity: 0.18;
+      line-height: 1;
+    }
+    .prod-card__name {
+      font-weight: 700;
+      color: var(--text-primary);
+      font-size: var(--fs-md);
+      line-height: 1.3;
+      margin: 0 60px 4px 0;
+    }
+    .prod-card__sub {
+      color: var(--gold-300);
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      font-weight: 600;
+      margin-bottom: var(--s-2);
+    }
+    .prod-card__desc {
+      color: var(--text-secondary);
+      font-size: var(--fs-xs);
+      margin: var(--s-2) 0;
+      line-height: 1.6;
+    }
+    .prod-card__price {
+      margin-top: var(--s-3);
+      padding-top: var(--s-2);
+      border-top: 1px dashed var(--border-subtle);
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+    .prod-card__price-amt {
+      font-family: 'Noto Serif KR', serif;
+      font-weight: 700;
+      color: var(--gold-300);
+      font-size: var(--fs-md);
+    }
+    .prod-card__price-unit {
+      color: var(--text-muted);
+      font-size: 10px;
+      letter-spacing: 0.06em;
+    }
+    .prod-card__channels {
+      display: flex;
+      gap: 4px;
+      flex-wrap: wrap;
+      margin-top: var(--s-2);
+    }
+    .prod-card__channels span {
+      padding: 2px 8px;
+      background: var(--bg-elev-2);
+      border-radius: var(--r-full);
+      font-size: 9px;
+      color: var(--text-secondary);
+      border: 1px solid var(--border-subtle);
+    }
+    .prod-card--star {
+      background: linear-gradient(135deg, var(--glass-gold), var(--glass-100));
+      border-color: var(--border-gold);
+    }
+    .prod-card--star .prod-card__num { opacity: 0.32; }
+    .prod-card__star-tag {
+      position: absolute;
+      top: 8px; left: 8px;
+      padding: 2px 6px;
+      background: var(--gold-500);
+      color: var(--text-on-gold);
+      border-radius: 4px;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+    }
+
+    /* ===== Donut chart for Y3 share ===== */
+    .donut-wrap {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: var(--s-6);
+      align-items: center;
+    }
+    @media (max-width: 1024px) {
+      .donut-wrap { grid-template-columns: 1fr; }
+      .donut-wrap > svg { margin: 0 auto; }
+    }
+
+    .legend-row {
+      display: grid;
+      grid-template-columns: 16px 1fr auto auto;
+      gap: var(--s-3);
+      align-items: center;
+      padding: var(--s-3) 0;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .legend-row:last-child { border:none; }
+    .legend-color {
+      width: 14px; height: 14px;
+      border-radius: 4px;
+    }
+    .legend-name { color: var(--text-primary); font-size: var(--fs-sm); font-weight: 500; }
+    .legend-name small { display:block; color: var(--text-muted); font-size: 11px; margin-top: 2px; }
+    .legend-pct {
+      color: var(--gold-300);
+      font-family: 'Noto Serif KR', serif;
+      font-weight: 700;
+      text-align: right;
+      min-width: 50px;
+    }
+    .legend-rev {
+      color: var(--text-secondary);
+      font-size: var(--fs-sm);
+      text-align: right;
+      min-width: 60px;
+    }
+
+    /* ===== Synergy matrix ===== */
+    .synergy-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--s-4);
+    }
+    @media (max-width: 768px) {
+      .synergy-grid { grid-template-columns: 1fr; }
+    }
+    .synergy-card {
+      padding: var(--s-5);
+      background: linear-gradient(135deg, var(--glass-gold), var(--glass-100));
+      border: 1px solid var(--border-gold);
+      border-radius: var(--r-lg);
+    }
+    .synergy-card__title {
+      color: var(--gold-300);
+      font-size: var(--fs-md);
+      font-weight: 700;
+      margin: 0 0 var(--s-2);
+    }
+
+    /* ===== Quick anchor menu ===== */
+    .anchor-menu {
+      display: flex;
+      gap: var(--s-2);
+      flex-wrap: wrap;
+      padding: var(--s-3) 0;
+      margin-bottom: var(--s-5);
+      border-bottom: 1px solid var(--border-subtle);
+      position: sticky;
+      top: var(--header-h);
+      background: rgba(10,14,26,0.85);
+      backdrop-filter: blur(12px);
+      z-index: 50;
+      padding-left: var(--s-2);
+      padding-right: var(--s-2);
+      margin-left: calc(-1 * var(--s-2));
+      margin-right: calc(-1 * var(--s-2));
+    }
+    .anchor-menu a {
+      padding: 6px 12px;
+      background: var(--glass-100);
+      border: 1px solid var(--border-default);
+      border-radius: var(--r-full);
+      font-size: var(--fs-xs);
+      color: var(--text-secondary);
+      transition: all 0.18s;
+    }
+    .anchor-menu a:hover {
+      color: var(--gold-300);
+      border-color: var(--border-gold);
+      background: var(--glass-gold);
+    }
+
+    .grid-3-prod { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--s-4); }
+    .grid-4-prod { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--s-4); }
+    @media (max-width: 1024px) {
+      .grid-3-prod, .grid-4-prod { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 640px) {
+      .grid-3-prod, .grid-4-prod { grid-template-columns: 1fr; }
+    }
+
+    /* ===== B2B 1-pager Print mode ===== */
+    @media print {
+      @page { size: A4; margin: 12mm; }
+      body { background: white !important; color: black !important; font-size: 10pt; }
+      .header, .footer, .anchor-menu, .nav-toggle { display: none !important; }
+      .hero { padding: 0 0 12pt !important; text-align: left !important; }
+      .hero__title { font-size: 24pt !important; color: black !important; margin: 0 0 4pt !important; }
+      .hero__sub { color: #444 !important; font-size: 10pt !important; max-width: none !important; margin: 0 0 8pt !important; }
+      .text-gradient { color: #8a6135 !important; -webkit-text-fill-color: #8a6135 !important; }
+      .eyebrow { color: #8a6135 !important; border-color: #c9a779 !important; background: #fff5e6 !important; }
+      .section { padding: 8pt 0 !important; background: white !important; }
+      .container { padding: 0 !important; max-width: none !important; }
+      .stat__value, .stat { color: black !important; }
+      .stat__value { color: #8a6135 !important; -webkit-text-fill-color: #8a6135 !important; font-size: 14pt !important; }
+      .stat__label { color: #555 !important; font-size: 8pt !important; }
+      .card, .prod-card, .synergy-card {
+        background: white !important;
+        border: 1px solid #ccc !important;
+        box-shadow: none !important;
+        backdrop-filter: none !important;
+        page-break-inside: avoid;
+        padding: 6pt !important;
+      }
+      .prod-card__name { color: black !important; font-size: 10pt !important; }
+      .prod-card__sub { color: #8a6135 !important; }
+      .prod-card__desc { color: #444 !important; font-size: 8pt !important; }
+      .prod-card__price-amt { color: #8a6135 !important; font-size: 10pt !important; }
+      .prod-card__num { display: none !important; }
+      .cat-section { padding: 8pt 0 !important; border-bottom: 1px solid #ccc !important; page-break-inside: avoid; }
+      .cat-letter {
+        background: #f0e6d2 !important;
+        color: #8a6135 !important;
+        box-shadow: none !important;
+        width: 36pt !important; height: 36pt !important;
+        font-size: 18pt !important;
+      }
+      .cat-title h2 { color: black !important; font-size: 14pt !important; }
+      .cat-stat__count { color: #8a6135 !important; font-size: 14pt !important; }
+      .grid-3-prod, .grid-4-prod {
+        display: grid !important;
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 4pt !important;
+      }
+      h2, h3 { color: black !important; }
+      .text-secondary, .text-muted { color: #555 !important; }
+      a { color: #8a6135 !important; text-decoration: none !important; }
+      .chip { background: #f0e6d2 !important; color: #8a6135 !important; border-color: #c9a779 !important; }
+      .btn { display: none !important; }
+      .donut-wrap { grid-template-columns: 1fr !important; }
+      .donut-wrap svg { display: none !important; }
+      .legend-name, .legend-pct, .legend-rev { color: black !important; }
+      .legend-color { border: 1px solid #ccc !important; }
+      .print-only { display: block !important; }
+      .print-hide { display: none !important; }
+      .print-header {
+        display: flex !important;
+        justify-content: space-between;
+        align-items: center;
+        padding-bottom: 8pt;
+        margin-bottom: 12pt;
+        border-bottom: 2px solid #8a6135;
+      }
+      .print-header img { height: 24pt; }
+      .print-footer {
+        display: block !important;
+        margin-top: 12pt;
+        padding-top: 6pt;
+        border-top: 1px solid #ccc;
+        font-size: 8pt;
+        color: #666;
+        text-align: center;
+      }
+    }
+    .print-only, .print-header, .print-footer { display: none; }
+  </style>
+</head>
+<body>
+
+  <header class="header">
+    <div class="header__inner">
+      <a class="brand" href="index.html" aria-label="Insight Bank Hub"><img src="assets/logo.svg" alt="Insight Bank Hub" class="brand__logo" /></a>
+      <nav class="nav">
+        <a class="nav__link" href="index.html">개요</a>
+        <a class="nav__link" href="proposal.html">제안서</a>
+        <a class="nav__link" href="channels.html">6개 채널</a>
+        <a class="nav__link" href="products.html">상품·서비스</a>
+        <a class="nav__link" href="monetization.html">수익 모델</a>
+        <a class="nav__link" href="competitive-landscape.html">경쟁 환경</a>
+        <a class="nav__link" href="ontology.html">온톨로지</a>
+        <a class="nav__link" href="graph-license.html">그래프 라이선스</a>
+        <a class="nav__link" href="structure.html">구조도</a>
+        <a class="nav__link" href="dashboard.html">대시보드</a>
+        <a class="nav__link" href="content.html">콘텐츠</a>
+        <a class="nav__link" href="knowledge.html">지식베이스</a>
+        <a class="nav__link" href="chatbot.html">챗봇</a>
+        <a class="nav__link" href="manual.html">매뉴얼</a>
+      </nav>
+      <button class="nav-toggle" aria-label="메뉴"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
+    </div>
+  </header>
+
+  <!-- Print-only header -->
+  <div class="print-header print-only">
+    <img src="assets/logo.svg" alt="Insight Bank Hub" />
+    <div style="text-align:right; font-size:9pt;">
+      <strong>상품·서비스 카탈로그 v1.0</strong><br/>
+      <span style="color:#666;">CONFIDENTIAL · 선명회계법인 신회장</span>
+    </div>
+  </div>
+
+  <!-- ===== HERO ===== -->
+  <section class="hero" style="padding:80px 0 var(--s-6);">
+    <div class="container hero__inner">
+      <span class="eyebrow">Product Catalog</span>
+      <h1 class="display hero__title" style="font-size:clamp(36px,6vw,56px);">
+        <span class="text-gradient">8개 카테고리 · 36종</span> 상품·서비스
+      </h1>
+      <p class="hero__sub">
+        6개 매체 × 9가지 수익 흐름 × 8개 카테고리에서 도출된 36종 상품·서비스 라인업.
+        <strong style="color:var(--text-primary);">B2C 매스 콘텐츠 → B2B 데이터 API → AI 라이선스 → 컨설팅</strong> 전 영역 커버.
+      </p>
+    </div>
+  </section>
+
+  <!-- ===== KPI strip ===== -->
+  <section class="section section--sm">
+    <div class="container">
+      <div class="grid grid-4" data-reveal>
+        <div class="stat card">
+          <div class="stat__value"><span data-count="8">8</span></div>
+          <div class="stat__label">카테고리</div>
+        </div>
+        <div class="stat card">
+          <div class="stat__value"><span data-count="36">36</span></div>
+          <div class="stat__label">상품·서비스</div>
+        </div>
+        <div class="stat card">
+          <div class="stat__value"><span data-count="55" data-suffix="억">55억</span></div>
+          <div class="stat__label">Y3 매출 추정</div>
+        </div>
+        <div class="stat card">
+          <div class="stat__value"><span data-count="180">180+</span></div>
+          <div class="stat__label">B2B 잠재 고객</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Y3 Revenue Donut + Legend ===== -->
+  <section class="section">
+    <div class="container">
+      <div data-reveal>
+        <span class="eyebrow">Revenue Mix</span>
+        <h2 style="margin-top:var(--s-4)">Y3 카테고리별 매출 비중</h2>
+      </div>
+
+      <div class="card mt-6" data-reveal style="padding:var(--s-6);">
+        <div class="donut-wrap">
+          <!-- Donut SVG -->
+          <svg viewBox="0 0 200 200" width="240" height="240" role="img" aria-label="카테고리 매출 비중 도넛차트">
+            <!-- 8 segments, 36% / 25% / 22% / 7% / 3% / 5% / 1% / 1% -->
+            <!-- circumference = 2π × r = 2 × 3.14159 × 70 = 439.823 -->
+            <!-- Stroke-dasharray = portion × 439.823 -->
+            <g transform="rotate(-90 100 100)" fill="none" stroke-width="36">
+              <!-- A. 36% (0~36) → 158.34 -->
+              <circle cx="100" cy="100" r="70" stroke="#d4a574" stroke-dasharray="158.34 439.82" stroke-dashoffset="0"/>
+              <!-- B. 25% → 109.96 (start at 158.34) -->
+              <circle cx="100" cy="100" r="70" stroke="#4a90e2" stroke-dasharray="109.96 439.82" stroke-dashoffset="-158.34"/>
+              <!-- C. 22% → 96.76 (start at 268.30) -->
+              <circle cx="100" cy="100" r="70" stroke="#c084fc" stroke-dasharray="96.76 439.82" stroke-dashoffset="-268.30"/>
+              <!-- D. 7% → 30.79 -->
+              <circle cx="100" cy="100" r="70" stroke="#4ade80" stroke-dasharray="30.79 439.82" stroke-dashoffset="-365.06"/>
+              <!-- E. 3% → 13.19 -->
+              <circle cx="100" cy="100" r="70" stroke="#fbbf24" stroke-dasharray="13.19 439.82" stroke-dashoffset="-395.85"/>
+              <!-- F. 5% → 21.99 -->
+              <circle cx="100" cy="100" r="70" stroke="#f87171" stroke-dasharray="21.99 439.82" stroke-dashoffset="-409.04"/>
+              <!-- G. 1% → 4.40 -->
+              <circle cx="100" cy="100" r="70" stroke="#14b8a6" stroke-dasharray="4.40 439.82" stroke-dashoffset="-431.03"/>
+              <!-- H. 1% → 4.40 -->
+              <circle cx="100" cy="100" r="70" stroke="#7eb6f5" stroke-dasharray="4.40 439.82" stroke-dashoffset="-435.43"/>
+            </g>
+            <!-- Center text -->
+            <text x="100" y="92" text-anchor="middle" fill="#9aa0b3" font-size="9" font-family="Pretendard" letter-spacing="2">Y3 매출</text>
+            <text x="100" y="115" text-anchor="middle" fill="#d4a574" font-size="22" font-family="'Noto Serif KR'" font-weight="700">55억</text>
+          </svg>
+
+          <!-- Legend -->
+          <div>
+            <div class="legend-row">
+              <span class="legend-color" style="background:#d4a574;"></span>
+              <span class="legend-name">A. 디지털 콘텐츠 <small>광고 + 구독</small></span>
+              <span class="legend-pct">36%</span>
+              <span class="legend-rev">~20억</span>
+            </div>
+            <div class="legend-row">
+              <span class="legend-color" style="background:#4a90e2;"></span>
+              <span class="legend-name">B. 데이터·API <small>6채널 통합 + 도메인별 트래커</small></span>
+              <span class="legend-pct">25%</span>
+              <span class="legend-rev">~14억</span>
+            </div>
+            <div class="legend-row">
+              <span class="legend-color" style="background:#c084fc;"></span>
+              <span class="legend-name">C. AI / LLM 라이선스 <small>인용 + 그래프 + Enterprise RAG</small></span>
+              <span class="legend-pct">22%</span>
+              <span class="legend-rev">~12억</span>
+            </div>
+            <div class="legend-row">
+              <span class="legend-color" style="background:#4ade80;"></span>
+              <span class="legend-name">D. 리서치·리포트 <small>분기 보고서 + 백서</small></span>
+              <span class="legend-pct">7%</span>
+              <span class="legend-rev">~4억</span>
+            </div>
+            <div class="legend-row">
+              <span class="legend-color" style="background:#fbbf24;"></span>
+              <span class="legend-name">E. 이벤트·컨퍼런스</span>
+              <span class="legend-pct">3%</span>
+              <span class="legend-rev">~2억</span>
+            </div>
+            <div class="legend-row">
+              <span class="legend-color" style="background:#f87171;"></span>
+              <span class="legend-name">F. 컨설팅 <small>본업 시너지</small></span>
+              <span class="legend-pct">5%</span>
+              <span class="legend-rev">~3억</span>
+            </div>
+            <div class="legend-row">
+              <span class="legend-color" style="background:#14b8a6;"></span>
+              <span class="legend-name">G. 교육·인증</span>
+              <span class="legend-pct">1%</span>
+              <span class="legend-rev">~0.5억</span>
+            </div>
+            <div class="legend-row">
+              <span class="legend-color" style="background:#7eb6f5;"></span>
+              <span class="legend-name">H. 글로벌 <small>다국어 라이선스</small></span>
+              <span class="legend-pct">1%</span>
+              <span class="legend-rev">~0.5억</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Anchor menu ===== -->
+  <section class="section section--sm">
+    <div class="container">
+      <nav class="anchor-menu" aria-label="카테고리 빠른 이동">
+        <a href="#cat-a">A · 콘텐츠</a>
+        <a href="#cat-b">B · 데이터 API</a>
+        <a href="#cat-c">C · AI 라이선스</a>
+        <a href="#cat-d">D · 리서치</a>
+        <a href="#cat-e">E · 이벤트</a>
+        <a href="#cat-f">F · 컨설팅</a>
+        <a href="#cat-g">G · 교육</a>
+        <a href="#cat-h">H · 글로벌</a>
+      </nav>
+
+      <!-- ============ A. 디지털 콘텐츠 ============ -->
+      <section class="cat-section" id="cat-a">
+        <div class="cat-head">
+          <div class="cat-letter">A</div>
+          <div class="cat-title">
+            <small>Digital Content · B2C 매스</small>
+            <h2>디지털 콘텐츠</h2>
+          </div>
+          <div class="cat-stat">
+            <div class="cat-stat__count">4종</div>
+            <div class="cat-stat__label">36% / 20억</div>
+          </div>
+        </div>
+
+        <div class="grid-4-prod">
+          <article class="prod-card">
+            <span class="prod-card__num">01</span>
+            <div class="prod-card__sub">광고 · B2C</div>
+            <div class="prod-card__name">6채널 통합 콘텐츠 발행</div>
+            <p class="prod-card__desc">매일 1,300건 무료 발행 + 통합 광고 패키지. CPM 1.4배 상향.</p>
+            <div class="prod-card__price">
+              <span class="prod-card__price-amt">광고 수익</span>
+              <span class="prod-card__price-unit">월 단위 매체사 정산</span>
+            </div>
+            <div class="prod-card__channels"><span>6채널 전체</span></div>
+          </article>
+
+          <article class="prod-card">
+            <span class="prod-card__num">02</span>
+            <div class="prod-card__sub">구독 · B2C 개인</div>
+            <div class="prod-card__name">프리미엄 구독 (개인)</div>
+            <p class="prod-card__desc">광고 없는 환경 + RAG 챗봇 무제한 + 분기 리포트 무료 액세스.</p>
+            <div class="prod-card__price">
+              <span class="prod-card__price-amt">19,900원</span>
+              <span class="prod-card__price-unit">/월</span>
+            </div>
+            <div class="prod-card__channels"><span>6채널</span><span>RAG 챗봇</span></div>
+          </article>
+
+          <article class="prod-card">
+            <span class="prod-card__num">03</span>
+            <div class="prod-card__sub">구독 · B2B 기업</div>
+            <div class="prod-card__name">프리미엄 구독 (기업)</div>
+            <p class="prod-card__desc">팀 단위 좌석 + 우선 알림 + 커스텀 토픽 워치리스트.</p>
+            <div class="prod-card__price">
+              <span class="prod-card__price-amt">99,000원</span>
+              <span class="prod-card__price-unit">/월·seat</span>
+            </div>
+            <div class="prod-card__channels"><span>6채널</span><span>팀 관리</span></div>
+          </article>
+
+          <article class="prod-card">
+            <span class="prod-card__num">04</span>
+            <div class="prod-card__sub">스폰서 · B2B</div>
+            <div class="prod-card__name">도메인 뉴스레터 스폰서</div>
+            <p class="prod-card__desc">채널별 주간 뉴스레터 6종. 각 매체 독자 풀 직접 노출.</p>
+            <div class="prod-card__price">
+              <span class="prod-card__price-amt">건당 협의</span>
+              <span class="prod-card__price-unit">월 4회 발송</span>
+            </div>
+            <div class="prod-card__channels"><span>6채널 별</span></div>
+          </article>
+        </div>
+      </section>
+
+      <!-- ============ B. 데이터·API ============ -->
+      <section class="cat-section" id="cat-b">
+        <div class="cat-head">
+          <div class="cat-letter cat-letter--b">B</div>
+          <div class="cat-title">
+            <small>Data &amp; API · B2B 핵심 차별화</small>
+            <h2>데이터·API</h2>
+          </div>
+          <div class="cat-stat">
+            <div class="cat-stat__count">8종</div>
+            <div class="cat-stat__label">25% / 14억</div>
+          </div>
+        </div>
+
+        <div class="grid-4-prod">
+          <article class="prod-card">
+            <span class="prod-card__num">05</span>
+            <div class="prod-card__sub">통합 API</div>
+            <div class="prod-card__name">6채널 통합 REST API</div>
+            <p class="prod-card__desc">전 채널 콘텐츠 + 메타 + 검색. 종량제 + 월정액 혼합.</p>
+            <div class="prod-card__price">
+              <span class="prod-card__price-amt">월 320만~</span>
+              <span class="prod-card__price-unit">트래픽 기준</span>
+            </div>
+            <div class="prod-card__channels"><span>6채널 통합</span></div>
+          </article>
+
+          <article class="prod-card prod-card--star">
+            <span class="prod-card__star-tag">STAR</span>
+            <span class="prod-card__num">06</span>
+            <div class="prod-card__sub" style="color:#c084fc;">SPARQL 그래프</div>
+            <div class="prod-card__name">지식 그래프 라이선스</div>
+            <p class="prod-card__desc">6채널 결합 RDF 그래프 + SPARQL API + 자동 추론. <strong style="color:#c084fc;">국내 최초</strong>.</p>
+            <div class="prod-card__price">
+              <span class="prod-card__price-amt">3,600만~5억+</span>
+              <span class="prod-card__price-unit">/년 · 4티어</span>
+            </div>
+            <div class="prod-card__channels"><span>6채널 결합</span><span>FIBO/XBRL</span></div>
+          </article>
+
+          <article class="prod-card">
+            <span class="prod-card__num">07</span>
+            <div class="prod-card__sub">M&amp;A 트래커</div>
+            <div class="prod-card__name">M&amp;A 거래 DB</div>
+            <p class="prod-card__desc">실시간 거래 + 자문사 리그테이블 + 거래 메타. KMNA 단독.</p>
+            <div class="prod-card__price">
+              <span class="prod-card__price-amt">6,000만</span>
+              <span class="prod-card__price-unit">/년</span>
+            </div>
+            <div class="prod-card__channels"><span>한국M&amp;A경제신문</span></div>
+          </article>
+
+          <article class="prod-card">
+            <span class="prod-card__num">08</span>
+            <div class="prod-card__sub">VC 펀딩</div>
+            <div class="prod-card__name">VC 펀딩 라운드 DB</div>
+            <p class="prod-card__desc">시리즈 A~D 라운드 추적 + VC 매핑 + 엑싯 데이터.</p>
+            <div class="prod-card__price">
+              <span class="prod-card__price-amt">4,800만</span>
+              <span class="prod-card__price-unit">/년</span>
+            </div>
+            <div class="prod-card__channels"><span>스타트업투데이</span></div>
+          </article>
+
+          <article class="prod-card">
+            <span class="prod-card__num">09</span>
+            <div class="prod-card__sub">K-방산 인덱스</div>
+            <div class="prod-card__name">K-방산 수출 인덱스</div>
+            <p class="prod-card__desc">계약·납기·구매국 시계열. 외국인 투자자 대상 잠재력 최상.</p>
+            <div class="prod-card__price">
+              <span class="prod-card__price-amt">7,200만</span>
+              <span class="prod-card__price-unit">/년</span>
+            </div>
+            <div class="prod-card__channels"><span>디펜스투데이</span></div>
+          </article>
+
+          <article class="prod-card">
+            <span class="prod-card__num">10</span>
+            <div class="prod-card__sub">바이오 임상</div>
+            <div class="prod-card__name">바이오 임상 파이프라인 DB</div>
+            <p class="prod-card__desc">임상 단계 · 적응증 · 승인 결과 추적. 제약사 IR 부서 핵심.</p>
+            <div class="prod-card__price">
+              <span class="prod-card__price-amt">8,400만</span>
+              <span class="prod-card__price-unit">/년</span>
+            </div>
+            <div class="prod-card__channels"><span>바이오타임즈</span></div>
+          </article>
+
+          <article class="prod-card">
+            <span class="prod-card__num">11</span>
+            <div class="prod-card__sub">ICT/통신 통계</div>
+            <div class="prod-card__name">통신·방송 통계 DB</div>
+            <p class="prod-card__desc">5G/6G·요금제·점유율. ARG 기존 B2B 자산 + 그래프 호환.</p>
+            <div class="prod-card__price">
+              <span class="prod-card__price-amt">1.2억</span>
+              <span class="prod-card__price-unit">/년</span>
+            </div>
+            <div class="prod-card__channels"><span>애틀러스리서치</span></div>
+          </article>
+
+          <article class="prod-card prod-card--star">
+            <span class="prod-card__star-tag">본업 시너지</span>
+            <span class="prod-card__num">12</span>
+            <div class="prod-card__sub">조세 판례</div>
+            <div class="prod-card__name">지방세 판례·해석 DB</div>
+            <p class="prod-card__desc">15년+ 판례 + 유권해석. 회계법인·법무법인 일상 도구.</p>
+            <div class="prod-card__price">
+              <span class="prod-card__price-amt">3,600만</span>
+              <span class="prod-card__price-unit">/년</span>
+            </div>
+            <div class="prod-card__channels"><span>월간지방세연구</span></div>
+          </article>
+        </div>
+      </section>
+
+      <!-- ============ C. AI / LLM 라이선스 ============ -->
+      <section class="cat-section" id="cat-c">
+        <div class="cat-head">
+          <div class="cat-letter cat-letter--c">C</div>
+          <div class="cat-title">
+            <small>AI / LLM License · 차별화 영역</small>
+            <h2>AI / LLM 라이선스</h2>
+          </div>
+          <div class="cat-stat">
+            <div class="cat-stat__count">6종</div>
+            <div class="cat-stat__label">22% / 12억</div>
+          </div>
+        </div>
+
+        <div class="grid-3-prod">
+          <article class="prod-card">
+            <span class="prod-card__num">13</span>
+            <div class="prod-card__sub">RAG SaaS · 개인</div>
+            <div class="prod-card__name">RAG 챗봇 (개인)</div>
+            <p class="prod-card__desc">6채널 통합 검색 + 출처 인용 + 멀티턴 대화. Gemini 2.5 기반.</p>
+            <div class="prod-card__price">
+              <span class="prod-card__price-amt">12,900원</span>
+              <span class="prod-card__price-unit">/월</span>
+            </div>
+            <div class="prod-card__channels"><span>6채널 RAG</span></div>
+          </article>
+
+          <article class="prod-card">
+            <span class="prod-card__num">14</span>
+            <div class="prod-card__sub">Enterprise RAG</div>
+            <div class="prod-card__name">기업 맞춤 RAG</div>
+            <p class="prod-card__desc">사내 검색 통합 + 도메인 사전 + 권한 기반. 임원 대시보드.</p>
+            <div class="prod-card__price">
+              <span class="prod-card__price-amt">1.2억~</span>
+              <span class="prod-card__price-unit">/년</span>
+            </div>
+            <div class="prod-card__channels"><span>6채널</span><span>+ 자사 데이터</span></div>
+          </article>
+
+          <article class="prod-card">
+            <span class="prod-card__num">15</span>
+            <div class="prod-card__sub">AI 인용 · Starter</div>
+            <div class="prod-card__name">AI 인용 라이선스 (Starter)</div>
+            <p class="prod-card__desc">LLM 검색 시 인용·표시만. 학습은 불허.</p>
+            <div class="prod-card__price">
+              <span class="prod-card__price-amt">2,400만</span>
+              <span class="prod-card__price-unit">/년</span>
+            </div>
+            <div class="prod-card__channels"><span>6채널 콘텐츠</span></div>
+          </article>
+
+          <article class="prod-card">
+            <span class="prod-card__num">16</span>
+            <div class="prod-card__sub">AI 인용 · Pro</div>
+            <div class="prod-card__name">AI 인용 라이선스 (Pro)</div>
+            <p class="prod-card__desc">학습 + 인용 + 분기별 갱신. 일반 LLM 회사 표준 티어.</p>
+            <div class="prod-card__price">
+              <span class="prod-card__price-amt">7,200만</span>
+              <span class="prod-card__price-unit">/년</span>
+            </div>
+            <div class="prod-card__channels"><span>6채널</span><span>학습 데이터</span></div>
+          </article>
+
+          <article class="prod-card">
+            <span class="prod-card__num">17</span>
+            <div class="prod-card__sub">AI 인용 · Enterprise</div>
+            <div class="prod-card__name">AI 인용 (Enterprise)</div>
+            <p class="prod-card__desc">8개 언어 + 우선 공급 + 전담 매니저. SLA 99.9%.</p>
+            <div class="prod-card__price">
+              <span class="prod-card__price-amt">2.4억</span>
+              <span class="prod-card__price-unit">/년</span>
+            </div>
+            <div class="prod-card__channels"><span>8개 언어</span></div>
+          </article>
+
+          <article class="prod-card prod-card--star">
+            <span class="prod-card__star-tag">5억+</span>
+            <span class="prod-card__num">18</span>
+            <div class="prod-card__sub" style="color:#c084fc;">AI 인용 · Strategic</div>
+            <div class="prod-card__name">LLM 학습 라이선스</div>
+            <p class="prod-card__desc">전체 트리플 덤프 + 공동 모델 개발 + 임원 분기 리뷰. <strong style="color:#c084fc;">OpenAI/Anthropic/Google급</strong>.</p>
+            <div class="prod-card__price">
+              <span class="prod-card__price-amt">5억+</span>
+              <span class="prod-card__price-unit">/년</span>
+            </div>
+            <div class="prod-card__channels"><span>6채널 결합</span><span>월간 덤프</span></div>
+          </article>
+        </div>
+      </section>
+
+      <!-- ============ D. 리서치·리포트 ============ -->
+      <section class="cat-section" id="cat-d">
+        <div class="cat-head">
+          <div class="cat-letter cat-letter--d">D</div>
+          <div class="cat-title">
+            <small>Research &amp; Reports</small>
+            <h2>리서치·리포트</h2>
+          </div>
+          <div class="cat-stat">
+            <div class="cat-stat__count">3종</div>
+            <div class="cat-stat__label">7% / 4억</div>
+          </div>
+        </div>
+
+        <div class="grid-3-prod">
+          <article class="prod-card">
+            <span class="prod-card__num">19</span>
+            <div class="prod-card__sub">분기 리포트</div>
+            <div class="prod-card__name">도메인 산업 분기 리포트</div>
+            <p class="prod-card__desc">바이오·ICT·스타트업·M&amp;A·방산·조세 6 도메인 × 4분기 = 연 24편.</p>
+            <div class="prod-card__price">
+              <span class="prod-card__price-amt">480만~2,800만</span>
+              <span class="prod-card__price-unit">건당</span>
+            </div>
+            <div class="prod-card__channels"><span>6채널 별</span></div>
+          </article>
+
+          <article class="prod-card">
+            <span class="prod-card__num">20</span>
+            <div class="prod-card__sub">맞춤 분석</div>
+            <div class="prod-card__name">맞춤형 시장 분석</div>
+            <p class="prod-card__desc">기업 의뢰 시장 분석 + 경쟁사 매핑. 본업 컨설팅 결합.</p>
+            <div class="prod-card__price">
+              <span class="prod-card__price-amt">2,000만~8,000만</span>
+              <span class="prod-card__price-unit">건당</span>
+            </div>
+            <div class="prod-card__channels"><span>본업 시너지</span></div>
+          </article>
+
+          <article class="prod-card">
+            <span class="prod-card__num">21</span>
+            <div class="prod-card__sub">연간 백서</div>
+            <div class="prod-card__name">K-Industry 연간 백서</div>
+            <p class="prod-card__desc">한국 산업·자본·조세 연간 종합 보고서. 인쇄 + 디지털.</p>
+            <div class="prod-card__price">
+              <span class="prod-card__price-amt">380만</span>
+              <span class="prod-card__price-unit">권당 (인쇄+디지털)</span>
+            </div>
+            <div class="prod-card__channels"><span>6채널 통합</span></div>
+          </article>
+        </div>
+      </section>
+
+      <!-- ============ E. 이벤트·컨퍼런스 ============ -->
+      <section class="cat-section" id="cat-e">
+        <div class="cat-head">
+          <div class="cat-letter cat-letter--e">E</div>
+          <div class="cat-title">
+            <small>Events &amp; Conferences</small>
+            <h2>이벤트·컨퍼런스</h2>
+          </div>
+          <div class="cat-stat">
+            <div class="cat-stat__count">4종</div>
+            <div class="cat-stat__label">3% / 2억</div>
+          </div>
+        </div>
+
+        <div class="grid-4-prod">
+          <article class="prod-card">
+            <span class="prod-card__num">22</span>
+            <div class="prod-card__sub">플래그십</div>
+            <div class="prod-card__name">K-Insight Summit (연 2회)</div>
+            <p class="prod-card__desc">6채널 통합 플래그십. 산업·자본·조세 연계 최대 규모 컨퍼런스.</p>
+            <div class="prod-card__price">
+              <span class="prod-card__price-amt">스폰서 5,000만~</span>
+              <span class="prod-card__price-unit">+ 티켓 매출</span>
+            </div>
+            <div class="prod-card__channels"><span>6채널 공동</span></div>
+          </article>
+
+          <article class="prod-card">
+            <span class="prod-card__num">23</span>
+            <div class="prod-card__sub">도메인 세미나</div>
+            <div class="prod-card__name">분기별 도메인 세미나</div>
+            <p class="prod-card__desc">6 도메인 × 4분기 = 연 24회. 채널별 독자 직접 모객.</p>
+            <div class="prod-card__price">
+              <span class="prod-card__price-amt">스폰서 + 티켓</span>
+              <span class="prod-card__price-unit">회당 단가</span>
+            </div>
+            <div class="prod-card__channels"><span>6채널 별</span></div>
+          </article>
+
+          <article class="prod-card">
+            <span class="prod-card__num">24</span>
+            <div class="prod-card__sub">VIP 라운드테이블</div>
+            <div class="prod-card__name">C-Level 라운드테이블</div>
+            <p class="prod-card__desc">제한 인원 임원 네트워크. 비공개 인사이트 공유.</p>
+            <div class="prod-card__price">
+              <span class="prod-card__price-amt">800만</span>
+              <span class="prod-card__price-unit">회당 회비</span>
+            </div>
+            <div class="prod-card__channels"><span>임원 한정</span></div>
+          </article>
+
+          <article class="prod-card">
+            <span class="prod-card__num">25</span>
+            <div class="prod-card__sub">데모데이</div>
+            <div class="prod-card__name">K-Startup 데모데이</div>
+            <p class="prod-card__desc">스타트업투데이 주관. VC·LP 매칭 + 데이터 인덱스 노출.</p>
+            <div class="prod-card__price">
+              <span class="prod-card__price-amt">스폰서</span>
+              <span class="prod-card__price-unit">분기 1회</span>
+            </div>
+            <div class="prod-card__channels"><span>스타트업투데이</span></div>
+          </article>
+        </div>
+      </section>
+
+      <!-- ============ F. 컨설팅 ============ -->
+      <section class="cat-section" id="cat-f">
+        <div class="cat-head">
+          <div class="cat-letter cat-letter--f">F</div>
+          <div class="cat-title">
+            <small>Consulting &amp; Advisory · 본업 시너지</small>
+            <h2>컨설팅·전문 서비스</h2>
+          </div>
+          <div class="cat-stat">
+            <div class="cat-stat__count">4종</div>
+            <div class="cat-stat__label">5% / 3억</div>
+          </div>
+        </div>
+
+        <div class="grid-4-prod">
+          <article class="prod-card">
+            <span class="prod-card__num">26</span>
+            <div class="prod-card__sub">시장 진입</div>
+            <div class="prod-card__name">시장 진입 컨설팅</div>
+            <p class="prod-card__desc">데이터 백본 활용 시장 진입 분석. 경쟁사·규제·세무 통합.</p>
+            <div class="prod-card__price">
+              <span class="prod-card__price-amt">5,000만~3억</span>
+              <span class="prod-card__price-unit">건당</span>
+            </div>
+            <div class="prod-card__channels"><span>본업 시너지</span></div>
+          </article>
+
+          <article class="prod-card prod-card--star">
+            <span class="prod-card__star-tag">본업 핵심</span>
+            <span class="prod-card__num">27</span>
+            <div class="prod-card__sub">M&amp;A 자문</div>
+            <div class="prod-card__name">M&amp;A 거래 자문 보조</div>
+            <p class="prod-card__desc">KMNA 데이터 + 선명회계 본업. 거래 단가 +30~50%.</p>
+            <div class="prod-card__price">
+              <span class="prod-card__price-amt">1억~5억</span>
+              <span class="prod-card__price-unit">건당</span>
+            </div>
+            <div class="prod-card__channels"><span>KMNA + 회계법인</span></div>
+          </article>
+
+          <article class="prod-card">
+            <span class="prod-card__num">28</span>
+            <div class="prod-card__sub">정부·공공</div>
+            <div class="prod-card__name">정부·공공 정책 자문</div>
+            <p class="prod-card__desc">세제·산업 정책 효과 측정. 그래프 추론으로 정량 분석.</p>
+            <div class="prod-card__price">
+              <span class="prod-card__price-amt">3억~10억</span>
+              <span class="prod-card__price-unit">/년 단위</span>
+            </div>
+            <div class="prod-card__channels"><span>그래프 + 본업</span></div>
+          </article>
+
+          <article class="prod-card">
+            <span class="prod-card__num">29</span>
+            <div class="prod-card__sub">임원 브리핑</div>
+            <div class="prod-card__name">임원 분기 브리핑</div>
+            <p class="prod-card__desc">CEO·임원 대상 분기 1회 맞춤 브리핑 + 산업 맵 업데이트.</p>
+            <div class="prod-card__price">
+              <span class="prod-card__price-amt">4,800만</span>
+              <span class="prod-card__price-unit">/년</span>
+            </div>
+            <div class="prod-card__channels"><span>C-Level 전용</span></div>
+          </article>
+        </div>
+      </section>
+
+      <!-- ============ G. 교육·인증 ============ -->
+      <section class="cat-section" id="cat-g">
+        <div class="cat-head">
+          <div class="cat-letter cat-letter--g">G</div>
+          <div class="cat-title">
+            <small>Education &amp; Certification · 본업 직결</small>
+            <h2>교육·인증</h2>
+          </div>
+          <div class="cat-stat">
+            <div class="cat-stat__count">4종</div>
+            <div class="cat-stat__label">1% / 0.5억</div>
+          </div>
+        </div>
+
+        <div class="grid-4-prod">
+          <article class="prod-card prod-card--star">
+            <span class="prod-card__star-tag">본업 직결</span>
+            <span class="prod-card__num">30</span>
+            <div class="prod-card__sub">공무원 보수교육</div>
+            <div class="prod-card__name">지방세 공무원 교육</div>
+            <p class="prod-card__desc">한국지방세연구회 활용. 전국 지자체 세무 공무원 의무 교육.</p>
+            <div class="prod-card__price">
+              <span class="prod-card__price-amt">38만</span>
+              <span class="prod-card__price-unit">인당</span>
+            </div>
+            <div class="prod-card__channels"><span>월간지방세연구</span></div>
+          </article>
+
+          <article class="prod-card">
+            <span class="prod-card__num">31</span>
+            <div class="prod-card__sub">전문직 CPE</div>
+            <div class="prod-card__name">회계사·세무사 CPE</div>
+            <p class="prod-card__desc">자격 갱신 시간 + 전문가 인증. 본업 회계법인 시너지.</p>
+            <div class="prod-card__price">
+              <span class="prod-card__price-amt">24만</span>
+              <span class="prod-card__price-unit">인당</span>
+            </div>
+            <div class="prod-card__channels"><span>본업 시너지</span></div>
+          </article>
+
+          <article class="prod-card">
+            <span class="prod-card__num">32</span>
+            <div class="prod-card__sub">도메인 인증</div>
+            <div class="prod-card__name">도메인 전문가 인증</div>
+            <p class="prod-card__desc">6 도메인 × 인증 프로그램. 산업 전문가 자격증 발급.</p>
+            <div class="prod-card__price">
+              <span class="prod-card__price-amt">280만</span>
+              <span class="prod-card__price-unit">인당</span>
+            </div>
+            <div class="prod-card__channels"><span>6 도메인 별</span></div>
+          </article>
+
+          <article class="prod-card">
+            <span class="prod-card__num">33</span>
+            <div class="prod-card__sub">출판</div>
+            <div class="prod-card__name">단행본·전자책 출판</div>
+            <p class="prod-card__desc">월간지방세연구 단행본 + 도메인 가이드북. 인세 + 강연.</p>
+            <div class="prod-card__price">
+              <span class="prod-card__price-amt">28,000원</span>
+              <span class="prod-card__price-unit">권당 / 인세 12%</span>
+            </div>
+            <div class="prod-card__channels"><span>월간지방세연구</span><span>+ 6채널</span></div>
+          </article>
+        </div>
+      </section>
+
+      <!-- ============ H. 글로벌 ============ -->
+      <section class="cat-section" id="cat-h">
+        <div class="cat-head">
+          <div class="cat-letter cat-letter--h">H</div>
+          <div class="cat-title">
+            <small>Global Expansion · Phase 4+</small>
+            <h2>글로벌·확장</h2>
+          </div>
+          <div class="cat-stat">
+            <div class="cat-stat__count">3종</div>
+            <div class="cat-stat__label">1% / 0.5억 (Y3) → 5억+ (Y5)</div>
+          </div>
+        </div>
+
+        <div class="grid-3-prod">
+          <article class="prod-card">
+            <span class="prod-card__num">34</span>
+            <div class="prod-card__sub">다국어 라이선스</div>
+            <div class="prod-card__name">8개 언어 콘텐츠 라이선스</div>
+            <p class="prod-card__desc">한·영·중·일·스·불·독·아 자동 번역 + 라이선싱. 해외 매체에 공급.</p>
+            <div class="prod-card__price">
+              <span class="prod-card__price-amt">1.2억~</span>
+              <span class="prod-card__price-unit">/년 · 언어별</span>
+            </div>
+            <div class="prod-card__channels"><span>6채널 × 8언어</span></div>
+          </article>
+
+          <article class="prod-card">
+            <span class="prod-card__num">35</span>
+            <div class="prod-card__sub">해외 제휴</div>
+            <div class="prod-card__name">해외 매체 제휴 (Content Swap)</div>
+            <p class="prod-card__desc">동남아·일본 매체와 콘텐츠 교환. 매출 분배 모델.</p>
+            <div class="prod-card__price">
+              <span class="prod-card__price-amt">매출 분배</span>
+              <span class="prod-card__price-unit">제휴 협약</span>
+            </div>
+            <div class="prod-card__channels"><span>아시아 매체</span></div>
+          </article>
+
+          <article class="prod-card">
+            <span class="prod-card__num">36</span>
+            <div class="prod-card__sub">글로벌 인덱스</div>
+            <div class="prod-card__name">K-Industry 글로벌 인덱스</div>
+            <p class="prod-card__desc">외국인 투자자 대상 한국 신성장 산업 인덱스. 영문 정량 자산.</p>
+            <div class="prod-card__price">
+              <span class="prod-card__price-amt">2.4억</span>
+              <span class="prod-card__price-unit">/년</span>
+            </div>
+            <div class="prod-card__channels"><span>6채널 결합</span><span>영문</span></div>
+          </article>
+        </div>
+      </section>
+
+    </div>
+  </section>
+
+  <!-- ===== 본업 시너지 매핑 ===== -->
+  <section class="section" style="background:var(--bg-elev-1);">
+    <div class="container">
+      <div data-reveal>
+        <span class="eyebrow">Body Synergy</span>
+        <h2 style="margin-top:var(--s-4)">선명회계법인 본업과의 시너지 매핑</h2>
+        <p>36종 중 <strong style="color:var(--gold-300);">8종</strong>이 회계·세무·M&amp;A 본업과 직접 시너지. 본업 단가 +30~50% 정당화.</p>
+      </div>
+
+      <div class="synergy-grid mt-6">
+        <div class="synergy-card" data-reveal>
+          <h3 class="synergy-card__title">⚖️ 세무 자문</h3>
+          <p class="text-secondary mb-0" style="font-size:var(--fs-sm);">
+            #12 지방세 판례 DB · #19 분기 리포트(조세) · #28 정책 자문 · #30 공무원 교육 · #31 회계사 CPE · #33 출판
+            <br/><strong style="color:var(--text-primary); margin-top:8px; display:block;">본업 단가 +30~50% / 신규 라인업 +6종</strong>
+          </p>
+        </div>
+        <div class="synergy-card" data-reveal>
+          <h3 class="synergy-card__title">💼 M&amp;A 자문</h3>
+          <p class="text-secondary mb-0" style="font-size:var(--fs-sm);">
+            #07 M&amp;A 거래 DB · #20 맞춤 분석 · #27 M&amp;A 자문 보조 · #29 임원 브리핑
+            <br/><strong style="color:var(--text-primary); margin-top:8px; display:block;">건당 1억~5억 자문 매출 + 데이터 백본</strong>
+          </p>
+        </div>
+        <div class="synergy-card" data-reveal>
+          <h3 class="synergy-card__title">🏛️ 정부·공공</h3>
+          <p class="text-secondary mb-0" style="font-size:var(--fs-sm);">
+            #06 그래프 라이선스 · #28 정책 자문 · #36 글로벌 인덱스
+            <br/><strong style="color:var(--text-primary); margin-top:8px; display:block;">정책 효과 정량 측정 → 정부 컨설팅 +150%</strong>
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 패키지 묶음 (B2B 영업 전략) ===== -->
+  <section class="section">
+    <div class="container">
+      <div data-reveal>
+        <span class="eyebrow">Bundle Strategy</span>
+        <h2 style="margin-top:var(--s-4)">고객별 패키지 묶음</h2>
+        <p>36종을 개별 판매하지 않고 고객 유형별 패키지로 영업 효율 ↑.</p>
+      </div>
+
+      <div class="grid grid-3 mt-6">
+        <div class="card" data-reveal>
+          <span class="chip chip--gold">Bundle 1</span>
+          <h3 class="card__title mt-3">법무법인 패키지</h3>
+          <p class="card__desc">#12 지방세 판례 + #07 M&amp;A 거래 DB + #06 그래프 라이선스 (Tier 1) = <strong style="color:var(--gold-300);">연 9,600만</strong></p>
+        </div>
+        <div class="card" data-reveal>
+          <span class="chip chip--gold">Bundle 2</span>
+          <h3 class="card__title mt-3">사모펀드/IB 패키지</h3>
+          <p class="card__desc">#07 M&amp;A + #08 VC 펀딩 + #09 K-방산 + #06 그래프 (Pro) + #29 브리핑 = <strong style="color:var(--gold-300);">연 2.5억</strong></p>
+        </div>
+        <div class="card" data-reveal>
+          <span class="chip chip--gold">Bundle 3</span>
+          <h3 class="card__title mt-3">대기업 IR 패키지</h3>
+          <p class="card__desc">#14 Enterprise RAG + #20 맞춤 분석 + #29 브리핑 + #03 기업 구독 = <strong style="color:var(--gold-300);">연 3.6억</strong></p>
+        </div>
+        <div class="card" data-reveal>
+          <span class="chip chip--gold">Bundle 4</span>
+          <h3 class="card__title mt-3">바이오 IR 패키지</h3>
+          <p class="card__desc">#10 임상 DB + #07 M&amp;A + #29 브리핑 + #20 맞춤 = <strong style="color:var(--gold-300);">연 1.8억</strong></p>
+        </div>
+        <div class="card" data-reveal>
+          <span class="chip chip--gold">Bundle 5</span>
+          <h3 class="card__title mt-3">정부·공공 패키지</h3>
+          <p class="card__desc">#06 그래프 (Enterprise) + #28 정책 자문 + #36 글로벌 인덱스 = <strong style="color:var(--gold-300);">연 8억+</strong></p>
+        </div>
+        <div class="card card--featured" data-reveal>
+          <span class="chip chip--gold">★ Bundle 6 · STRATEGIC</span>
+          <h3 class="card__title mt-3">LLM 회사 패키지</h3>
+          <p class="card__desc">#18 LLM 학습 라이선스 + #34 다국어 (8개) + #06 그래프 (Strategic) = <strong style="color:var(--gold-300);">연 10억+</strong></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CTA / Print ===== -->
+  <section class="section section--lg">
+    <div class="container">
+      <div class="card card--featured text-center" style="padding:var(--s-8);" data-reveal>
+        <span class="eyebrow">Sales Enablement</span>
+        <h2 style="margin: var(--s-4) 0;">B2B 영업 1-pager 인쇄</h2>
+        <p style="max-width:600px; margin: 0 auto var(--s-6);">
+          이 페이지는 <strong style="color:var(--text-primary);">@media print 최적화</strong>되어 있습니다.
+          브라우저 인쇄(Ctrl/⌘+P)로 A4 형태의 영업 자료가 즉시 출력됩니다.
+          가격은 라벨만 표기된 견적 인쇄도 옵션 가능.
+        </p>
+        <div class="hero__cta">
+          <button class="btn btn--primary btn--lg" onclick="window.print()">📄 인쇄 / PDF 저장</button>
+          <a class="btn btn--ghost btn--lg" href="proposal.html">계약 제안서</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Print-only footer -->
+  <div class="print-footer print-only">
+    © 2026 Insight Bank Hub · CONFIDENTIAL · 한국 산업·자본·조세 6대 권위 매체 통합 GEO-AIO 싱크탱크 허브
+  </div>
+
+  <footer class="footer">
+    <div class="footer__cta-strip">
+      <div class="container">
+        <div class="row" style="justify-content:space-between; align-items:center; flex-wrap:wrap; gap:var(--s-4);">
+          <div>
+            <h3>한국 산업·자본·조세 6대 매체의 권위, 하나의 인사이트 뱅크 허브로</h3>
+            <p>제안서 검토부터 시작하시거나, 데모 모듈을 둘러보세요.</p>
+          </div>
+          <div class="row gap-2">
+            <a class="btn btn--primary" href="proposal.html">제안서 보기</a>
+            <a class="btn btn--ghost" href="dashboard.html">데모 대시보드</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer__main">
+      <div class="container">
+        <div class="footer__grid">
+          <div class="footer__brand-col">
+            <img src="assets/logo.svg" alt="Insight Bank Hub" />
+            <p class="footer__tagline">바이오·ICT·스타트업·M&amp;A·방산·지방세 — 한국 산업·자본·조세 6대 매체 통합 GEO-AIO 싱크탱크.</p>
+            <div class="footer__langs">🇰🇷 🇺🇸 🇨🇳 🇯🇵 🇪🇸 🇫🇷 🇩🇪 🇸🇦</div>
+            <div class="footer__social">
+              <a href="#" aria-label="X / Twitter"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+              <a href="#" aria-label="LinkedIn"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67h-3.55V9h3.41v1.56h.05c.48-.9 1.65-1.85 3.4-1.85 3.64 0 4.31 2.4 4.31 5.51zM5.34 7.43A2.06 2.06 0 113.28 5.37a2.06 2.06 0 012.06 2.06zm-1.78 13.02h3.56V9H3.56zM22.23 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.46c.98 0 1.77-.77 1.77-1.72V1.72C24 .77 23.21 0 22.23 0z"/></svg></a>
+              <a href="#" aria-label="YouTube"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M23.5 6.5c-.3-1-1-1.8-2-2C19.7 4 12 4 12 4s-7.7 0-9.5.5c-1 .2-1.7 1-2 2C0 8.3 0 12 0 12s0 3.7.5 5.5c.3 1 1 1.8 2 2C4.3 20 12 20 12 20s7.7 0 9.5-.5c1-.2 1.7-1 2-2 .5-1.8.5-5.5.5-5.5s0-3.7-.5-5.5zM9.5 15.5v-7l6 3.5z"/></svg></a>
+              <a href="#" aria-label="RSS"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M4 4v3a14 14 0 0114 14h3A17 17 0 004 4zm0 6v3a8 8 0 018 8h3a11 11 0 00-11-11zm2.5 8a2.5 2.5 0 110 5 2.5 2.5 0 010-5z"/></svg></a>
+            </div>
+          </div>
+          <div class="footer__col">
+            <h5>플랫폼</h5>
+            <a href="dashboard.html">통합 대시보드</a>
+            <a href="content.html">콘텐츠 관리</a>
+            <a href="knowledge.html">RAG 지식베이스</a>
+            <a href="ontology.html">온톨로지</a>
+            <a href="graph-license.html">그래프 라이선스</a>
+            <a href="chatbot.html">RAG 챗봇</a>
+          </div>
+          <div class="footer__col">
+            <h5>자료</h5>
+            <a href="index.html">개요</a>
+            <a href="channels.html">6개 채널</a>
+            <a href="products.html">상품·서비스</a>
+            <a href="monetization.html">수익 모델</a>
+            <a href="proposal.html">계약 제안서</a>
+            <a href="manual.html">운영 매뉴얼</a>
+          </div>
+          <div class="footer__col">
+            <h5>연락처</h5>
+            <p>support@insightbankhub.kr</p>
+            <p>평일 09:00 – 18:00 KST</p>
+            <p>SLA 24/7 비상 라인</p>
+            <a href="proposal.html" class="btn btn--ghost btn--sm" style="margin-top:8px; display:inline-flex;">파트너 문의 →</a>
+          </div>
+        </div>
+
+        <hr class="footer__divider" />
+
+        <div class="footer__bottom">
+          <span>© 2026 Insight Bank Hub. All rights reserved.</span>
+          <div class="footer__legal">
+            <a href="#">이용약관</a>
+            <a href="#">개인정보처리방침</a>
+            <a href="#">llms.txt</a>
+            <span class="footer__seal">v1.0 · Confidential</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/common.js"></script>
+</body>
+</html>

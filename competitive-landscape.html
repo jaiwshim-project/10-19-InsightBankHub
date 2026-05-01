@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0a0e1a" />
+  <title>경쟁 환경 — Insight Bank Hub</title>
+  <meta name="description" content="8개 영역 글로벌·한국 경쟁사 망라 + Moat + 위협 분석 — Bloomberg·PitchBook·Diffbot·NYT 등 비교" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="경쟁 환경 — Insight Bank Hub" />
+  <meta property="og:image" content="assets/og-image.svg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;700;900&display=swap" />
+  <link rel="stylesheet" href="css/common.css" />
+  <style>
+    /* ===== Domain section ===== */
+    .domain-section {
+      padding: var(--s-7) 0;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .domain-section:last-child { border:none; }
+    .domain-head {
+      display: grid;
+      grid-template-columns: 64px 1fr;
+      gap: var(--s-4);
+      align-items: center;
+      margin-bottom: var(--s-4);
+    }
+    .domain-emoji {
+      width: 56px; height: 56px;
+      border-radius: var(--r-md);
+      background: var(--glass-100);
+      border: 1px solid var(--border-default);
+      display: grid; place-items: center;
+      font-size: 28px;
+    }
+    .domain-title h3 { margin: 0; font-size: var(--fs-lg); }
+    .domain-title small {
+      color: var(--gold-300); font-size: 11px;
+      letter-spacing: 0.12em; text-transform: uppercase; font-weight: 600;
+    }
+
+    /* ===== Comp table ===== */
+    .comp-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--glass-100);
+      border-radius: var(--r-md);
+      overflow: hidden;
+      backdrop-filter: blur(10px);
+    }
+    .comp-table th, .comp-table td {
+      padding: 12px 14px;
+      text-align: left;
+      border-bottom: 1px solid var(--border-subtle);
+      font-size: var(--fs-sm);
+      vertical-align: top;
+    }
+    .comp-table th {
+      color: var(--gold-300);
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      background: var(--bg-elev-2);
+      border-bottom: 1px solid var(--border-default);
+    }
+    .comp-table tr:hover td { background: var(--glass-100); }
+    .comp-table .num {
+      font-family: 'Noto Serif KR', serif;
+      font-weight: 700;
+      color: var(--gold-300);
+    }
+    .comp-table tr.us-row {
+      background: var(--glass-gold);
+    }
+    .comp-table tr.us-row td {
+      color: var(--text-primary);
+      font-weight: 600;
+    }
+    .comp-table tr.us-row td:first-child {
+      color: var(--gold-300);
+      font-family: 'Noto Serif KR', serif;
+    }
+    .flag {
+      display: inline-flex;
+      width: 22px;
+      margin-right: 6px;
+    }
+
+    /* ===== Position matrix ===== */
+    .matrix-row {
+      display: grid;
+      grid-template-columns: 1.4fr 1.6fr 1.6fr 2fr;
+      gap: var(--s-3);
+      padding: var(--s-3) var(--s-4);
+      border-bottom: 1px solid var(--border-subtle);
+      align-items: center;
+      font-size: var(--fs-sm);
+    }
+    .matrix-row:nth-child(even) { background: var(--glass-100); }
+    .matrix-row:hover { background: var(--glass-200); }
+    .matrix-row strong { color: var(--text-primary); }
+    .matrix-row__us {
+      padding: 6px 10px;
+      background: var(--glass-gold);
+      border: 1px solid var(--border-gold);
+      border-radius: var(--r-sm);
+      color: var(--gold-300);
+      font-weight: 700;
+    }
+    .matrix-head {
+      display: grid;
+      grid-template-columns: 1.4fr 1.6fr 1.6fr 2fr;
+      gap: var(--s-3);
+      padding: var(--s-3) var(--s-4);
+      background: var(--bg-elev-2);
+      border-radius: var(--r-md) var(--r-md) 0 0;
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      color: var(--gold-300);
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+
+    /* ===== Moat ===== */
+    .moat-card {
+      padding: var(--s-5);
+      background: linear-gradient(135deg, var(--glass-gold), var(--glass-100));
+      border: 1px solid var(--border-gold);
+      border-radius: var(--r-lg);
+    }
+    .moat-card h4 {
+      color: var(--gold-300);
+      font-family: 'Noto Serif KR', serif;
+      margin: 0 0 var(--s-2);
+      display: flex; align-items: center; gap: var(--s-2);
+    }
+    .moat-card__num {
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      background: var(--gold-500);
+      color: var(--text-on-gold);
+      display: grid; place-items: center;
+      font-weight: 900;
+      font-size: var(--fs-md);
+    }
+
+    /* ===== Threat ===== */
+    .threat-row {
+      display: grid;
+      grid-template-columns: 80px 1.5fr 80px 80px 1.6fr;
+      gap: var(--s-3);
+      padding: var(--s-3) var(--s-4);
+      border-bottom: 1px solid var(--border-subtle);
+      align-items: center;
+      font-size: var(--fs-sm);
+    }
+    .threat-head {
+      display: grid;
+      grid-template-columns: 80px 1.5fr 80px 80px 1.6fr;
+      gap: var(--s-3);
+      padding: var(--s-3) var(--s-4);
+      background: var(--bg-elev-2);
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      color: var(--gold-300);
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+    .threat-row__level {
+      padding: 3px 8px;
+      border-radius: var(--r-full);
+      font-size: 10px;
+      font-weight: 700;
+      text-align: center;
+    }
+    .lvl-low { background: rgba(74,222,128,0.10); color: var(--success); }
+    .lvl-mid { background: rgba(251,191,36,0.10); color: var(--warning); }
+    .lvl-high { background: rgba(248,113,113,0.10); color: var(--danger); }
+
+    /* ===== Scenario ===== */
+    .scenario-card {
+      padding: var(--s-5);
+      background: rgba(248,113,113,0.06);
+      border: 1px solid rgba(248,113,113,0.20);
+      border-radius: var(--r-lg);
+    }
+    .scenario-card h4 { color: var(--danger); margin: 0 0 var(--s-2); }
+
+    @media (max-width: 1024px) {
+      .matrix-head, .matrix-row { grid-template-columns: 1fr; gap: 6px; }
+      .matrix-head { display: none; }
+      .threat-head, .threat-row { grid-template-columns: 1fr; gap: 4px; }
+      .threat-head { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="header">
+    <div class="header__inner">
+      <a class="brand" href="index.html" aria-label="Insight Bank Hub"><img src="assets/logo.svg" alt="Insight Bank Hub" class="brand__logo" /></a>
+      <nav class="nav">
+        <a class="nav__link" href="index.html">개요</a>
+        <a class="nav__link" href="proposal.html">제안서</a>
+        <a class="nav__link" href="channels.html">6개 채널</a>
+        <a class="nav__link" href="products.html">상품·서비스</a>
+        <a class="nav__link" href="monetization.html">수익 모델</a>
+        <a class="nav__link" href="competitive-landscape.html">경쟁 환경</a>
+        <a class="nav__link" href="ontology.html">온톨로지</a>
+        <a class="nav__link" href="graph-license.html">그래프 라이선스</a>
+        <a class="nav__link" href="structure.html">구조도</a>
+        <a class="nav__link" href="dashboard.html">대시보드</a>
+        <a class="nav__link" href="content.html">콘텐츠</a>
+        <a class="nav__link" href="knowledge.html">지식베이스</a>
+        <a class="nav__link" href="chatbot.html">챗봇</a>
+        <a class="nav__link" href="manual.html">매뉴얼</a>
+      </nav>
+      <button class="nav-toggle" aria-label="메뉴"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
+    </div>
+  </header>
+
+  <!-- ===== HERO ===== -->
+  <section class="hero" style="padding:80px 0 var(--s-6);">
+    <div class="container hero__inner">
+      <span class="eyebrow">Competitive Landscape</span>
+      <h1 class="display hero__title" style="font-size:clamp(36px,6vw,56px);">
+        <span class="text-gradient">8개 영역 경쟁 환경</span> 망라
+      </h1>
+      <p class="hero__sub">
+        Bloomberg · PitchBook · Diffbot · NYT · Wolters Kluwer 등 글로벌 1위 및 한국 동급 매체 비교.
+        <strong style="color:var(--text-primary);">우리와 동급 모델은 글로벌에도 존재하지 않습니다</strong> — 영역별 1위만 있을 뿐.
+      </p>
+    </div>
+  </section>
+
+  <!-- ===== KPI strip ===== -->
+  <section class="section section--sm">
+    <div class="container">
+      <div class="grid grid-4" data-reveal>
+        <div class="stat card">
+          <div class="stat__value"><span data-count="8">8</span></div>
+          <div class="stat__label">분석 영역</div>
+        </div>
+        <div class="stat card">
+          <div class="stat__value"><span data-count="40">40+</span></div>
+          <div class="stat__label">분석 경쟁사</div>
+        </div>
+        <div class="stat card">
+          <div class="stat__value"><span data-count="0">0</span></div>
+          <div class="stat__label">동급 직접 경쟁</div>
+        </div>
+        <div class="stat card">
+          <div class="stat__value"><span data-count="5" data-suffix="년+">5년+</span></div>
+          <div class="stat__label">진입 장벽</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== A. 통합 미디어 + 데이터 ===== -->
+  <section class="section">
+    <div class="container">
+      <div class="domain-section">
+        <div class="domain-head">
+          <div class="domain-emoji">🌐</div>
+          <div class="domain-title">
+            <small>Domain A · Integrated Media + Data</small>
+            <h3>통합 미디어 + 데이터 플랫폼</h3>
+          </div>
+        </div>
+
+        <div style="overflow-x:auto;">
+          <table class="comp-table">
+            <thead>
+              <tr><th>경쟁사</th><th>본거지</th><th>포지션</th><th>가격</th><th>강점 / 한계</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>Bloomberg Terminal</strong></td><td>🇺🇸</td><td>금융 데이터 + 뉴스 절대강자</td><td class="num">$24,000+/년</td><td>35만+ 단말기 · 한국 도메인 부재</td></tr>
+              <tr><td><strong>Refinitiv (LSEG)</strong></td><td>🇬🇧</td><td>로이터 + 금융 데이터</td><td class="num">$20,000+/년</td><td>외환·채권 강점 · 산업 미디어 약함</td></tr>
+              <tr><td><strong>Dow Jones · WSJ Pro</strong></td><td>🇺🇸</td><td>뉴스 + 데이터</td><td class="num">$$$ 도메인별</td><td>WSJ 권위 · 영문 한정</td></tr>
+              <tr><td><strong>Axios Pro · Politico Pro</strong></td><td>🇺🇸</td><td>정책·도메인 프리미엄</td><td class="num">연 $5,000+</td><td>도메인 깊이 · 데이터 약함</td></tr>
+              <tr><td><strong>연합인포맥스</strong></td><td>🇰🇷</td><td>한국 금융 단말기</td><td class="num">월 30만~</td><td>한국 IB 표준 · AI/그래프 없음</td></tr>
+              <tr><td><strong>이데일리 / 머투 the300</strong></td><td>🇰🇷</td><td>종합 경제 미디어</td><td class="num">광고 모델</td><td>대중성 · 전문 도메인 깊이 부족</td></tr>
+              <tr class="us-row"><td><strong>★ Insight Bank Hub</strong></td><td>🇰🇷</td><td><strong>6채널 = 한국 산업·자본·조세 결합</strong></td><td class="num">월 320만~5억</td><td><strong style="color:var(--text-primary);">수직 결합 유일 · 본업 시너지</strong></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== B. 데이터·API ===== -->
+  <section class="section" style="background:var(--bg-elev-1);">
+    <div class="container">
+      <div class="domain-section" style="border:none;">
+        <div class="domain-head">
+          <div class="domain-emoji">💼</div>
+          <div class="domain-title">
+            <small>Domain B · Data &amp; API · 핵심 차별화</small>
+            <h3>데이터·API 전문</h3>
+          </div>
+        </div>
+
+        <div style="overflow-x:auto;">
+          <table class="comp-table">
+            <thead>
+              <tr><th>경쟁사</th><th>영역</th><th>가격</th><th>우리 대응 상품</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>PitchBook (Morningstar)</strong></td><td>VC·PE·M&amp;A 글로벌</td><td class="num">$20,000~50,000</td><td>#07 M&amp;A DB + #08 VC</td></tr>
+              <tr><td><strong>CB Insights</strong></td><td>스타트업 + AI 분석</td><td class="num">$30,000+</td><td>#08 + #06 그래프</td></tr>
+              <tr><td><strong>Mergermarket</strong></td><td>M&amp;A 글로벌</td><td class="num">$15,000+</td><td>#07 (한국 1위)</td></tr>
+              <tr><td><strong>Crunchbase</strong></td><td>스타트업 (대중)</td><td class="num">$99~$1,200/월</td><td>#08 (저가 진입)</td></tr>
+              <tr><td><strong>Capital IQ (S&amp;P)</strong></td><td>기업·금융 종합</td><td class="num">$20,000+</td><td>#11 + #07</td></tr>
+              <tr><td><strong>Janes</strong></td><td>방산 데이터 글로벌</td><td class="num">$15,000+</td><td>#09 K-방산</td></tr>
+              <tr><td><strong>Cortellis · Evaluate Pharma</strong></td><td>바이오 임상</td><td class="num">$10,000~30,000</td><td>#10 임상 DB</td></tr>
+              <tr><td><strong>NICE / KISLINE / KED</strong></td><td>한국 기업 신용 (다른 영역)</td><td class="num">종량제</td><td>영역 다름 (재무 vs 산업)</td></tr>
+              <tr><td><strong>GlobalData / Statista</strong></td><td>산업 통계</td><td class="num">$5,000+/년</td><td>#11 ARG 통계</td></tr>
+              <tr class="us-row"><td><strong>★ Insight Bank Hub</strong></td><td><strong>한국 6채널 결합 · 도메인 1위</strong></td><td class="num">4,800만~1.2억/년</td><td><strong style="color:var(--text-primary);">글로벌 1/3 가격 · 한국 도메인 1위</strong></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== C. AI·지식 그래프 ===== -->
+  <section class="section">
+    <div class="container">
+      <div class="domain-section" style="border:none;">
+        <div class="domain-head">
+          <div class="domain-emoji">🤖</div>
+          <div class="domain-title">
+            <small>Domain C · AI / Knowledge Graph · 가장 새로운 영역</small>
+            <h3>AI · 지식 그래프 플랫폼</h3>
+          </div>
+        </div>
+
+        <div style="overflow-x:auto;">
+          <table class="comp-table">
+            <thead>
+              <tr><th>경쟁사</th><th>모델</th><th>강점</th><th>우리 대비</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>Diffbot</strong></td><td>Knowledge as a Service</td><td>글로벌 1위 KaaS · $1B 그래프</td><td>한국어/도메인 없음</td></tr>
+              <tr><td><strong>Cycorp (Cyc)</strong></td><td>30년 지식 그래프</td><td>깊은 추론 · 학술 강점</td><td>미디어 결합 없음</td></tr>
+              <tr><td><strong>Wolfram Alpha</strong></td><td>계산 가능한 지식</td><td>수학·과학 깊이</td><td>산업·시사 약함</td></tr>
+              <tr><td><strong>Yext</strong></td><td>Knowledge Network for Brands</td><td>B2B SaaS</td><td>도메인 큐레이션 없음</td></tr>
+              <tr><td><strong>Stardog · GraphAware</strong></td><td>Enterprise Graph 솔루션</td><td>인프라 도구</td><td>콘텐츠 자체 없음</td></tr>
+              <tr><td><strong>Wikidata · DBpedia</strong></td><td>오픈 그래프 (무료)</td><td>광범위 · 무료</td><td>비상업적 · 깊이 부족</td></tr>
+              <tr><td><strong>NIA 한국지능정보사회진흥원</strong></td><td>공공 그래프</td><td>한국 공공 자산</td><td>B2B 영업 모델 없음</td></tr>
+              <tr class="us-row"><td><strong>★ Insight Bank Hub</strong></td><td><strong>6채널 결합 + FIBO/XBRL + 미디어 본문</strong></td><td><strong>글로벌 유일 모델</strong></td><td><strong style="color:var(--text-primary);">한국 도메인 + 콘텐츠 + 그래프</strong></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== D. 미디어+AI 결합 ===== -->
+  <section class="section" style="background:var(--bg-elev-1);">
+    <div class="container">
+      <div class="domain-section" style="border:none;">
+        <div class="domain-head">
+          <div class="domain-emoji">📰</div>
+          <div class="domain-title">
+            <small>Domain D · Media + AI · 가장 직접 경쟁</small>
+            <h3>미디어 + AI 결합 플랫폼</h3>
+          </div>
+        </div>
+
+        <div style="overflow-x:auto;">
+          <table class="comp-table">
+            <thead>
+              <tr><th>경쟁사</th><th>영역</th><th>모델</th><th>비고</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>Thomson Reuters · Westlaw Edge</strong></td><td>법률·뉴스·AI</td><td>법조계 표준</td><td>글로벌 · 미국 중심</td></tr>
+              <tr><td><strong>LexisNexis</strong></td><td>법률·B2B 데이터 + RAG</td><td>$$$$</td><td>글로벌 · 한국 약함</td></tr>
+              <tr><td><strong>Harvey AI</strong></td><td>법률 GPT (Allen &amp; Overy)</td><td>LLM 도구</td><td>데이터 자체 없음</td></tr>
+              <tr><td><strong>Bloomberg + GPT</strong></td><td>금융 뉴스 + 자체 LLM</td><td>자체 학습</td><td>자체 데이터로만</td></tr>
+              <tr><td><strong>로톡 · 로앤비</strong></td><td>한국 법률 검색</td><td>검색 엔진</td><td>RAG/그래프 없음</td></tr>
+              <tr class="us-row"><td><strong>★ Insight Bank Hub</strong></td><td><strong>6채널 RAG + 그래프 + 인용 라이선스</strong></td><td>미디어 + AI 풀스택</td><td><strong style="color:var(--text-primary);">한국 시장 최초</strong></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== E. AI 인용 라이선스 (글로벌 트렌드) ===== -->
+  <section class="section">
+    <div class="container">
+      <div class="domain-section" style="border:none;">
+        <div class="domain-head">
+          <div class="domain-emoji">🏛️</div>
+          <div class="domain-title">
+            <small>Domain E · AI Citation License · 최신 트렌드</small>
+            <h3>AI 인용 라이선스 시장</h3>
+          </div>
+        </div>
+
+        <p class="text-secondary mb-4">2023~2024년 글로벌 LLM 회사들이 매체와 합법적 라이선스 계약을 본격화. 우리는 한국 첫 진입자.</p>
+
+        <div style="overflow-x:auto;">
+          <table class="comp-table">
+            <thead>
+              <tr><th>매체 ↔ LLM</th><th>국가</th><th>계약 규모</th><th>시점</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>NYT ↔ Amazon · Microsoft</strong></td><td>🇺🇸</td><td class="num">$100M+ (소송 진행)</td><td>2024~</td></tr>
+              <tr><td><strong>Reuters ↔ Meta</strong></td><td>🇺🇸·🇬🇧</td><td class="num">비공개</td><td>2024</td></tr>
+              <tr><td><strong>Reddit ↔ Google</strong></td><td>🇺🇸</td><td class="num">$60M/년</td><td>2024</td></tr>
+              <tr><td><strong>Stack Overflow ↔ OpenAI</strong></td><td>🇺🇸</td><td class="num">비공개</td><td>2024</td></tr>
+              <tr><td><strong>AP ↔ OpenAI</strong></td><td>🇺🇸</td><td class="num">비공개</td><td>2023</td></tr>
+              <tr><td><strong>Axel Springer (Bild·Politico) ↔ OpenAI</strong></td><td>🇩🇪</td><td class="num">€30M+/년</td><td>2023</td></tr>
+              <tr><td><strong>Financial Times ↔ OpenAI</strong></td><td>🇬🇧</td><td class="num">비공개</td><td>2024</td></tr>
+              <tr><td><strong>Le Monde · Vox ↔ OpenAI</strong></td><td>🇫🇷·🇺🇸</td><td class="num">다년 계약</td><td>2024</td></tr>
+              <tr><td><strong>News Corp (WSJ) ↔ OpenAI</strong></td><td>🇺🇸</td><td class="num">$250M / 5년</td><td>2024</td></tr>
+              <tr style="background: rgba(248,113,113,0.06);"><td colspan="4" style="text-align:center; color:var(--danger); font-weight:700;">🇰🇷 한국 — 사례 없음 (2026 현재)</td></tr>
+              <tr class="us-row"><td><strong>★ Insight Bank Hub</strong></td><td>🇰🇷</td><td class="num">5억+/년 (Strategic)</td><td><strong style="color:var(--text-primary);">한국 최초 진입 모델 (2026)</strong></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="card mt-5" style="background:var(--glass-gold); border-color:var(--border-gold); padding:var(--s-4);">
+          <strong style="color:var(--gold-300);">💡 First Mover 가치</strong>
+          <p class="text-secondary mb-0 mt-2" style="font-size:var(--fs-sm);">
+            한국 매체 중 1순위 진입자가 5년+ 시장 독점 가능. OpenAI·Anthropic·Google·Naver·카카오가 각각 최소 1개 한국 매체와 라이선스 계약을 맺을 것 — 우리가 그 1개가 되는 것이 핵심.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== F. 리서치·컨설팅 ===== -->
+  <section class="section" style="background:var(--bg-elev-1);">
+    <div class="container">
+      <div class="domain-section" style="border:none;">
+        <div class="domain-head">
+          <div class="domain-emoji">📊</div>
+          <div class="domain-title">
+            <small>Domain F · Research &amp; Consulting</small>
+            <h3>리서치·컨설팅</h3>
+          </div>
+        </div>
+
+        <div style="overflow-x:auto;">
+          <table class="comp-table">
+            <thead>
+              <tr><th>경쟁사</th><th>가격대</th><th>비고</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>Gartner / Forrester / IDC</strong></td><td class="num">$20,000~$50,000/년</td><td>산업 분석 글로벌 표준</td></tr>
+              <tr><td><strong>McKinsey GI · BCG · Bain Reports</strong></td><td class="num">컨설팅 결합</td><td>매출 분배 모델</td></tr>
+              <tr><td><strong>Frost &amp; Sullivan · Euromonitor</strong></td><td class="num">$5,000+/년</td><td>중간 가격대</td></tr>
+              <tr><td><strong>삼정KPMG · 딜로이트 · EY 한국</strong></td><td class="num">컨설팅 매출</td><td>본업 회계법인 + 리포트</td></tr>
+              <tr><td><strong>현대경제연구원 · LG경영연구원</strong></td><td class="num">모회사 의존</td><td>산업 연구원형</td></tr>
+              <tr class="us-row"><td><strong>★ Insight Bank Hub</strong></td><td class="num">2,000만~10억</td><td><strong style="color:var(--text-primary);">데이터 백본 + 본업 시너지</strong></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== G. 법률·세무 ===== -->
+  <section class="section">
+    <div class="container">
+      <div class="domain-section" style="border:none;">
+        <div class="domain-head">
+          <div class="domain-emoji">⚖️</div>
+          <div class="domain-title">
+            <small>Domain G · Law &amp; Tax · 월간지방세연구 영역</small>
+            <h3>법률·세무·조세 정보</h3>
+          </div>
+        </div>
+
+        <div style="overflow-x:auto;">
+          <table class="comp-table">
+            <thead>
+              <tr><th>경쟁사</th><th>영역</th><th>비고</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>Wolters Kluwer</strong></td><td>글로벌 법률·세무 출판</td><td>$$$$ · 미국·유럽 중심</td></tr>
+              <tr><td><strong>Thomson Reuters Tax</strong></td><td>글로벌 세무 정보</td><td>한국 약함</td></tr>
+              <tr><td><strong>LexisNexis Tax</strong></td><td>법률·세무</td><td>글로벌</td></tr>
+              <tr><td><strong>국세청 · 법제처 (공공)</strong></td><td>한국 무료 공공 자료</td><td>검색 어려움</td></tr>
+              <tr><td><strong>로톡 · 로앤비</strong></td><td>한국 법률 SaaS</td><td>그래프 없음</td></tr>
+              <tr><td><strong>택스워치 (한겨레)</strong></td><td>세무 뉴스</td><td>콘텐츠만</td></tr>
+              <tr class="us-row"><td><strong>★ Insight Bank Hub (월간지방세연구)</strong></td><td><strong>15년+ 아카이브 + 그래프 + 본업</strong></td><td><strong style="color:var(--text-primary);">한국 최강 + 회계법인 결합</strong></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 차별화 포지션 매트릭스 ===== -->
+  <section class="section" style="background:var(--bg-elev-1);">
+    <div class="container">
+      <div data-reveal>
+        <span class="eyebrow">Position Matrix</span>
+        <h2 style="margin-top:var(--s-4)">우리 차별화 포지션 — 8개 영역 종합</h2>
+      </div>
+
+      <div class="card mt-6" data-reveal style="padding:0; overflow:hidden;">
+        <div class="matrix-head">
+          <div>영역</div>
+          <div>글로벌 1위</div>
+          <div>한국 1위</div>
+          <div>우리 포지션</div>
+        </div>
+
+        <div class="matrix-row">
+          <div><strong>통합 미디어</strong></div>
+          <div>Bloomberg</div>
+          <div>연합인포맥스</div>
+          <div class="matrix-row__us">수직 결합 = 한국 산업·자본·조세 망라</div>
+        </div>
+        <div class="matrix-row">
+          <div><strong>M&amp;A 데이터</strong></div>
+          <div>PitchBook · Mergermarket</div>
+          <div>없음</div>
+          <div class="matrix-row__us">KMNA 한국 1위 + 그래프 결합</div>
+        </div>
+        <div class="matrix-row">
+          <div><strong>방산 데이터</strong></div>
+          <div>Janes</div>
+          <div>없음</div>
+          <div class="matrix-row__us">디펜스투데이 한국 1위</div>
+        </div>
+        <div class="matrix-row">
+          <div><strong>바이오 임상</strong></div>
+          <div>Cortellis · Evaluate</div>
+          <div>없음</div>
+          <div class="matrix-row__us">바이오타임즈 한국 1위</div>
+        </div>
+        <div class="matrix-row">
+          <div><strong>ICT 통계</strong></div>
+          <div>GlobalData · IDC</div>
+          <div>일부 KISLINE</div>
+          <div class="matrix-row__us">애틀러스리서치 보유</div>
+        </div>
+        <div class="matrix-row">
+          <div><strong>지식 그래프</strong></div>
+          <div>Diffbot</div>
+          <div>없음</div>
+          <div class="matrix-row__us">6채널 결합 = 글로벌 유일 모델</div>
+        </div>
+        <div class="matrix-row">
+          <div><strong>AI 인용 라이선스</strong></div>
+          <div>NYT · Reddit · FT (LLM 계약)</div>
+          <div>없음</div>
+          <div class="matrix-row__us">한국 최초 진입 모델</div>
+        </div>
+        <div class="matrix-row">
+          <div><strong>법률·세무</strong></div>
+          <div>Wolters · Thomson</div>
+          <div>없음</div>
+          <div class="matrix-row__us">월간지방세 15년+ 아카이브</div>
+        </div>
+        <div class="matrix-row" style="background:var(--glass-gold);">
+          <div><strong style="color:var(--gold-300);">★ 본업 시너지</strong></div>
+          <div>—</div>
+          <div>—</div>
+          <div class="matrix-row__us"><strong>선명회계 + 미디어 = 글로벌에도 동급 모델 없음</strong></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Moat 분석 ===== -->
+  <section class="section">
+    <div class="container">
+      <div data-reveal>
+        <span class="eyebrow">Moat Analysis</span>
+        <h2 style="margin-top:var(--s-4)">진입 장벽 — 경쟁사가 따라잡기 어려운 5가지</h2>
+        <p>경쟁사가 우리를 동일하게 복제하려면 <strong style="color:var(--gold-300);">200억+ · 5년+</strong>가 필요합니다.</p>
+      </div>
+
+      <div class="grid grid-2 mt-6">
+        <div class="moat-card" data-reveal>
+          <h4><span class="moat-card__num">1</span>6개 한국 매체 인수</h4>
+          <p class="text-secondary mb-0" style="font-size:var(--fs-sm);">
+            (주)비즈뷰 3개 + (주)채널더블유 1개 + 애틀러스리서치 + 한국지방세연구회 = 6개 회사 합병 또는 인수.
+            <strong style="color:var(--text-primary);">예상 비용 80~150억 · 4년+</strong>
+          </p>
+        </div>
+
+        <div class="moat-card" data-reveal>
+          <h4><span class="moat-card__num">2</span>15년+ 아카이브</h4>
+          <p class="text-secondary mb-0" style="font-size:var(--fs-sm);">
+            월간지방세연구 2009년~ 판례 아카이브 + 5개 매체 2019년~ 콘텐츠 누적 = 누적 2.4M+ 트리플.
+            <strong style="color:var(--text-primary);">시간 자본 — 돈으로 못 산다</strong>
+          </p>
+        </div>
+
+        <div class="moat-card" data-reveal>
+          <h4><span class="moat-card__num">3</span>한국 도메인 전문가 6명</h4>
+          <p class="text-secondary mb-0" style="font-size:var(--fs-sm);">
+            바이오·ICT·스타트업·M&amp;A·방산·조세 6개 도메인 모두에 깊은 인력. 각 매체의 발행·편집인이 곧 전문가.
+            <strong style="color:var(--text-primary);">영입 비용 + 신뢰 형성에 3~5년</strong>
+          </p>
+        </div>
+
+        <div class="moat-card" data-reveal>
+          <h4><span class="moat-card__num">4</span>회계법인 본업 결합</h4>
+          <p class="text-secondary mb-0" style="font-size:var(--fs-sm);">
+            선명회계법인이라는 본업 + 미디어 그룹 + AI 결합. 글로벌에도 이 정도 결합 모델은 Reuters+Refinitiv 정도가 유일.
+            <strong style="color:var(--text-primary);">한국 시장에는 동급 없음</strong>
+          </p>
+        </div>
+
+        <div class="moat-card" data-reveal>
+          <h4><span class="moat-card__num">5</span>AI 인용 라이선스 First Mover</h4>
+          <p class="text-secondary mb-0" style="font-size:var(--fs-sm);">
+            한국 첫 진입자가 OpenAI·Anthropic·Google·Naver·카카오와 5억+ Strategic Tier 계약 체결 시,
+            <strong style="color:var(--text-primary);">5년+ 시장 독점</strong> (한국 매체당 LLM 1사 정도가 표준이 될 가능성)
+          </p>
+        </div>
+
+        <div class="moat-card" data-reveal style="background: linear-gradient(135deg, rgba(192,132,252,0.10), var(--glass-blue)); border-color: rgba(192,132,252,0.30);">
+          <h4 style="color:#c084fc;"><span class="moat-card__num" style="background:#c084fc;">★</span>6채널 결합 그래프</h4>
+          <p class="text-secondary mb-0" style="font-size:var(--fs-sm);">
+            한 사건이 4~6개 매체에 걸쳐 시간순 추적되는 수직 결합 그래프.
+            <strong style="color:var(--text-primary);">단일 매체로는 흉내 불가능</strong> · 글로벌에도 같은 모델 없음
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 위협 분석 ===== -->
+  <section class="section" style="background:var(--bg-elev-1);">
+    <div class="container">
+      <div data-reveal>
+        <span class="eyebrow">Threat Analysis</span>
+        <h2 style="margin-top:var(--s-4)">잠재 위협 — 발생 가능성 + 대응</h2>
+      </div>
+
+      <div class="card mt-6" data-reveal style="padding:0; overflow:hidden;">
+        <div class="threat-head">
+          <div>가능성</div>
+          <div>위협</div>
+          <div>시점</div>
+          <div>강도</div>
+          <div>대응</div>
+        </div>
+
+        <div class="threat-row">
+          <div><span class="threat-row__level lvl-low">LOW</span></div>
+          <div><strong>Bloomberg / Reuters 한국 진출</strong><br/><small class="text-muted">한국어 장벽 + 도메인 깊이 한계</small></div>
+          <div class="text-secondary">5년+</div>
+          <div class="text-secondary">중대</div>
+          <div class="text-secondary">도메인 깊이로 방어 + 협업 가능</div>
+        </div>
+        <div class="threat-row">
+          <div><span class="threat-row__level lvl-mid">MID</span></div>
+          <div><strong>국내 미디어그룹 통합 시도</strong> (조선·중앙·매경)<br/><small class="text-muted">한국 1티어 종합지의 AI 결합</small></div>
+          <div class="text-secondary">2~3년</div>
+          <div class="text-secondary">중대</div>
+          <div class="text-secondary">First Mover + AI 라이선스 선점</div>
+        </div>
+        <div class="threat-row">
+          <div><span class="threat-row__level lvl-mid">MID</span></div>
+          <div><strong>PitchBook 한국 시장 진입</strong> (M&amp;A 영역)<br/><small class="text-muted">글로벌 1위가 한국 단독 진출 시</small></div>
+          <div class="text-secondary">2~4년</div>
+          <div class="text-secondary">부분</div>
+          <div class="text-secondary">KMNA 단독 데이터 + 그래프 결합</div>
+        </div>
+        <div class="threat-row">
+          <div><span class="threat-row__level lvl-high">HIGH</span></div>
+          <div><strong>OpenAI/Google이 자체 한국 매체와 라이선스</strong><br/><small class="text-muted">우리가 아닌 다른 매체가 선점 시</small></div>
+          <div class="text-secondary">1~2년</div>
+          <div class="text-secondary">치명적</div>
+          <div class="text-secondary"><strong style="color:var(--danger);">★ 우리가 먼저 Strategic Tier 계약 체결 必</strong></div>
+        </div>
+        <div class="threat-row">
+          <div><span class="threat-row__level lvl-high">HIGH</span></div>
+          <div><strong>AI의 매체 콘텐츠 무단 학습</strong><br/><small class="text-muted">현재 진행 중 · NYT 소송 모델 참조</small></div>
+          <div class="text-secondary">진행 중</div>
+          <div class="text-secondary">중대</div>
+          <div class="text-secondary">llms.txt + 라이선스 API + 법적 대응</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 가장 위험한 시나리오 ===== -->
+  <section class="section">
+    <div class="container">
+      <div data-reveal>
+        <span class="eyebrow">Worst Case Scenario</span>
+        <h2 style="margin-top:var(--s-4)">가장 위험한 직접 경쟁 시나리오</h2>
+      </div>
+
+      <div class="scenario-card mt-6" data-reveal>
+        <h4>"조선·중앙·매경 통합 + AI 결합"</h4>
+        <p class="text-secondary" style="font-size:var(--fs-sm);">
+          <strong style="color:var(--text-primary);">시나리오</strong> · 조선미디어 + 매경미디어 + 중앙홀딩스가 통합하여 한국 1티어 종합지 미디어 그룹을 형성하고 AI 라이선스 모델 시작.
+        </p>
+
+        <div class="grid grid-2 mt-4" style="gap:var(--s-4);">
+          <div>
+            <strong style="color:var(--danger);">위협 요소</strong>
+            <ul style="margin: 8px 0 0; padding-left: 20px; color: var(--text-secondary); font-size:var(--fs-sm);">
+              <li>한국 1티어 종합지 = 권위 동급</li>
+              <li>월 발행량 우리의 5배+</li>
+              <li>독자 규모 우리의 10배+</li>
+              <li>광고·구독 자본 우위</li>
+            </ul>
+          </div>
+          <div>
+            <strong style="color:var(--success);">우리 대응</strong>
+            <ul style="margin: 8px 0 0; padding-left: 20px; color: var(--text-secondary); font-size:var(--fs-sm);">
+              <li>1티어는 종합지 — 도메인 깊이 부족</li>
+              <li>우리는 6개 도메인 전문지 = 깊이 1위</li>
+              <li>AI 라이선스 First Mover 선점</li>
+              <li>본업(선명회계) 시너지 = 종합지 불가능</li>
+              <li>15년+ 판례 그래프 = 1티어 종합지에도 없음</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card mt-4" style="background:var(--glass-gold); border-color:var(--border-gold); padding:var(--s-3);">
+          <strong style="color:var(--gold-300);">결론</strong>
+          <p class="mt-2 mb-0" style="font-size:var(--fs-sm); color:var(--text-secondary);">
+            종합지 1티어와 우리는 <strong style="color:var(--text-primary);">서로 다른 시장</strong>입니다.
+            우리는 "도메인 깊이 + B2B + AI 자산"이 핵심 — 종합지의 광고·구독 매스 모델과 직접 경쟁하지 않습니다.
+            오히려 <strong style="color:var(--text-primary);">종합지가 데이터 보강을 위해 우리에게 라이선스를 사는</strong> 협력 가능성도.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 결론 / Bottom Line ===== -->
+  <section class="section section--lg">
+    <div class="container">
+      <div class="card card--featured text-center" style="padding:var(--s-8);" data-reveal>
+        <span class="eyebrow">Bottom Line</span>
+        <h2 style="margin: var(--s-4) 0;">동급 직접 경쟁 0 · 영역별 1위만 존재</h2>
+        <p style="max-width:680px; margin: 0 auto var(--s-6);">
+          글로벌 영역별 1위(Bloomberg·PitchBook·Diffbot 등)가 있지만 <strong style="color:var(--text-primary);">우리처럼 6개 매체 + AI + 본업 시너지를 동시에 갖춘 모델은 글로벌에도 없습니다.</strong>
+          한국 시장에서는 영역별 1위조차 부재 — <strong style="color:var(--gold-300);">진공 시장에 First Mover</strong>로 진입합니다.
+        </p>
+        <div class="hero__cta">
+          <a class="btn btn--primary btn--lg" href="proposal.html">계약 제안서 검토</a>
+          <a class="btn btn--ghost btn--lg" href="graph-license.html">그래프 라이선스 상세</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="footer__cta-strip">
+      <div class="container">
+        <div class="row" style="justify-content:space-between; align-items:center; flex-wrap:wrap; gap:var(--s-4);">
+          <div>
+            <h3>한국 산업·자본·조세 6대 매체의 권위, 하나의 인사이트 뱅크 허브로</h3>
+            <p>제안서 검토부터 시작하시거나, 데모 모듈을 둘러보세요.</p>
+          </div>
+          <div class="row gap-2">
+            <a class="btn btn--primary" href="proposal.html">제안서 보기</a>
+            <a class="btn btn--ghost" href="dashboard.html">데모 대시보드</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer__main">
+      <div class="container">
+        <div class="footer__grid">
+          <div class="footer__brand-col">
+            <img src="assets/logo.svg" alt="Insight Bank Hub" />
+            <p class="footer__tagline">바이오·ICT·스타트업·M&amp;A·방산·지방세 — 한국 산업·자본·조세 6대 매체 통합 GEO-AIO 싱크탱크.</p>
+            <div class="footer__langs">🇰🇷 🇺🇸 🇨🇳 🇯🇵 🇪🇸 🇫🇷 🇩🇪 🇸🇦</div>
+            <div class="footer__social">
+              <a href="#" aria-label="X / Twitter"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+              <a href="#" aria-label="LinkedIn"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67h-3.55V9h3.41v1.56h.05c.48-.9 1.65-1.85 3.4-1.85 3.64 0 4.31 2.4 4.31 5.51zM5.34 7.43A2.06 2.06 0 113.28 5.37a2.06 2.06 0 012.06 2.06zm-1.78 13.02h3.56V9H3.56zM22.23 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.46c.98 0 1.77-.77 1.77-1.72V1.72C24 .77 23.21 0 22.23 0z"/></svg></a>
+              <a href="#" aria-label="YouTube"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M23.5 6.5c-.3-1-1-1.8-2-2C19.7 4 12 4 12 4s-7.7 0-9.5.5c-1 .2-1.7 1-2 2C0 8.3 0 12 0 12s0 3.7.5 5.5c.3 1 1 1.8 2 2C4.3 20 12 20 12 20s7.7 0 9.5-.5c1-.2 1.7-1 2-2 .5-1.8.5-5.5.5-5.5s0-3.7-.5-5.5zM9.5 15.5v-7l6 3.5z"/></svg></a>
+              <a href="#" aria-label="RSS"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M4 4v3a14 14 0 0114 14h3A17 17 0 004 4zm0 6v3a8 8 0 018 8h3a11 11 0 00-11-11zm2.5 8a2.5 2.5 0 110 5 2.5 2.5 0 010-5z"/></svg></a>
+            </div>
+          </div>
+          <div class="footer__col">
+            <h5>플랫폼</h5>
+            <a href="dashboard.html">통합 대시보드</a>
+            <a href="content.html">콘텐츠 관리</a>
+            <a href="knowledge.html">RAG 지식베이스</a>
+            <a href="ontology.html">온톨로지</a>
+            <a href="graph-license.html">그래프 라이선스</a>
+            <a href="chatbot.html">RAG 챗봇</a>
+          </div>
+          <div class="footer__col">
+            <h5>자료</h5>
+            <a href="index.html">개요</a>
+            <a href="channels.html">6개 채널</a>
+            <a href="products.html">상품·서비스</a>
+            <a href="competitive-landscape.html">경쟁 환경</a>
+            <a href="monetization.html">수익 모델</a>
+            <a href="proposal.html">계약 제안서</a>
+            <a href="manual.html">운영 매뉴얼</a>
+          </div>
+          <div class="footer__col">
+            <h5>연락처</h5>
+            <p>support@insightbankhub.kr</p>
+            <p>평일 09:00 – 18:00 KST</p>
+            <p>SLA 24/7 비상 라인</p>
+            <a href="proposal.html" class="btn btn--ghost btn--sm" style="margin-top:8px; display:inline-flex;">파트너 문의 →</a>
+          </div>
+        </div>
+
+        <hr class="footer__divider" />
+
+        <div class="footer__bottom">
+          <span>© 2026 Insight Bank Hub. All rights reserved.</span>
+          <div class="footer__legal">
+            <a href="#">이용약관</a>
+            <a href="#">개인정보처리방침</a>
+            <a href="#">llms.txt</a>
+            <span class="footer__seal">v1.0 · Confidential</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/common.js"></script>
+</body>
+</html>

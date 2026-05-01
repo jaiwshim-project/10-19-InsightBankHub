@@ -344,7 +344,9 @@
         <a class="nav__link" href="index.html">개요</a>
         <a class="nav__link" href="proposal.html">제안서</a>
         <a class="nav__link" href="channels.html">6개 채널</a>
+        <a class="nav__link" href="products.html">상품·서비스</a>
         <a class="nav__link" href="monetization.html">수익 모델</a>
+        <a class="nav__link" href="competitive-landscape.html">경쟁 환경</a>
         <a class="nav__link" href="ontology.html">온톨로지</a>
         <a class="nav__link" href="graph-license.html">그래프 라이선스</a>
         <a class="nav__link" href="structure.html">구조도</a>
@@ -723,8 +725,74 @@
     </div>
   </section>
 
-  <!-- ===== 5. 차별화 ===== -->
+  <!-- ===== 4.5 Diffbot/글로벌 KaaS 비교 ===== -->
   <section class="section">
+    <div class="container">
+      <div data-reveal>
+        <span class="eyebrow">04.5 · vs Global KaaS</span>
+        <h2 style="margin-top:var(--s-4)">Diffbot 등 글로벌 KaaS 대비 차별화</h2>
+        <p>Knowledge as a Service 글로벌 1위 Diffbot과 우리를 비교. <strong style="color:var(--gold-300);">우리는 한국 도메인 + 미디어 본문 결합으로 다른 시장</strong>을 점유합니다.</p>
+      </div>
+
+      <div class="card mt-6" data-reveal style="padding:0; overflow:hidden;">
+        <table class="price-table" style="font-size:var(--fs-sm);">
+          <thead>
+            <tr>
+              <th>비교 항목</th>
+              <th>Diffbot (KaaS 1위)</th>
+              <th>Cyc / Wikidata</th>
+              <th style="background:var(--glass-gold); color:var(--gold-300);">★ Insight Bank Hub</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><strong style="color:var(--text-primary);">데이터 소스</strong></td><td class="text-secondary">웹 크롤링 (영문 웹 전체)</td><td class="text-secondary">위키피디아·전통 지식</td><td style="color:var(--gold-300);">큐레이션된 6개 한국 매체</td></tr>
+            <tr><td><strong style="color:var(--text-primary);">한국어 도메인</strong></td><td class="text-secondary">매우 약함 (영문 중심)</td><td class="text-secondary">제한적</td><td style="color:var(--gold-300);">전 도메인 1위 매체 결합</td></tr>
+            <tr><td><strong style="color:var(--text-primary);">출처 메타 (Provenance)</strong></td><td class="text-secondary">웹 페이지 URL만</td><td class="text-secondary">Wikipedia 인용</td><td style="color:var(--gold-300);">매체·기자·날짜 추적</td></tr>
+            <tr><td><strong style="color:var(--text-primary);">법적 인용 강도</strong></td><td class="text-secondary">약함 (웹 스크래핑)</td><td class="text-secondary">중간</td><td style="color:var(--gold-300);">높음 (정식 매체 라이선스)</td></tr>
+            <tr><td><strong style="color:var(--text-primary);">시계열 추적</strong></td><td class="text-secondary">스냅샷</td><td class="text-secondary">없음</td><td style="color:var(--gold-300);">15년+ 시계열 그래프</td></tr>
+            <tr><td><strong style="color:var(--text-primary);">미디어 본문 결합</strong></td><td class="text-secondary">없음 (그래프만)</td><td class="text-secondary">없음</td><td style="color:var(--gold-300);">RAG + 그래프 결합</td></tr>
+            <tr><td><strong style="color:var(--text-primary);">FIBO/XBRL 호환</strong></td><td class="text-secondary">자체 스키마</td><td class="text-secondary">자체 스키마</td><td style="color:var(--gold-300);">완전 호환</td></tr>
+            <tr><td><strong style="color:var(--text-primary);">가격</strong></td><td class="text-secondary">$50K~$2M/년</td><td class="text-secondary">유료 라이선스</td><td style="color:var(--gold-300);">3,600만~5억/년 (1/2 가격)</td></tr>
+            <tr><td><strong style="color:var(--text-primary);">한국 LLM 회사 인덱싱</strong></td><td class="text-secondary">자체 학습 부재</td><td class="text-secondary">제한적</td><td style="color:var(--gold-300);">한국 첫 라이선스 모델</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="grid grid-2 mt-6" style="gap:var(--s-4);">
+        <div class="card" data-reveal style="padding:var(--s-4); background:rgba(248,113,113,0.06); border-color:rgba(248,113,113,0.20);">
+          <strong style="color:var(--danger);">Diffbot의 한계 (한국 시장)</strong>
+          <ul style="margin: 8px 0 0; padding-left: 20px; color: var(--text-secondary); font-size:var(--fs-sm);">
+            <li>한국어 NER 정확도 70% 이하 (영문 95% vs)</li>
+            <li>한국 신문사 콘텐츠 대부분 robots.txt 차단</li>
+            <li>방산·바이오·지방세 등 한국 특화 도메인 깊이 부재</li>
+            <li>제휴 매체 없이 웹 크롤링만 → 법적 인용 강도 낮음</li>
+          </ul>
+        </div>
+
+        <div class="card card--featured" data-reveal style="padding:var(--s-4);">
+          <strong style="color:var(--gold-300);">우리만이 가능한 영역</strong>
+          <ul style="margin: 8px 0 0; padding-left: 20px; color: var(--text-secondary); font-size:var(--fs-sm);">
+            <li>6개 매체 정식 라이선스 보유 (저작권 안전)</li>
+            <li>한국어 도메인 NER 90~93%</li>
+            <li>15년+ 판례·거래 시계열 그래프</li>
+            <li>미디어 본문 + 그래프 동시 제공 (RAG 결합)</li>
+            <li>회계법인 본업 자문 결합 = 글로벌에도 없는 모델</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card mt-5" style="background:linear-gradient(135deg, var(--glass-gold), var(--glass-blue)); border-color:var(--border-gold); padding:var(--s-5);" data-reveal>
+        <strong style="color:var(--gold-300);">결론 — 다른 시장</strong>
+        <p class="text-secondary mb-0 mt-2" style="font-size:var(--fs-sm);">
+          우리는 Diffbot과 직접 경쟁하지 않습니다. Diffbot은 <strong style="color:var(--text-primary);">"전 세계 영문 웹 그래프"</strong>이고, 우리는 <strong style="color:var(--text-primary);">"한국 산업·자본·조세 큐레이션 그래프"</strong>입니다.
+          오히려 <strong style="color:var(--gold-300);">Diffbot이 한국 데이터를 보강하기 위해 우리에게 라이선스를 살 수 있는 협력 모델</strong>이 더 자연스럽습니다.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 5. 차별화 ===== -->
+  <section class="section" style="background:var(--bg-elev-1);">
     <div class="container">
       <div data-reveal>
         <span class="eyebrow">05 · Why We Win</span>
@@ -1073,6 +1141,8 @@
             <h5>자료</h5>
             <a href="index.html">개요</a>
             <a href="channels.html">6개 채널</a>
+            <a href="products.html">상품·서비스</a>
+            <a href="competitive-landscape.html">경쟁 환경</a>
             <a href="monetization.html">수익 모델</a>
             <a href="proposal.html">계약 제안서</a>
             <a href="manual.html">운영 매뉴얼</a>
