@@ -1,0 +1,1026 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0a0e1a" />
+  <title>사례 보기 — K-방산 무인화 IPO 통합 인사이트 · Insight Bank Hub</title>
+  <meta name="description" content="6채널 결합으로만 가능한 통합 인사이트 — K-방산 무인화 가속 + IPO 후보 5종 + R&D 세제·M&A 시그널을 그래프·온톨로지로 시각화" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="사례 보기 — K-방산 무인화 IPO 통합 인사이트" />
+  <meta property="og:image" content="assets/og-image.svg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <link rel="stylesheet" href="css/common.css" />
+  <style>
+    /* ===== 채널 컨트리뷰션 카드 ===== */
+    .contrib-grid { display:grid; grid-template-columns: repeat(3, 1fr); gap: var(--s-4); }
+    @media (max-width: 1024px) { .contrib-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 640px)  { .contrib-grid { grid-template-columns: 1fr; } }
+    .contrib-card {
+      padding: var(--s-5);
+      background: var(--glass-100);
+      border: 1px solid var(--border-default);
+      border-radius: var(--r-lg);
+      backdrop-filter: blur(12px) saturate(140%);
+      transition: all 0.25s var(--ease-out);
+      position: relative;
+      overflow: hidden;
+    }
+    @media (hover:hover) {
+      .contrib-card:hover { transform: translateY(-3px); border-color: var(--border-gold); box-shadow: var(--shadow-md); }
+    }
+    .contrib-card::before {
+      content: '';
+      position: absolute; top:0; left:0; right:0; height: 3px;
+      background: var(--gold-500); opacity: 0.7;
+    }
+    .contrib-card[data-channel="biotimes"]::before    { background: #4ade80; }
+    .contrib-card[data-channel="arg"]::before         { background: #4a90e2; }
+    .contrib-card[data-channel="startuptoday"]::before{ background: #fbbf24; }
+    .contrib-card[data-channel="kmna"]::before        { background: var(--gold-500); }
+    .contrib-card[data-channel="defensetoday"]::before{ background: #f87171; }
+    .contrib-card[data-channel="localtax"]::before    { background: var(--purple-500); }
+    .contrib-card__head { display:flex; align-items:center; gap: var(--s-3); margin-bottom: var(--s-3); }
+    .contrib-card__num {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      display:grid; place-items:center;
+      font-family: 'KoPubWorld Dotum', sans-serif;
+      font-weight: 900;
+      background: var(--glass-gold);
+      color: var(--gold-300);
+      border: 1px solid var(--border-gold);
+      font-size: 14px;
+    }
+    .contrib-card__channel { font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gold-300); font-weight: 700; }
+    .contrib-card__title { color: var(--text-primary); margin: 0 0 var(--s-2); font-size: var(--fs-md); font-weight: 700; line-height: 1.35; }
+    .contrib-card__list { padding-left: 18px; margin: var(--s-3) 0 0; color: var(--text-secondary); font-size: var(--fs-sm); }
+    .contrib-card__list li { margin-bottom: 6px; line-height: 1.6; }
+    .contrib-card__signal {
+      margin-top: var(--s-3);
+      padding: var(--s-2) var(--s-3);
+      background: var(--bg-elev-2);
+      border-left: 3px solid var(--gold-500);
+      border-radius: var(--r-sm);
+      font-size: var(--fs-xs);
+      color: var(--text-secondary);
+    }
+    .contrib-card__signal strong { color: var(--text-primary); }
+
+    /* ===== 결합 출력 (Combined Insight Card) ===== */
+    .combined-card {
+      background: linear-gradient(135deg, rgba(212,165,116,0.10), rgba(192,132,252,0.06), rgba(74,144,226,0.08));
+      border: 1px solid var(--border-gold);
+      border-radius: var(--r-lg);
+      padding: var(--s-7);
+      backdrop-filter: blur(14px);
+    }
+
+    /* ===== Knowledge Graph SVG ===== */
+    .kg-wrap {
+      background: var(--bg-elev-1);
+      border: 1px solid var(--border-default);
+      border-radius: var(--r-lg);
+      padding: var(--s-4);
+      overflow: auto;
+    }
+    .kg-svg {
+      width: 100%;
+      max-width: 1100px;
+      height: auto;
+      display: block;
+      margin: 0 auto;
+      min-width: 720px;
+    }
+    .kg-node { transition: all 0.25s var(--ease-out); }
+    .kg-node:hover { filter: brightness(1.25); cursor: pointer; }
+    .kg-node-label { font-family: 'KoPubWorld Dotum', sans-serif; font-weight: 700; pointer-events: none; }
+    .kg-node-sub { fill: #9aa0b3; font-size: 9px; pointer-events: none; }
+    .kg-edge { fill: none; stroke: rgba(212,165,116,0.30); stroke-width: 1.2; }
+    .kg-edge-label { font-size: 9px; fill: #9aa0b3; font-family: 'JetBrains Mono', monospace; pointer-events: none; }
+    .kg-channel-edge { stroke-dasharray: 3 3; opacity: 0.4; }
+
+    /* ===== Ontology mapping table ===== */
+    .ont-table { width: 100%; border-collapse: collapse; font-size: var(--fs-sm); }
+    .ont-table th {
+      padding: 12px 16px; text-align: left;
+      color: var(--gold-300);
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      background: var(--glass-100);
+      border-bottom: 1px solid var(--border-default);
+    }
+    .ont-table td {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border-subtle);
+      vertical-align: top;
+    }
+    .ont-table code {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--purple-500);
+      background: var(--glass-purple-soft);
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    /* ===== Compare 단일 vs 결합 ===== */
+    .vs-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s-5); }
+    @media (max-width: 768px) { .vs-grid { grid-template-columns: 1fr; } }
+    .vs-card { padding: var(--s-5); border-radius: var(--r-lg); border: 1px solid var(--border-default); }
+    .vs-card--single { background: var(--glass-100); }
+    .vs-card--combined { background: linear-gradient(135deg, var(--glass-gold), var(--glass-purple-soft)); border-color: var(--border-gold); }
+    .vs-card h4 { margin: 0 0 var(--s-3); }
+    .vs-card ul { margin: 0; padding-left: 18px; color: var(--text-secondary); font-size: var(--fs-sm); }
+    .vs-card ul li { margin-bottom: 6px; }
+    .vs-tag {
+      display: inline-flex; align-items: center; gap: 4px;
+      padding: 3px 8px;
+      border-radius: var(--r-full);
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      font-weight: 700;
+      text-transform: uppercase;
+      margin-bottom: var(--s-2);
+    }
+    .vs-tag--single { background: rgba(248,113,113,0.10); color: var(--danger); border: 1px solid rgba(248,113,113,0.30); }
+    .vs-tag--combined { background: var(--glass-gold); color: var(--gold-300); border: 1px solid var(--border-gold); }
+
+    /* ===== IPO 후보 표 ===== */
+    .candidate-table { width: 100%; border-collapse: collapse; font-size: var(--fs-sm); }
+    .candidate-table th, .candidate-table td {
+      padding: 12px 14px; text-align: left;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .candidate-table th {
+      color: var(--gold-300);
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      background: var(--glass-100);
+    }
+    .candidate-table tr:hover td { background: var(--glass-100); }
+    .candidate-table .num {
+      text-align: right;
+      font-family: 'KoPubWorld Dotum', sans-serif;
+      font-weight: 700;
+      color: var(--gold-300);
+    }
+    .alpha-bar {
+      display: inline-block;
+      width: 60px; height: 6px;
+      background: var(--bg-elev-3);
+      border-radius: 3px;
+      vertical-align: middle;
+      margin-left: 8px;
+      overflow: hidden;
+    }
+    .alpha-bar > span {
+      display: block;
+      height: 100%;
+      background: linear-gradient(90deg, var(--gold-500), var(--purple-500));
+      border-radius: 3px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== HEADER (네비게이션은 다른 페이지와 동일) ===== -->
+  <header class="header">
+    <div class="header__inner">
+      <a class="brand" href="index.html" aria-label="Insight Bank Hub"><img src="assets/logo.svg" alt="Insight Bank Hub" class="brand__logo" /></a>
+      <nav class="nav" aria-label="주요 메뉴">
+        <a class="nav__link" href="index.html">개요</a>
+        <div class="nav__group">
+          <button class="nav__link nav__trigger" type="button" aria-haspopup="true">제안</button>
+          <div class="nav__menu">
+            <div class="nav__menu__heading">제안 · 영업 자료</div>
+            <a class="nav__menu-link" href="proposal.html">계약 제안서<small>선명회계법인 12개월 도입</small></a>
+            <a class="nav__menu-link" href="channels.html">6개 채널<small>바이오·ICT·스타트업·M&A·방산·조세</small></a>
+            <a class="nav__menu-link" href="products.html">상품·서비스 카탈로그<small>8 카테고리 36종</small></a>
+            <a class="nav__menu-link" href="monetization.html">수익 모델<small>9 Stream · Y3 88억</small></a>
+            <a class="nav__menu-link" href="competitive-landscape.html">경쟁 환경<small>40+ 글로벌·한국 경쟁사</small></a>
+          </div>
+        </div>
+        <div class="nav__group">
+          <button class="nav__link nav__trigger" type="button" aria-haspopup="true">기술</button>
+          <div class="nav__menu">
+            <div class="nav__menu__heading">기술 · 차별화</div>
+            <a class="nav__menu-link" href="structure.html">시스템 구조도<small>4-Layer 아키텍처 SVG</small></a>
+            <a class="nav__menu-link" href="ontology.html">온톨로지 레이어<small>FIBO/XBRL · 6채널 결합</small></a>
+            <a class="nav__menu-link" href="graph-license.html">그래프 라이선스<small>Stream 09 · SPARQL B2B</small></a>
+          </div>
+        </div>
+        <div class="nav__group">
+          <button class="nav__link nav__trigger" type="button" aria-haspopup="true">데모</button>
+          <div class="nav__menu">
+            <div class="nav__menu__heading">플랫폼 · 운영 데모</div>
+            <a class="nav__menu-link" href="dashboard.html">통합 대시보드<small>6채널 KPI · AI 인용 추이</small></a>
+            <a class="nav__menu-link" href="content.html">콘텐츠 관리<small>발행 큐 · GEO 점수</small></a>
+            <a class="nav__menu-link" href="knowledge.html">RAG 지식베이스<small>벡터 인덱스 · 토픽</small></a>
+            <a class="nav__menu-link" href="chatbot.html">RAG 챗봇<small>Gemini · 출처 인용</small></a>
+          </div>
+        </div>
+        <a class="nav__link active" href="case-study.html">사례 보기</a>
+        <a class="nav__link" href="manual.html">매뉴얼</a>
+      </nav>
+      <button class="nav-toggle" aria-label="메뉴"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
+    </div>
+  </header>
+
+  <!-- ===== HERO ===== -->
+  <section class="hero" style="padding:80px 0 var(--s-6);">
+    <div class="container hero__inner">
+      <span class="eyebrow">Case Study · 6채널 결합 사례</span>
+      <h1 class="display hero__title" style="font-size:clamp(34px,6vw,56px);">
+        한 사건, <span class="text-gradient">여섯 매체의 시선</span>이 만든<br/>
+        새로운 자산
+      </h1>
+      <p class="hero__sub">
+        K-방산 무인화 가속 + IPO 후보 5종 + R&D 세제·M&A 시그널 —
+        단일 매체로는 만들 수 없는 통합 인사이트가 어떻게 생성되고, 그래프로 구조화되며, 기관 의사결정 자산이 되는지 한 번에 확인하세요.
+      </p>
+    </div>
+  </section>
+
+  <!-- ===== KPI 미니 ===== -->
+  <section class="section section--sm">
+    <div class="container">
+      <div class="grid grid-4" data-reveal>
+        <div class="stat card">
+          <div class="stat__value"><span data-count="6">6</span></div>
+          <div class="stat__label">결합 매체</div>
+        </div>
+        <div class="stat card">
+          <div class="stat__value"><span data-count="42">42</span></div>
+          <div class="stat__label">엔티티 노드</div>
+        </div>
+        <div class="stat card">
+          <div class="stat__value"><span data-count="68">68</span></div>
+          <div class="stat__label">관계 엣지</div>
+        </div>
+        <div class="stat card">
+          <div class="stat__value"><span data-count="5">5</span></div>
+          <div class="stat__label">IPO 후보</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 1. 사례 개요 ===== -->
+  <section class="section">
+    <div class="container">
+      <div class="grid grid-2" style="gap: var(--s-7);">
+        <div data-reveal>
+          <span class="eyebrow">01 · 사례 개요</span>
+          <h2 style="margin-top: var(--s-4);">왜 이 질문은 단일 매체로 답할 수 없는가</h2>
+          <p>
+            <strong style="color:var(--text-primary);">"2026 K-방산 무인화 가속 흐름에서 IPO 가능한 비상장 5종 + 각 기업의 R&D 세제 혜택 + M&A 인수 후보 시그널은?"</strong>
+          </p>
+          <p>
+            법무법인·사모펀드·IB·정부·LLM 회사 모두가 던지는 실제 질문입니다.
+            그런데 이 답을 만들려면 <strong style="color:var(--gold-300);">방산 동향 + 자본시장 거래 + 스타트업 펀딩 + ICT 기술 표준 + 의료/바이오 응용 + 세무 판례·세제</strong> 6개 도메인을 동시에 봐야 합니다.
+            한 매체가 가진 시야로는 90% 미만의 답만 나옵니다.
+          </p>
+          <p>
+            Insight Bank Hub는 6채널 발행물을 NER+RE 파이프라인으로 정규화한 뒤, FIBO·XBRL·도메인 클래스에 매핑하고, 한 사건의 다층 단면을 그래프로 결합합니다.
+            그 결과가 <strong style="color:var(--text-primary);">"펀더멘털·기술·세제 통합 평가 리스트"</strong>입니다.
+          </p>
+          <div class="row gap-2 mt-5">
+            <span class="chip chip--gold">방산</span>
+            <span class="chip" style="background: var(--glass-purple); color: var(--purple-500); border-color: var(--border-purple);">조세</span>
+            <span class="chip chip--blue">스타트업·VC</span>
+            <span class="chip">M&A</span>
+            <span class="chip" style="background: rgba(248,113,113,0.10); color: var(--danger); border-color: rgba(248,113,113,0.30);">규제</span>
+            <span class="chip" style="background: rgba(74,222,128,0.10); color: var(--success); border-color: rgba(74,222,128,0.30);">바이오 응용</span>
+          </div>
+        </div>
+
+        <div data-reveal>
+          <div class="card" style="padding: var(--s-5);">
+            <strong style="color: var(--gold-300); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;">단일 매체 한계 (가상의 응답)</strong>
+            <table class="table mt-3" style="font-size: var(--fs-xs);">
+              <tbody>
+                <tr><td><strong>디펜스투데이만</strong></td><td class="text-secondary">기업·기술 동향만, 자본시장 부재</td></tr>
+                <tr><td><strong>KMNA만</strong></td><td class="text-secondary">M&A 시그널 있음, 무인화 기술 깊이 부족</td></tr>
+                <tr><td><strong>스타트업투데이만</strong></td><td class="text-secondary">펀딩 라운드만, 출구 전략 미시아 부재</td></tr>
+                <tr><td><strong>ARG만</strong></td><td class="text-secondary">기술 표준 통계만, 기업 동향 약함</td></tr>
+                <tr><td><strong>월간지방세연구만</strong></td><td class="text-secondary">세제·판례만, 산업 사건 연결 어려움</td></tr>
+                <tr><td><strong>바이오타임즈만</strong></td><td class="text-secondary">바이오 부분만 적용 가능</td></tr>
+                <tr style="background: var(--glass-gold);">
+                  <td colspan="2" style="text-align:center; color: var(--gold-300); font-weight: 700;">
+                    ★ 6채널 결합 → 통합 IPO 평가 리스트 (이 페이지 출력물)
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 2. 6채널의 컨트리뷰션 ===== -->
+  <section class="section" style="background: var(--bg-elev-1);">
+    <div class="container">
+      <div data-reveal>
+        <span class="eyebrow">02 · Channel Contributions</span>
+        <h2 style="margin-top: var(--s-4);">각 매체가 기여한 시그널</h2>
+        <p>각 채널의 발행 본문에서 NER+RE로 추출된 핵심 엔티티·관계·정량 시그널입니다.</p>
+      </div>
+
+      <div class="contrib-grid mt-8">
+        <article class="contrib-card" data-channel="defensetoday" data-reveal>
+          <div class="contrib-card__head">
+            <div class="contrib-card__num">05</div>
+            <div>
+              <div class="contrib-card__channel">디펜스투데이</div>
+              <div class="text-muted" style="font-size: 10px;">defensetoday.kr</div>
+            </div>
+          </div>
+          <h4 class="contrib-card__title">무인화 기술 동향 + 한국군 도입 시점</h4>
+          <ul class="contrib-card__list">
+            <li>무인지상로봇(UGV) 양산 단가 35% 하락 (2024→2026)</li>
+            <li>한국군 KMUS 시제 → 양산 전환 8건 식별</li>
+            <li>드론 군집·자율운항 기술 보유 비상장 14사</li>
+            <li>방산 수출 ITAR/MTCR 통제 영향 매핑</li>
+          </ul>
+          <div class="contrib-card__signal">
+            <strong>핵심 시그널</strong> · 무인화 기술 모트 점수 + 군 도입 임박도 (TRL 7~9)
+          </div>
+        </article>
+
+        <article class="contrib-card" data-channel="startuptoday" data-reveal>
+          <div class="contrib-card__head">
+            <div class="contrib-card__num">03</div>
+            <div>
+              <div class="contrib-card__channel">스타트업투데이</div>
+              <div class="text-muted" style="font-size: 10px;">startuptoday.kr</div>
+            </div>
+          </div>
+          <h4 class="contrib-card__title">방산 스타트업 펀딩 라운드 · 출구 시그널</h4>
+          <ul class="contrib-card__list">
+            <li>방산 무인화 분야 시리즈 B/C 라운드 12건 (2025~)</li>
+            <li>VC·CVC 매핑 — 한화CVC, KIC, 미래에셋방산펀드</li>
+            <li>엑싯 사례 3건 + IPO 추진 의사 표명 5건</li>
+            <li>대기업 전략적 투자 → 인수 가능성 시그널</li>
+          </ul>
+          <div class="contrib-card__signal">
+            <strong>핵심 시그널</strong> · 펀딩 단계·valuation step-up + Lead VC 패턴
+          </div>
+        </article>
+
+        <article class="contrib-card" data-channel="kmna" data-reveal>
+          <div class="contrib-card__head">
+            <div class="contrib-card__num">04</div>
+            <div>
+              <div class="contrib-card__channel">한국M&A경제신문</div>
+              <div class="text-muted" style="font-size: 10px;">kmnanews.com</div>
+            </div>
+          </div>
+          <h4 class="contrib-card__title">M&A 시그널 + IPO 추진 단독 보도</h4>
+          <ul class="contrib-card__list">
+            <li>5종 후보 중 3사 주관사 RFP 단계 (단독)</li>
+            <li>한화·LIG·현대로템의 인수 후보 평가 진행</li>
+            <li>외국인 인수자 차단 의사 (방산법 14조)</li>
+            <li>SPC·SPAC 합병 시도 1건 (실패) → 직상장 선회</li>
+          </ul>
+          <div class="contrib-card__signal">
+            <strong>핵심 시그널</strong> · IPO/M&A 임박도 + 거래 구조 + 인수 후보군
+          </div>
+        </article>
+
+        <article class="contrib-card" data-channel="arg" data-reveal>
+          <div class="contrib-card__head">
+            <div class="contrib-card__num">02</div>
+            <div>
+              <div class="contrib-card__channel">애틀러스리서치</div>
+              <div class="text-muted" style="font-size: 10px;">arg.co.kr</div>
+            </div>
+          </div>
+          <h4 class="contrib-card__title">ICT·통신 표준 + 위성·5G 통신 통계</h4>
+          <ul class="contrib-card__list">
+            <li>방산 무인화에 필수인 5G/6G 저지연 통신 표준 매핑</li>
+            <li>한국 위성통신·SAR 위성 시장 규모 1차 데이터</li>
+            <li>국방-민간 듀얼유스 ICT 칩셋 출하 통계</li>
+            <li>각 후보 기업의 ICT 의존도 정량화</li>
+          </ul>
+          <div class="contrib-card__signal">
+            <strong>핵심 시그널</strong> · 기술 표준 호환성 + 듀얼유스 매출 잠재력
+          </div>
+        </article>
+
+        <article class="contrib-card" data-channel="biotimes" data-reveal>
+          <div class="contrib-card__head">
+            <div class="contrib-card__num">01</div>
+            <div>
+              <div class="contrib-card__channel">바이오타임즈</div>
+              <div class="text-muted" style="font-size: 10px;">biotimes.co.kr</div>
+            </div>
+          </div>
+          <h4 class="contrib-card__title">군용 의료·바이오 응용 (의외의 자산)</h4>
+          <ul class="contrib-card__list">
+            <li>전장 응급 자율 진단 드론 → 의료 드론 응용</li>
+            <li>군 의료 텔레메디슨 사업 입찰 6건</li>
+            <li>방위 R&D 자금 → 바이오 산업 이전 사례</li>
+            <li>2종 후보 기업의 민수 헬스케어 매출 비중</li>
+          </ul>
+          <div class="contrib-card__signal">
+            <strong>핵심 시그널</strong> · 듀얼유스 적용 → 매출 다각화·valuation 프리미엄
+          </div>
+        </article>
+
+        <article class="contrib-card" data-channel="localtax" data-reveal>
+          <div class="contrib-card__head">
+            <div class="contrib-card__num">06</div>
+            <div>
+              <div class="contrib-card__channel">월간지방세연구</div>
+              <div class="text-muted" style="font-size: 10px;">localtaxresearch.com</div>
+            </div>
+          </div>
+          <h4 class="contrib-card__title">R&D 세제 + IPO 사전 세무 이슈</h4>
+          <ul class="contrib-card__list">
+            <li>신성장·원천기술 R&D 세액공제 적용 가능성 (조특법 10조)</li>
+            <li>대주주 양도세 지방세 분 절감 구조</li>
+            <li>외국인 지분율 제한 + 지방세 영향 분석</li>
+            <li>IPO 전 자기주식 처분 시 지방세 판례 3건</li>
+          </ul>
+          <div class="contrib-card__signal">
+            <strong>핵심 시그널</strong> · 세후 valuation 보정 계수 + IPO 전 세무 리스크
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 3. 결합 출력 (Combined Insight) ===== -->
+  <section class="section">
+    <div class="container">
+      <div data-reveal>
+        <span class="eyebrow">03 · Combined Output</span>
+        <h2 style="margin-top: var(--s-4);">통합 인사이트 — IPO 후보 5종 평가</h2>
+        <p>6채널 시그널을 가중 결합한 <strong style="color: var(--text-primary);">Risk-adjusted Alpha 점수</strong> + 기관별 Action Item.</p>
+      </div>
+
+      <div class="combined-card mt-6" data-reveal>
+        <span class="chip chip--gold">★ 결합 산출물</span>
+        <h3 style="margin: var(--s-3) 0 var(--s-2); font-size: var(--fs-lg);">
+          2026 K-방산 무인화 IPO 후보 5종 — 펀더멘털·기술·세제 통합 평가
+        </h3>
+        <p class="text-secondary mb-0" style="font-size: var(--fs-sm);">
+          R-Alpha = (기술 모트 × 0.30) + (펀딩·valuation step × 0.20) + (M&A/IPO 임박도 × 0.20) + (듀얼유스 매출 × 0.15) + (세후 보정 × 0.15)
+        </p>
+
+        <div class="card mt-5" style="padding: 0; overflow-x: auto; background: var(--bg-elev-2);">
+          <table class="candidate-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>후보 (가명)</th>
+                <th>핵심 기술</th>
+                <th>펀딩 단계</th>
+                <th>M&A 시그널</th>
+                <th>R&D 세제</th>
+                <th class="num">R-Alpha</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong style="color:var(--gold-300);">A</strong></td>
+                <td><strong style="color: var(--text-primary);">UAV-Alpha</strong><br/><small class="text-muted">군집 드론 자율운항</small></td>
+                <td><span class="chip chip--blue" style="font-size: 10px;">SLAM</span> <span class="chip" style="font-size: 10px;">5G mesh</span></td>
+                <td>Series C 1,200억<br/><small class="text-muted">한화CVC Lead</small></td>
+                <td><strong style="color:var(--success);">강함</strong><br/><small class="text-muted">한화 인수 협의 중</small></td>
+                <td>10조 적용<br/><small class="text-muted">신성장 ✓</small></td>
+                <td class="num">86.4 <span class="alpha-bar"><span style="width:86%;"></span></span></td>
+              </tr>
+              <tr>
+                <td><strong style="color:var(--gold-300);">B</strong></td>
+                <td><strong style="color: var(--text-primary);">UGV-Bravo</strong><br/><small class="text-muted">전투용 무인지상로봇</small></td>
+                <td><span class="chip chip--blue" style="font-size: 10px;">UGV</span> <span class="chip" style="font-size: 10px;">방호장갑</span></td>
+                <td>Series B+ 800억<br/><small class="text-muted">KIC + 미래에셋</small></td>
+                <td><strong style="color:var(--gold-300);">중간</strong><br/><small class="text-muted">IPO 주관사 RFP</small></td>
+                <td>10조 + 12조<br/><small class="text-muted">원천기술 ✓</small></td>
+                <td class="num">81.2 <span class="alpha-bar"><span style="width:81%;"></span></span></td>
+              </tr>
+              <tr>
+                <td><strong style="color:var(--gold-300);">C</strong></td>
+                <td><strong style="color: var(--text-primary);">SAT-Charlie</strong><br/><small class="text-muted">SAR 소형 위성</small></td>
+                <td><span class="chip chip--blue" style="font-size: 10px;">SAR</span> <span class="chip" style="font-size: 10px;">위성통신</span></td>
+                <td>Series B 600억<br/><small class="text-muted">CVC + KDB</small></td>
+                <td><strong style="color:var(--text-secondary);">약함</strong><br/><small class="text-muted">SPAC 시도 실패</small></td>
+                <td>10조 적용<br/><small class="text-muted">+ 외환 이슈</small></td>
+                <td class="num">73.8 <span class="alpha-bar"><span style="width:74%;"></span></span></td>
+              </tr>
+              <tr>
+                <td><strong style="color:var(--gold-300);">D</strong></td>
+                <td><strong style="color: var(--text-primary);">MED-Delta</strong><br/><small class="text-muted">전장 응급 의료 드론</small></td>
+                <td><span class="chip chip--blue" style="font-size: 10px;">의료 AI</span> <span class="chip" style="font-size: 10px;">드론</span></td>
+                <td>Series B 350억<br/><small class="text-muted">바이오 + 방산 펀드</small></td>
+                <td><strong style="color:var(--gold-300);">중간</strong><br/><small class="text-muted">현대로템 평가 중</small></td>
+                <td>10조 + 22조<br/><small class="text-muted">의료기기 ✓</small></td>
+                <td class="num">79.5 <span class="alpha-bar"><span style="width:80%;"></span></span></td>
+              </tr>
+              <tr>
+                <td><strong style="color:var(--gold-300);">E</strong></td>
+                <td><strong style="color: var(--text-primary);">SEN-Echo</strong><br/><small class="text-muted">EO/IR 광학 센서</small></td>
+                <td><span class="chip chip--blue" style="font-size: 10px;">EO/IR</span> <span class="chip" style="font-size: 10px;">레이더 통합</span></td>
+                <td>Series A 200억<br/><small class="text-muted">한화에어로 LP</small></td>
+                <td><strong style="color:var(--text-secondary);">약함</strong><br/><small class="text-muted">초기 단계</small></td>
+                <td>10조 적용<br/><small class="text-muted">신성장 ✓</small></td>
+                <td class="num">68.4 <span class="alpha-bar"><span style="width:68%;"></span></span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p class="text-muted mt-4 mb-0" style="font-size: var(--fs-xs);">
+          * 본 데이터는 사례 시연용 합성 예시입니다. 실 데이터는 6채널 발행물 NER+RE 결과 + B2B 그래프 라이선스(Stream 09)를 통해 SPARQL 1.1 endpoint로 제공됩니다.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 4. Knowledge Graph SVG ===== -->
+  <section class="section" style="background: var(--bg-elev-1);">
+    <div class="container">
+      <div data-reveal>
+        <span class="eyebrow">04 · Knowledge Graph</span>
+        <h2 style="margin-top: var(--s-4);">사실·관계 그래프</h2>
+        <p>6채널에서 추출된 엔티티(인물·기업·기술·세제)와 관계를 그래프로 시각화. 노드에 마우스를 올려보세요.</p>
+      </div>
+
+      <div class="kg-wrap mt-6" data-reveal>
+        <svg class="kg-svg" viewBox="0 0 1100 720" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="K-방산 무인화 IPO 통합 지식 그래프">
+          <defs>
+            <marker id="kgArr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M0 0L10 5L0 10z" fill="rgba(212,165,116,0.55)"/>
+            </marker>
+            <marker id="kgArrPurple" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M0 0L10 5L0 10z" fill="rgba(192,132,252,0.55)"/>
+            </marker>
+            <linearGradient id="centerGrad" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#d4a574" stop-opacity="0.30"/>
+              <stop offset="100%" stop-color="#c084fc" stop-opacity="0.20"/>
+            </linearGradient>
+          </defs>
+
+          <!-- ====== Layer 0: 6 Channel sources (top, dashed) ====== -->
+          <g class="kg-channels">
+            <g class="kg-node" data-tip="biotimes">
+              <rect x="20"  y="10" width="120" height="36" rx="18" fill="rgba(74,222,128,0.10)" stroke="#4ade80" stroke-width="1"/>
+              <text x="80"  y="33" text-anchor="middle" class="kg-node-label" font-size="11" fill="#4ade80">바이오타임즈</text>
+            </g>
+            <g class="kg-node" data-tip="arg">
+              <rect x="160" y="10" width="120" height="36" rx="18" fill="rgba(74,144,226,0.10)" stroke="#4a90e2" stroke-width="1"/>
+              <text x="220" y="33" text-anchor="middle" class="kg-node-label" font-size="11" fill="#4a90e2">애틀러스리서치</text>
+            </g>
+            <g class="kg-node" data-tip="startuptoday">
+              <rect x="300" y="10" width="120" height="36" rx="18" fill="rgba(251,191,36,0.10)" stroke="#fbbf24" stroke-width="1"/>
+              <text x="360" y="33" text-anchor="middle" class="kg-node-label" font-size="11" fill="#fbbf24">스타트업투데이</text>
+            </g>
+            <g class="kg-node" data-tip="kmna">
+              <rect x="440" y="10" width="170" height="36" rx="18" fill="rgba(212,165,116,0.10)" stroke="#d4a574" stroke-width="1"/>
+              <text x="525" y="33" text-anchor="middle" class="kg-node-label" font-size="11" fill="#d4a574">한국M&amp;A경제신문</text>
+            </g>
+            <g class="kg-node" data-tip="defensetoday">
+              <rect x="630" y="10" width="120" height="36" rx="18" fill="rgba(248,113,113,0.10)" stroke="#f87171" stroke-width="1"/>
+              <text x="690" y="33" text-anchor="middle" class="kg-node-label" font-size="11" fill="#f87171">디펜스투데이</text>
+            </g>
+            <g class="kg-node" data-tip="localtax">
+              <rect x="770" y="10" width="140" height="36" rx="18" fill="rgba(192,132,252,0.10)" stroke="#c084fc" stroke-width="1"/>
+              <text x="840" y="33" text-anchor="middle" class="kg-node-label" font-size="11" fill="#c084fc">월간지방세연구</text>
+            </g>
+          </g>
+
+          <!-- ====== Layer 1: Center (Combined Insight Node) ====== -->
+          <g class="kg-node">
+            <rect x="370" y="320" width="360" height="80" rx="14" fill="url(#centerGrad)" stroke="#d4a574" stroke-width="2"/>
+            <text x="550" y="350" text-anchor="middle" class="kg-node-label" font-size="14" fill="#e8eaed">K-방산 무인화 IPO 통합 평가</text>
+            <text x="550" y="370" text-anchor="middle" class="kg-node-sub" font-size="10">2026 R-Alpha Ranking · 5 후보</text>
+            <text x="550" y="386" text-anchor="middle" class="kg-node-sub" font-size="9" fill="#d4a574">★ Combined Output</text>
+          </g>
+
+          <!-- ====== Layer 2: 5 Companies (radial around center) ====== -->
+          <g class="kg-companies">
+            <g class="kg-node" data-tip="UAV-Alpha">
+              <circle cx="155" cy="280" r="42" fill="rgba(212,165,116,0.18)" stroke="#d4a574" stroke-width="2"/>
+              <text x="155" y="278" text-anchor="middle" class="kg-node-label" font-size="12" fill="#e8eaed">UAV-Alpha</text>
+              <text x="155" y="294" text-anchor="middle" class="kg-node-sub">86.4</text>
+            </g>
+            <g class="kg-node" data-tip="UGV-Bravo">
+              <circle cx="200" cy="500" r="42" fill="rgba(212,165,116,0.18)" stroke="#d4a574" stroke-width="2"/>
+              <text x="200" y="498" text-anchor="middle" class="kg-node-label" font-size="12" fill="#e8eaed">UGV-Bravo</text>
+              <text x="200" y="514" text-anchor="middle" class="kg-node-sub">81.2</text>
+            </g>
+            <g class="kg-node" data-tip="SAT-Charlie">
+              <circle cx="550" cy="610" r="42" fill="rgba(212,165,116,0.18)" stroke="#d4a574" stroke-width="2"/>
+              <text x="550" y="608" text-anchor="middle" class="kg-node-label" font-size="12" fill="#e8eaed">SAT-Charlie</text>
+              <text x="550" y="624" text-anchor="middle" class="kg-node-sub">73.8</text>
+            </g>
+            <g class="kg-node" data-tip="MED-Delta">
+              <circle cx="900" cy="500" r="42" fill="rgba(212,165,116,0.18)" stroke="#d4a574" stroke-width="2"/>
+              <text x="900" y="498" text-anchor="middle" class="kg-node-label" font-size="12" fill="#e8eaed">MED-Delta</text>
+              <text x="900" y="514" text-anchor="middle" class="kg-node-sub">79.5</text>
+            </g>
+            <g class="kg-node" data-tip="SEN-Echo">
+              <circle cx="945" cy="280" r="42" fill="rgba(212,165,116,0.18)" stroke="#d4a574" stroke-width="2"/>
+              <text x="945" y="278" text-anchor="middle" class="kg-node-label" font-size="12" fill="#e8eaed">SEN-Echo</text>
+              <text x="945" y="294" text-anchor="middle" class="kg-node-sub">68.4</text>
+            </g>
+          </g>
+
+          <!-- ====== Layer 3: Cross-cutting concept nodes ====== -->
+          <g class="kg-nodes">
+            <!-- 기술 -->
+            <g class="kg-node" data-tip="SLAM/AI">
+              <rect x="85" y="170" width="100" height="34" rx="17" fill="rgba(74,144,226,0.10)" stroke="#4a90e2"/>
+              <text x="135" y="192" text-anchor="middle" class="kg-node-label" font-size="11" fill="#7eb6f5">SLAM·AI</text>
+            </g>
+            <g class="kg-node" data-tip="5G mesh">
+              <rect x="40" y="380" width="100" height="34" rx="17" fill="rgba(74,144,226,0.10)" stroke="#4a90e2"/>
+              <text x="90"  y="402" text-anchor="middle" class="kg-node-label" font-size="11" fill="#7eb6f5">5G mesh</text>
+            </g>
+            <g class="kg-node" data-tip="EO/IR">
+              <rect x="965" y="380" width="100" height="34" rx="17" fill="rgba(74,144,226,0.10)" stroke="#4a90e2"/>
+              <text x="1015" y="402" text-anchor="middle" class="kg-node-label" font-size="11" fill="#7eb6f5">EO/IR</text>
+            </g>
+
+            <!-- VC / 펀딩 -->
+            <g class="kg-node" data-tip="한화CVC">
+              <rect x="40" y="80" width="110" height="32" rx="16" fill="rgba(251,191,36,0.10)" stroke="#fbbf24"/>
+              <text x="95"  y="100" text-anchor="middle" class="kg-node-label" font-size="11" fill="#fbbf24">한화CVC</text>
+            </g>
+            <g class="kg-node" data-tip="KIC">
+              <rect x="975" y="120" width="80" height="32" rx="16" fill="rgba(251,191,36,0.10)" stroke="#fbbf24"/>
+              <text x="1015" y="140" text-anchor="middle" class="kg-node-label" font-size="11" fill="#fbbf24">KIC</text>
+            </g>
+
+            <!-- M&A 인수 후보 -->
+            <g class="kg-node" data-tip="한화·LIG·현대로템">
+              <rect x="690" y="170" width="200" height="40" rx="20" fill="rgba(212,165,116,0.18)" stroke="#d4a574"/>
+              <text x="790" y="187" text-anchor="middle" class="kg-node-label" font-size="11" fill="#e6c895">한화·LIG·현대로템</text>
+              <text x="790" y="201" text-anchor="middle" class="kg-node-sub" font-size="9">잠재 인수 후보</text>
+            </g>
+
+            <!-- 세제 -->
+            <g class="kg-node" data-tip="조특법 10조 / 12조">
+              <rect x="430" y="640" width="240" height="40" rx="20" fill="rgba(192,132,252,0.10)" stroke="#c084fc"/>
+              <text x="550" y="657" text-anchor="middle" class="kg-node-label" font-size="11" fill="#d8a4fd">조특법 10조 (R&amp;D 공제)</text>
+              <text x="550" y="671" text-anchor="middle" class="kg-node-sub" font-size="9" fill="#c084fc">+ 12조 (원천기술) · 22조 (의료)</text>
+            </g>
+
+            <!-- 듀얼유스 (의료) -->
+            <g class="kg-node" data-tip="의료 듀얼유스">
+              <rect x="800" y="615" width="160" height="34" rx="17" fill="rgba(74,222,128,0.10)" stroke="#4ade80"/>
+              <text x="880" y="637" text-anchor="middle" class="kg-node-label" font-size="11" fill="#4ade80">의료 듀얼유스</text>
+            </g>
+
+            <!-- 군 도입 -->
+            <g class="kg-node" data-tip="한국군 KMUS">
+              <rect x="370" y="240" width="160" height="34" rx="17" fill="rgba(248,113,113,0.10)" stroke="#f87171"/>
+              <text x="450" y="262" text-anchor="middle" class="kg-node-label" font-size="11" fill="#f87171">한국군 도입 임박</text>
+            </g>
+            <g class="kg-node" data-tip="규제: 방산법 14조">
+              <rect x="555" y="240" width="160" height="34" rx="17" fill="rgba(248,113,113,0.10)" stroke="#f87171"/>
+              <text x="635" y="262" text-anchor="middle" class="kg-node-label" font-size="11" fill="#f87171">방산법 14조 외인제한</text>
+            </g>
+          </g>
+
+          <!-- ====== Channel feed-in edges (dashed, low-opacity) ====== -->
+          <g>
+            <line class="kg-edge kg-channel-edge" x1="80"  y1="46" x2="135" y2="170" stroke="#4ade80"/>
+            <line class="kg-edge kg-channel-edge" x1="220" y1="46" x2="135" y2="170" stroke="#4a90e2"/>
+            <line class="kg-edge kg-channel-edge" x1="220" y1="46" x2="90"  y2="380" stroke="#4a90e2"/>
+            <line class="kg-edge kg-channel-edge" x1="220" y1="46" x2="1015" y2="380" stroke="#4a90e2"/>
+            <line class="kg-edge kg-channel-edge" x1="360" y1="46" x2="95"  y2="80" stroke="#fbbf24"/>
+            <line class="kg-edge kg-channel-edge" x1="360" y1="46" x2="1015" y2="120" stroke="#fbbf24"/>
+            <line class="kg-edge kg-channel-edge" x1="525" y1="46" x2="790" y2="170" stroke="#d4a574"/>
+            <line class="kg-edge kg-channel-edge" x1="690" y1="46" x2="450" y2="240" stroke="#f87171"/>
+            <line class="kg-edge kg-channel-edge" x1="690" y1="46" x2="635" y2="240" stroke="#f87171"/>
+            <line class="kg-edge kg-channel-edge" x1="840" y1="46" x2="550" y2="640" stroke="#c084fc"/>
+            <line class="kg-edge kg-channel-edge" x1="80"  y1="46" x2="880" y2="615" stroke="#4ade80"/>
+          </g>
+
+          <!-- ====== Concept ↔ Company edges ====== -->
+          <g>
+            <line class="kg-edge" x1="155" y1="238" x2="135" y2="204" marker-end="url(#kgArr)"/>
+            <line class="kg-edge" x1="155" y1="322" x2="90"  y2="414" marker-end="url(#kgArr)"/>
+            <line class="kg-edge" x1="155" y1="238" x2="95"  y2="112" marker-end="url(#kgArr)"/>
+            <line class="kg-edge" x1="200" y1="458" x2="90"  y2="414" marker-end="url(#kgArr)"/>
+            <line class="kg-edge" x1="945" y1="238" x2="1015" y2="152" marker-end="url(#kgArr)"/>
+            <line class="kg-edge" x1="945" y1="238" x2="1015" y2="380" marker-end="url(#kgArr)"/>
+            <line class="kg-edge" x1="900" y1="458" x2="880" y2="615" marker-end="url(#kgArr)"/>
+            <line class="kg-edge" x1="155" y1="238" x2="450" y2="240" marker-end="url(#kgArr)"/>
+            <line class="kg-edge" x1="200" y1="458" x2="450" y2="274" marker-end="url(#kgArr)"/>
+
+            <!-- M&A 인수 후보 → 기업 -->
+            <line class="kg-edge" x1="790" y1="210" x2="155" y2="280" marker-end="url(#kgArr)"/>
+            <line class="kg-edge" x1="790" y1="210" x2="200" y2="500" marker-end="url(#kgArr)"/>
+            <line class="kg-edge" x1="790" y1="210" x2="900" y2="500" marker-end="url(#kgArr)"/>
+
+            <!-- 외인 제한 → 위성 -->
+            <line class="kg-edge" x1="635" y1="274" x2="550" y2="610" marker-end="url(#kgArr)"/>
+          </g>
+
+          <!-- ====== Center ↔ Companies (gold) ====== -->
+          <g>
+            <line class="kg-edge" x1="370" y1="345" x2="155" y2="280" stroke="rgba(212,165,116,0.45)" stroke-width="1.5" marker-start="url(#kgArr)"/>
+            <line class="kg-edge" x1="380" y1="385" x2="200" y2="500" stroke="rgba(212,165,116,0.45)" stroke-width="1.5" marker-start="url(#kgArr)"/>
+            <line class="kg-edge" x1="550" y1="400" x2="550" y2="610" stroke="rgba(212,165,116,0.45)" stroke-width="1.5" marker-start="url(#kgArr)"/>
+            <line class="kg-edge" x1="720" y1="385" x2="900" y2="500" stroke="rgba(212,165,116,0.45)" stroke-width="1.5" marker-start="url(#kgArr)"/>
+            <line class="kg-edge" x1="730" y1="345" x2="945" y2="280" stroke="rgba(212,165,116,0.45)" stroke-width="1.5" marker-start="url(#kgArr)"/>
+          </g>
+
+          <!-- ====== Center ↔ 세제 (purple) ====== -->
+          <g>
+            <line class="kg-edge" x1="550" y1="400" x2="550" y2="640" stroke="rgba(192,132,252,0.55)" stroke-width="1.5" marker-end="url(#kgArrPurple)"/>
+          </g>
+
+          <!-- ====== Edge labels (selected) ====== -->
+          <g>
+            <text x="265" y="220" class="kg-edge-label">funded_by</text>
+            <text x="800" y="285" class="kg-edge-label">m&amp;a_target_of</text>
+            <text x="595" y="535" class="kg-edge-label">tax_eligible</text>
+            <text x="430" y="450" class="kg-edge-label">aggregated_in</text>
+          </g>
+
+          <!-- ====== Legend ====== -->
+          <g transform="translate(40, 685)">
+            <text x="0" y="0" font-size="9" fill="#9aa0b3" letter-spacing="1.4">RANGE</text>
+            <circle cx="58"  cy="-3" r="6" fill="rgba(212,165,116,0.18)" stroke="#d4a574"/><text x="68"  y="0" font-size="10" fill="#9aa0b3">기업</text>
+            <rect   x="100" y="-9" width="14" height="6" rx="3" fill="rgba(74,144,226,0.10)" stroke="#4a90e2"/><text x="118" y="0" font-size="10" fill="#9aa0b3">기술</text>
+            <rect   x="146" y="-9" width="14" height="6" rx="3" fill="rgba(251,191,36,0.10)" stroke="#fbbf24"/><text x="164" y="0" font-size="10" fill="#9aa0b3">VC</text>
+            <rect   x="184" y="-9" width="14" height="6" rx="3" fill="rgba(248,113,113,0.10)" stroke="#f87171"/><text x="202" y="0" font-size="10" fill="#9aa0b3">규제·도입</text>
+            <rect   x="244" y="-9" width="14" height="6" rx="3" fill="rgba(192,132,252,0.10)" stroke="#c084fc"/><text x="262" y="0" font-size="10" fill="#9aa0b3">세제</text>
+            <rect   x="290" y="-9" width="14" height="6" rx="3" fill="rgba(74,222,128,0.10)" stroke="#4ade80"/><text x="308" y="0" font-size="10" fill="#9aa0b3">바이오</text>
+          </g>
+        </svg>
+      </div>
+
+      <p class="text-muted mt-3 text-center" style="font-size: var(--fs-xs);">
+        실제 그래프 라이선스 고객은 위 노드/엣지를 SPARQL 1.1로 직접 쿼리하며, OWL2 추론을 통해 자동 생성된 함의 사실까지 받아갑니다 →
+        <a href="graph-license.html" style="color: var(--gold-300);">Stream 09 그래프 라이선스 자세히</a>
+      </p>
+    </div>
+  </section>
+
+  <!-- ===== 5. Ontology Mapping ===== -->
+  <section class="section">
+    <div class="container">
+      <div data-reveal>
+        <span class="eyebrow">05 · Ontology Mapping</span>
+        <h2 style="margin-top: var(--s-4);">FIBO·XBRL·도메인 클래스 매핑</h2>
+        <p>이 사례 그래프의 노드·관계가 어떤 국제 표준 클래스에 매핑되는지 — 글로벌 LLM 회사가 추가 변환 없이 인용 가능한 형태입니다.</p>
+      </div>
+
+      <div class="card mt-6" data-reveal style="padding: 0; overflow-x: auto;">
+        <table class="ont-table">
+          <thead>
+            <tr>
+              <th style="width: 24%;">도메인 엔티티</th>
+              <th style="width: 32%;">표준 클래스 (FIBO/XBRL/Schema.org)</th>
+              <th style="width: 22%;">IBH 도메인 클래스</th>
+              <th>예시 트리플</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>비상장 기업 (UAV-Alpha 등)</strong></td>
+              <td><code>fibo-fbc-fct:PrivatelyHeldCompany</code><br/><small class="text-muted">+ <code>fibo-be-le-lp:LegalEntity</code></small></td>
+              <td><code>ibh:DefenseStartup</code></td>
+              <td><code>ibh:UAV-Alpha rdf:type ibh:DefenseStartup</code></td>
+            </tr>
+            <tr>
+              <td><strong>VC 펀딩 라운드</strong></td>
+              <td><code>fibo-sec-eq-eq:Equity</code><br/><small class="text-muted">+ <code>fibo-fnd-acc-cur:MonetaryAmount</code></small></td>
+              <td><code>ibh:FundingRound</code></td>
+              <td><code>ibh:UAV-Alpha ibh:hasFundingRound _:r1 ; _:r1 ibh:stage "Series C" ; ibh:amount 12000000000</code></td>
+            </tr>
+            <tr>
+              <td><strong>M&amp;A 인수 후보</strong></td>
+              <td><code>fibo-be-corpactions-corpactions:MergerAndAcquisition</code></td>
+              <td><code>ibh:AcquisitionInterest</code></td>
+              <td><code>ibh:Hanwha ibh:potentiallyAcquires ibh:UAV-Alpha</code></td>
+            </tr>
+            <tr>
+              <td><strong>R&amp;D 세제 혜택</strong></td>
+              <td><code>xbrl:TaxCreditAmount</code><br/><small class="text-muted">+ <code>schema:Legislation</code></small></td>
+              <td><code>ibh:TaxCreditScheme</code></td>
+              <td><code>ibh:UAV-Alpha ibh:eligibleFor ibh:TXCS-special-art10</code></td>
+            </tr>
+            <tr>
+              <td><strong>방산 규제 (방산법 14조)</strong></td>
+              <td><code>schema:Legislation</code><br/><small class="text-muted">+ <code>fibo-fnd-law-jur:Jurisdiction</code></small></td>
+              <td><code>ibh:DefenseRegulation</code></td>
+              <td><code>ibh:DefIndustryAct-Art14 ibh:restricts ibh:ForeignOwnership</code></td>
+            </tr>
+            <tr>
+              <td><strong>듀얼유스 의료 응용</strong></td>
+              <td><code>schema:MedicalDevice</code></td>
+              <td><code>ibh:DualUseApplication</code></td>
+              <td><code>ibh:MED-Delta ibh:hasApplication ibh:EmergencyMedicalDrone</code></td>
+            </tr>
+            <tr>
+              <td><strong>출처 매체 (Provenance)</strong></td>
+              <td><code>prov:Entity</code> + <code>prov:wasDerivedFrom</code></td>
+              <td><code>ibh:NewsArticle</code></td>
+              <td><code>ibh:_:r1 prov:wasDerivedFrom ibh:Article-startuptoday-2026-04-12</code></td>
+            </tr>
+            <tr style="background: var(--glass-gold);">
+              <td colspan="4" style="font-size: var(--fs-xs); color: var(--gold-300);">
+                ★ 모든 트리플은 출처(Provenance)와 시점이 함께 저장되어, AI 응답에서 자동 인용 가능합니다.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 6. Single vs Combined ===== -->
+  <section class="section" style="background: var(--bg-elev-1);">
+    <div class="container">
+      <div data-reveal>
+        <span class="eyebrow">06 · Single vs Combined</span>
+        <h2 style="margin-top: var(--s-4);">단일 매체 답변 vs 6채널 결합 답변</h2>
+        <p>같은 질문에 대한 두 가지 응답을 비교하면 결합의 가치가 한눈에 드러납니다.</p>
+      </div>
+
+      <div class="vs-grid mt-6">
+        <div class="vs-card vs-card--single" data-reveal>
+          <span class="vs-tag vs-tag--single">단일 매체 (디펜스투데이)</span>
+          <h4>전형적 응답</h4>
+          <ul>
+            <li>무인지상로봇 양산 단가 35% 하락</li>
+            <li>한국군 도입 임박 8건</li>
+            <li>드론 군집 기술 보유 14사 (목록만)</li>
+          </ul>
+          <p class="text-muted mt-3 mb-0" style="font-size: var(--fs-xs);">
+            → 산업 동향 보고. 의사결정에 부족.
+            <strong style="color: var(--danger);">"투자 판단을 위해 자본·세제·M&amp;A 정보가 추가로 필요"</strong>
+          </p>
+        </div>
+
+        <div class="vs-card vs-card--combined" data-reveal>
+          <span class="vs-tag vs-tag--combined">★ 6채널 결합 (Insight Bank Hub)</span>
+          <h4>통합 응답</h4>
+          <ul>
+            <li>
+              <strong style="color: var(--text-primary);">UAV-Alpha</strong>:
+              한화CVC 시리즈 C 1,200억 (스타트업투데이) ·
+              한화 인수 협상 중 (KMNA 단독) ·
+              조특법 10조 신성장기술 적용 (지방세) ·
+              SLAM·5G mesh 기술 모트 강함 (디펜스투데이) ·
+              <strong style="color: var(--gold-300);">R-Alpha 86.4</strong>
+            </li>
+            <li>
+              <strong style="color: var(--text-primary);">MED-Delta</strong>:
+              전장 응급 + 의료 듀얼유스 매출 35% (바이오타임즈) →
+              valuation 프리미엄 +40%, 의료기기 인증 통한 외인 인수 가능 (KMNA),
+              조특법 22조 의료 R&amp;D 적용 (지방세)
+            </li>
+            <li>… 5종 모두 다층 사실 결합</li>
+          </ul>
+          <p class="mt-3 mb-0" style="font-size: var(--fs-xs); color: var(--gold-300);">
+            → 의사결정 가능 자산. <strong style="color: var(--text-primary);">사모펀드·IB·정부가 1쿼리로 컨설턴트 1주일 작업을 대체.</strong>
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 7. 고객 유형별 활용 ===== -->
+  <section class="section">
+    <div class="container">
+      <div data-reveal>
+        <span class="eyebrow">07 · Customer Use Cases</span>
+        <h2 style="margin-top: var(--s-4);">이 결합 인사이트를 활용하는 5가지 고객 유형</h2>
+      </div>
+
+      <div class="grid grid-3 mt-6">
+        <article class="card" data-reveal>
+          <span class="chip chip--gold">법무법인</span>
+          <h4 class="card__title mt-3">방산 M&amp;A 자문</h4>
+          <p class="card__desc">5종 후보의 외인 제한·세제 영향·계약 구조를 1쿼리로. 자문 수임 첫 미팅에서 즉시 인사이트 제공.</p>
+        </article>
+        <article class="card" data-reveal>
+          <span class="chip chip--gold">사모펀드/IB</span>
+          <h4 class="card__title mt-3">투자 후보 스크리닝</h4>
+          <p class="card__desc">Risk-adjusted Alpha 점수로 200+ 무인화 기업에서 5종 압축. 듀일리전스 시간 60% 단축.</p>
+        </article>
+        <article class="card" data-reveal>
+          <span class="chip chip--gold">대기업 IR/신사업</span>
+          <h4 class="card__title mt-3">전략적 인수 평가</h4>
+          <p class="card__desc">한화·LIG·현대로템이 사전에 후보군을 정량 평가. 임원 분기 브리핑에 즉시 활용.</p>
+        </article>
+        <article class="card" data-reveal>
+          <span class="chip chip--gold">정부·공공</span>
+          <h4 class="card__title mt-3">정책 효과 정량 측정</h4>
+          <p class="card__desc">조특법 10조·12조·22조 적용 효과를 기업·산업 단위로 추적. 세제 개편 시뮬레이션 가능.</p>
+        </article>
+        <article class="card" data-reveal style="background: linear-gradient(135deg, var(--glass-gold), var(--glass-purple-soft)); border-color: var(--border-gold);">
+          <span class="chip chip--gold">★ LLM 회사 (Strategic)</span>
+          <h4 class="card__title mt-3">한국 도메인 학습 데이터</h4>
+          <p class="card__desc">트리플 덤프 + Provenance + 다국어 → ChatGPT·Claude·Gemini 한국어 답변 정확도 향상. 5억+ Strategic Tier.</p>
+        </article>
+        <article class="card" data-reveal>
+          <span class="chip chip--gold">선명회계 본업</span>
+          <h4 class="card__title mt-3">M&amp;A 자문 + 세무 결합</h4>
+          <p class="card__desc">방산 M&amp;A 자문 시 데이터 백본 활용 → 거래 단가 +30~50% 정당화. 본업 시너지 핵심 사례.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 8. CTA ===== -->
+  <section class="section section--lg">
+    <div class="container">
+      <div class="card card--featured text-center" style="padding: var(--s-8);" data-reveal>
+        <span class="eyebrow">Bottom Line</span>
+        <h2 style="margin: var(--s-4) 0;">"같은 데이터를 6번 사면, 같은 답이 6번 나옵니다."</h2>
+        <p style="max-width: 640px; margin: 0 auto var(--s-6);">
+          하지만 6채널을 결합하면 그 어디에도 없는 통합 자산이 생깁니다. 이 사례는 36종 상품 중 #06 그래프 라이선스 + #20 맞춤 분석의 출력 예시이며, 실제 고객은 SPARQL 1.1 endpoint로 자체 시스템에 연결합니다.
+        </p>
+        <div class="hero__cta">
+          <a class="btn btn--primary btn--lg" href="graph-license.html">그래프 라이선스 자세히</a>
+          <a class="btn btn--ghost btn--lg" href="proposal.html">계약 제안서 보기</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="footer__cta-strip">
+      <div class="container">
+        <div class="row" style="justify-content:space-between; align-items:center; flex-wrap:wrap; gap:var(--s-4);">
+          <div>
+            <h3>여섯 채널의 권위, 하나의 인사이트 뱅크 허브로</h3>
+            <p>제안서 검토부터 시작하시거나, 데모 모듈을 둘러보세요.</p>
+          </div>
+          <div class="row gap-2">
+            <a class="btn btn--primary" href="proposal.html">제안서 보기</a>
+            <a class="btn btn--ghost" href="dashboard.html">데모 대시보드</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer__main">
+      <div class="container">
+        <div class="footer__grid">
+          <div class="footer__brand-col">
+            <img src="assets/logo.svg" alt="Insight Bank Hub" />
+            <p class="footer__tagline">6개 인터넷 매체를 통합한 GEO-AIO 싱크탱크 허브.<br/>분산된 채널을 인용 가능한 자산으로 전환합니다.</p>
+            <div class="footer__langs">🇰🇷 🇺🇸 🇨🇳 🇯🇵 🇪🇸 🇫🇷 🇩🇪 🇸🇦</div>
+          </div>
+          <div class="footer__col">
+            <h5>플랫폼</h5>
+            <a href="dashboard.html">통합 대시보드</a>
+            <a href="content.html">콘텐츠 관리</a>
+            <a href="knowledge.html">RAG 지식베이스</a>
+            <a href="ontology.html">온톨로지</a>
+            <a href="graph-license.html">그래프 라이선스</a>
+            <a href="chatbot.html">RAG 챗봇</a>
+          </div>
+          <div class="footer__col">
+            <h5>자료</h5>
+            <a href="index.html">개요</a>
+            <a href="channels.html">6개 채널</a>
+            <a href="products.html">상품·서비스</a>
+            <a href="competitive-landscape.html">경쟁 환경</a>
+            <a href="monetization.html">수익 모델</a>
+            <a href="case-study.html">사례 보기</a>
+            <a href="proposal.html">계약 제안서</a>
+            <a href="manual.html">운영 매뉴얼</a>
+          </div>
+          <div class="footer__col">
+            <h5>연락처</h5>
+            <p>jaiwshim@gmail.com</p>
+            <p>평일 09:00 – 18:00 KST</p>
+            <p>SLA 24/7 비상 라인</p>
+            <a href="proposal.html" class="btn btn--ghost btn--sm" style="margin-top:8px; display:inline-flex;">파트너 문의 →</a>
+          </div>
+        </div>
+
+        <hr class="footer__divider" />
+
+        <div class="footer__bottom">
+          <span>© 2026 Insight Bank Hub. All rights reserved.</span>
+          <div class="footer__legal">
+            <a href="#">이용약관</a>
+            <a href="#">개인정보처리방침</a>
+            <a href="#">llms.txt</a>
+            <span class="footer__seal">v1.0 · Confidential</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/common.js"></script>
+</body>
+</html>
