@@ -1,8 +1,8 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
-  <rect width="64" height="64" rx="14" fill="#0a0e1a"/>
-  <rect x="6" y="6" width="52" height="52" rx="11" fill="#0a0e1a" stroke="#4a90e2" stroke-width="2"/>
-  <text x="22" y="42" font-family="'Pretendard', system-ui, sans-serif" font-weight="900" font-size="30" fill="#e8eaed" text-anchor="middle">i</text>
-  <text x="42" y="42" font-family="'Pretendard', system-ui, sans-serif" font-weight="900" font-size="30" fill="#4a90e2" text-anchor="middle">B</text>
-  <line x1="14" y1="50" x2="50" y2="50" stroke="#d4a574" stroke-width="2" stroke-linecap="round"/>
-  <text x="32" y="60" font-family="sans-serif" font-weight="700" font-size="9" letter-spacing="2" fill="#d4a574" text-anchor="middle">HUB</text>
+  <rect width="64" height="64" rx="14" fill="#fafaf6"/>
+  <rect x="6" y="6" width="52" height="52" rx="11" fill="#fbf6ec" stroke="#1d4f93" stroke-width="2"/>
+  <text x="22" y="42" font-family="'Pretendard', system-ui, sans-serif" font-weight="900" font-size="30" fill="#0a0e1a" text-anchor="middle">i</text>
+  <text x="42" y="42" font-family="'Pretendard', system-ui, sans-serif" font-weight="900" font-size="30" fill="#1d4f93" text-anchor="middle">B</text>
+  <line x1="14" y1="50" x2="50" y2="50" stroke="#b8864e" stroke-width="2" stroke-linecap="round"/>
+  <text x="32" y="60" font-family="sans-serif" font-weight="700" font-size="9" letter-spacing="2" fill="#8a6135" text-anchor="middle">HUB</text>
 </svg>

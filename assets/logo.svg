@@ -3,12 +3,12 @@
     .ibh-w { font-family: 'Pretendard', 'Noto Sans KR', system-ui, sans-serif; font-weight: 900; letter-spacing: -0.02em; }
     .ibh-h { font-family: 'Pretendard', 'Noto Sans KR', system-ui, sans-serif; font-weight: 700; letter-spacing: 0.55em; }
   </style>
-  <!-- Top row: INSIGHT (white) + BANK (blue) -->
+  <!-- Top row: INSIGHT (deep ink) + BANK (deep blue) — readable on white -->
   <text x="200" y="56" class="ibh-w" font-size="46" text-anchor="middle">
-    <tspan fill="#e8eaed">INSIGHT</tspan><tspan fill="#4a90e2" dx="10">BANK</tspan>
+    <tspan fill="#0a0e1a">INSIGHT</tspan><tspan fill="#1d4f93" dx="10">BANK</tspan>
   </text>
-  <!-- Bottom row: line — HUB — line (gold accent) -->
-  <line x1="80" y1="80" x2="170" y2="80" stroke="#d4a574" stroke-width="2.4" stroke-linecap="round"/>
-  <text x="200" y="88" class="ibh-h" font-size="20" fill="#d4a574" text-anchor="middle">HUB</text>
-  <line x1="230" y1="80" x2="320" y2="80" stroke="#d4a574" stroke-width="2.4" stroke-linecap="round"/>
+  <!-- Bottom row: line — HUB — line (deep gold accent) -->
+  <line x1="80" y1="80" x2="170" y2="80" stroke="#b8864e" stroke-width="2.4" stroke-linecap="round"/>
+  <text x="200" y="88" class="ibh-h" font-size="20" fill="#8a6135" text-anchor="middle">HUB</text>
+  <line x1="230" y1="80" x2="320" y2="80" stroke="#b8864e" stroke-width="2.4" stroke-linecap="round"/>
 </svg>
