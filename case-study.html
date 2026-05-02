@@ -96,11 +96,38 @@
     }
     .kg-node { transition: all 0.25s var(--ease-out); }
     .kg-node:hover { filter: brightness(1.25); cursor: pointer; }
-    .kg-node-label { font-family: 'KoPubWorld Dotum', sans-serif; font-weight: 700; pointer-events: none; }
-    .kg-node-sub { fill: #c8ccd6; font-size: 9px; pointer-events: none; }
-    .kg-edge { fill: none; stroke: rgba(212,165,116,0.30); stroke-width: 1.2; }
-    .kg-edge-label { font-size: 9px; fill: #c8ccd6; font-family: 'JetBrains Mono', monospace; pointer-events: none; }
-    .kg-channel-edge { stroke-dasharray: 3 3; opacity: 0.4; }
+    .kg-node-label {
+      font-family: 'KoPubWorld Dotum', sans-serif;
+      font-weight: 700;
+      pointer-events: none;
+      paint-order: stroke fill;
+      stroke: rgba(255,255,255,0.92);
+      stroke-width: 3.5px;
+      stroke-linejoin: round;
+    }
+    .kg-node-sub {
+      fill: #3a3a45;
+      font-size: 11px;
+      font-weight: 600;
+      pointer-events: none;
+      paint-order: stroke fill;
+      stroke: rgba(255,255,255,0.92);
+      stroke-width: 3px;
+      stroke-linejoin: round;
+    }
+    .kg-edge { fill: none; stroke: rgba(138,97,53,0.55); stroke-width: 1.4; }
+    .kg-edge-label {
+      font-size: 12px;
+      fill: #6e4a25;
+      font-weight: 700;
+      font-family: 'JetBrains Mono', monospace;
+      pointer-events: none;
+      paint-order: stroke fill;
+      stroke: rgba(255,255,255,0.95);
+      stroke-width: 4px;
+      stroke-linejoin: round;
+    }
+    .kg-channel-edge { stroke-dasharray: 3 3; opacity: 0.65; stroke-width: 1.4; }
 
     /* ===== Ontology mapping table ===== */
     .ont-table { width: 100%; border-collapse: collapse; font-size: var(--fs-sm); }
@@ -798,78 +825,78 @@
         <svg class="kg-svg" viewBox="0 0 1100 720" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="K-방산 무인화 IPO 통합 지식 그래프">
           <defs>
             <marker id="kgArr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-              <path d="M0 0L10 5L0 10z" fill="rgba(212,165,116,0.55)"/>
+              <path d="M0 0L10 5L0 10z" fill="rgba(138,97,53,0.75)"/>
             </marker>
             <marker id="kgArrPurple" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-              <path d="M0 0L10 5L0 10z" fill="rgba(192,132,252,0.55)"/>
+              <path d="M0 0L10 5L0 10z" fill="rgba(126,34,206,0.7)"/>
             </marker>
             <linearGradient id="centerGrad" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stop-color="#d4a574" stop-opacity="0.30"/>
-              <stop offset="100%" stop-color="#c084fc" stop-opacity="0.20"/>
+              <stop offset="0%" stop-color="#8a6135" stop-opacity="0.30"/>
+              <stop offset="100%" stop-color="#6b1ab0" stop-opacity="0.20"/>
             </linearGradient>
           </defs>
 
           <!-- ====== Layer 0: 6 Channel sources (top, dashed) ====== -->
           <g class="kg-channels">
             <g class="kg-node" data-tip="biotimes">
-              <rect x="20"  y="10" width="120" height="36" rx="18" fill="rgba(74,222,128,0.10)" stroke="#4ade80" stroke-width="1"/>
-              <text x="80"  y="33" text-anchor="middle" class="kg-node-label" font-size="11" fill="#4ade80">바이오타임즈</text>
+              <rect x="20"  y="10" width="120" height="36" rx="18" fill="rgba(74,222,128,0.10)" stroke="#15803d" stroke-width="1"/>
+              <text x="80"  y="33" text-anchor="middle" class="kg-node-label" font-size="11" fill="#15803d">바이오타임즈</text>
             </g>
             <g class="kg-node" data-tip="arg">
-              <rect x="160" y="10" width="120" height="36" rx="18" fill="rgba(74,144,226,0.10)" stroke="#4a90e2" stroke-width="1"/>
-              <text x="220" y="33" text-anchor="middle" class="kg-node-label" font-size="11" fill="#4a90e2">애틀러스리서치</text>
+              <rect x="160" y="10" width="120" height="36" rx="18" fill="rgba(74,144,226,0.10)" stroke="#1d4f93" stroke-width="1"/>
+              <text x="220" y="33" text-anchor="middle" class="kg-node-label" font-size="11" fill="#1d4f93">애틀러스리서치</text>
             </g>
             <g class="kg-node" data-tip="startuptoday">
-              <rect x="300" y="10" width="120" height="36" rx="18" fill="rgba(251,191,36,0.10)" stroke="#fbbf24" stroke-width="1"/>
-              <text x="360" y="33" text-anchor="middle" class="kg-node-label" font-size="11" fill="#fbbf24">스타트업투데이</text>
+              <rect x="300" y="10" width="120" height="36" rx="18" fill="rgba(251,191,36,0.10)" stroke="#b45309" stroke-width="1"/>
+              <text x="360" y="33" text-anchor="middle" class="kg-node-label" font-size="11" fill="#b45309">스타트업투데이</text>
             </g>
             <g class="kg-node" data-tip="kmna">
-              <rect x="440" y="10" width="170" height="36" rx="18" fill="rgba(212,165,116,0.10)" stroke="#d4a574" stroke-width="1"/>
-              <text x="525" y="33" text-anchor="middle" class="kg-node-label" font-size="11" fill="#d4a574">한국M&amp;A경제신문</text>
+              <rect x="440" y="10" width="170" height="36" rx="18" fill="rgba(212,165,116,0.10)" stroke="#8a6135" stroke-width="1"/>
+              <text x="525" y="33" text-anchor="middle" class="kg-node-label" font-size="11" fill="#8a6135">한국M&amp;A경제신문</text>
             </g>
             <g class="kg-node" data-tip="defensetoday">
-              <rect x="630" y="10" width="120" height="36" rx="18" fill="rgba(248,113,113,0.10)" stroke="#f87171" stroke-width="1"/>
-              <text x="690" y="33" text-anchor="middle" class="kg-node-label" font-size="11" fill="#f87171">디펜스투데이</text>
+              <rect x="630" y="10" width="120" height="36" rx="18" fill="rgba(248,113,113,0.10)" stroke="#b91c1c" stroke-width="1"/>
+              <text x="690" y="33" text-anchor="middle" class="kg-node-label" font-size="11" fill="#b91c1c">디펜스투데이</text>
             </g>
             <g class="kg-node" data-tip="localtax">
-              <rect x="770" y="10" width="140" height="36" rx="18" fill="rgba(192,132,252,0.10)" stroke="#c084fc" stroke-width="1"/>
-              <text x="840" y="33" text-anchor="middle" class="kg-node-label" font-size="11" fill="#c084fc">월간지방세연구</text>
+              <rect x="770" y="10" width="140" height="36" rx="18" fill="rgba(192,132,252,0.10)" stroke="#6b1ab0" stroke-width="1"/>
+              <text x="840" y="33" text-anchor="middle" class="kg-node-label" font-size="11" fill="#6b1ab0">월간지방세연구</text>
             </g>
           </g>
 
           <!-- ====== Layer 1: Center (Combined Insight Node) ====== -->
           <g class="kg-node">
-            <rect x="370" y="320" width="360" height="80" rx="14" fill="url(#centerGrad)" stroke="#d4a574" stroke-width="2"/>
-            <text x="550" y="350" text-anchor="middle" class="kg-node-label" font-size="14" fill="#e8eaed">K-방산 무인화 IPO 통합 평가</text>
+            <rect x="370" y="320" width="360" height="80" rx="14" fill="url(#centerGrad)" stroke="#8a6135" stroke-width="2"/>
+            <text x="550" y="350" text-anchor="middle" class="kg-node-label" font-size="14" fill="#1a1a1f">K-방산 무인화 IPO 통합 평가</text>
             <text x="550" y="370" text-anchor="middle" class="kg-node-sub" font-size="10">2026 R-Alpha Ranking · 5 후보</text>
-            <text x="550" y="386" text-anchor="middle" class="kg-node-sub" font-size="9" fill="#d4a574">★ Combined Output</text>
+            <text x="550" y="386" text-anchor="middle" class="kg-node-sub" font-size="9" fill="#8a6135">★ Combined Output</text>
           </g>
 
           <!-- ====== Layer 2: 5 Companies (radial around center) ====== -->
           <g class="kg-companies">
             <g class="kg-node" data-tip="UAV-Alpha">
-              <circle cx="155" cy="280" r="42" fill="rgba(212,165,116,0.18)" stroke="#d4a574" stroke-width="2"/>
-              <text x="155" y="278" text-anchor="middle" class="kg-node-label" font-size="12" fill="#e8eaed">UAV-Alpha</text>
+              <circle cx="155" cy="280" r="42" fill="rgba(212,165,116,0.28)" stroke="#8a6135" stroke-width="2"/>
+              <text x="155" y="278" text-anchor="middle" class="kg-node-label" font-size="12" fill="#1a1a1f">UAV-Alpha</text>
               <text x="155" y="294" text-anchor="middle" class="kg-node-sub">86.4</text>
             </g>
             <g class="kg-node" data-tip="UGV-Bravo">
-              <circle cx="200" cy="500" r="42" fill="rgba(212,165,116,0.18)" stroke="#d4a574" stroke-width="2"/>
-              <text x="200" y="498" text-anchor="middle" class="kg-node-label" font-size="12" fill="#e8eaed">UGV-Bravo</text>
+              <circle cx="200" cy="500" r="42" fill="rgba(212,165,116,0.28)" stroke="#8a6135" stroke-width="2"/>
+              <text x="200" y="498" text-anchor="middle" class="kg-node-label" font-size="12" fill="#1a1a1f">UGV-Bravo</text>
               <text x="200" y="514" text-anchor="middle" class="kg-node-sub">81.2</text>
             </g>
             <g class="kg-node" data-tip="SAT-Charlie">
-              <circle cx="550" cy="610" r="42" fill="rgba(212,165,116,0.18)" stroke="#d4a574" stroke-width="2"/>
-              <text x="550" y="608" text-anchor="middle" class="kg-node-label" font-size="12" fill="#e8eaed">SAT-Charlie</text>
+              <circle cx="550" cy="610" r="42" fill="rgba(212,165,116,0.28)" stroke="#8a6135" stroke-width="2"/>
+              <text x="550" y="608" text-anchor="middle" class="kg-node-label" font-size="12" fill="#1a1a1f">SAT-Charlie</text>
               <text x="550" y="624" text-anchor="middle" class="kg-node-sub">73.8</text>
             </g>
             <g class="kg-node" data-tip="MED-Delta">
-              <circle cx="900" cy="500" r="42" fill="rgba(212,165,116,0.18)" stroke="#d4a574" stroke-width="2"/>
-              <text x="900" y="498" text-anchor="middle" class="kg-node-label" font-size="12" fill="#e8eaed">MED-Delta</text>
+              <circle cx="900" cy="500" r="42" fill="rgba(212,165,116,0.28)" stroke="#8a6135" stroke-width="2"/>
+              <text x="900" y="498" text-anchor="middle" class="kg-node-label" font-size="12" fill="#1a1a1f">MED-Delta</text>
               <text x="900" y="514" text-anchor="middle" class="kg-node-sub">79.5</text>
             </g>
             <g class="kg-node" data-tip="SEN-Echo">
-              <circle cx="945" cy="280" r="42" fill="rgba(212,165,116,0.18)" stroke="#d4a574" stroke-width="2"/>
-              <text x="945" y="278" text-anchor="middle" class="kg-node-label" font-size="12" fill="#e8eaed">SEN-Echo</text>
+              <circle cx="945" cy="280" r="42" fill="rgba(212,165,116,0.28)" stroke="#8a6135" stroke-width="2"/>
+              <text x="945" y="278" text-anchor="middle" class="kg-node-label" font-size="12" fill="#1a1a1f">SEN-Echo</text>
               <text x="945" y="294" text-anchor="middle" class="kg-node-sub">68.4</text>
             </g>
           </g>
@@ -878,72 +905,72 @@
           <g class="kg-nodes">
             <!-- 기술 -->
             <g class="kg-node" data-tip="SLAM/AI">
-              <rect x="85" y="170" width="100" height="34" rx="17" fill="rgba(74,144,226,0.10)" stroke="#4a90e2"/>
-              <text x="135" y="192" text-anchor="middle" class="kg-node-label" font-size="11" fill="#7eb6f5">SLAM·AI</text>
+              <rect x="85" y="170" width="100" height="34" rx="17" fill="rgba(74,144,226,0.10)" stroke="#1d4f93"/>
+              <text x="135" y="192" text-anchor="middle" class="kg-node-label" font-size="11" fill="#1d4f93">SLAM·AI</text>
             </g>
             <g class="kg-node" data-tip="5G mesh">
-              <rect x="40" y="380" width="100" height="34" rx="17" fill="rgba(74,144,226,0.10)" stroke="#4a90e2"/>
-              <text x="90"  y="402" text-anchor="middle" class="kg-node-label" font-size="11" fill="#7eb6f5">5G mesh</text>
+              <rect x="40" y="380" width="100" height="34" rx="17" fill="rgba(74,144,226,0.10)" stroke="#1d4f93"/>
+              <text x="90"  y="402" text-anchor="middle" class="kg-node-label" font-size="11" fill="#1d4f93">5G mesh</text>
             </g>
             <g class="kg-node" data-tip="EO/IR">
-              <rect x="965" y="380" width="100" height="34" rx="17" fill="rgba(74,144,226,0.10)" stroke="#4a90e2"/>
-              <text x="1015" y="402" text-anchor="middle" class="kg-node-label" font-size="11" fill="#7eb6f5">EO/IR</text>
+              <rect x="965" y="380" width="100" height="34" rx="17" fill="rgba(74,144,226,0.10)" stroke="#1d4f93"/>
+              <text x="1015" y="402" text-anchor="middle" class="kg-node-label" font-size="11" fill="#1d4f93">EO/IR</text>
             </g>
 
             <!-- VC / 펀딩 -->
             <g class="kg-node" data-tip="한화CVC">
-              <rect x="40" y="80" width="110" height="32" rx="16" fill="rgba(251,191,36,0.10)" stroke="#fbbf24"/>
-              <text x="95"  y="100" text-anchor="middle" class="kg-node-label" font-size="11" fill="#fbbf24">한화CVC</text>
+              <rect x="40" y="80" width="110" height="32" rx="16" fill="rgba(251,191,36,0.10)" stroke="#b45309"/>
+              <text x="95"  y="100" text-anchor="middle" class="kg-node-label" font-size="11" fill="#b45309">한화CVC</text>
             </g>
             <g class="kg-node" data-tip="KIC">
-              <rect x="975" y="120" width="80" height="32" rx="16" fill="rgba(251,191,36,0.10)" stroke="#fbbf24"/>
-              <text x="1015" y="140" text-anchor="middle" class="kg-node-label" font-size="11" fill="#fbbf24">KIC</text>
+              <rect x="975" y="120" width="80" height="32" rx="16" fill="rgba(251,191,36,0.10)" stroke="#b45309"/>
+              <text x="1015" y="140" text-anchor="middle" class="kg-node-label" font-size="11" fill="#b45309">KIC</text>
             </g>
 
             <!-- M&A 인수 후보 -->
             <g class="kg-node" data-tip="한화·LIG·현대로템">
-              <rect x="690" y="170" width="200" height="40" rx="20" fill="rgba(212,165,116,0.18)" stroke="#d4a574"/>
-              <text x="790" y="187" text-anchor="middle" class="kg-node-label" font-size="11" fill="#e6c895">한화·LIG·현대로템</text>
+              <rect x="690" y="170" width="200" height="40" rx="20" fill="rgba(212,165,116,0.28)" stroke="#8a6135"/>
+              <text x="790" y="187" text-anchor="middle" class="kg-node-label" font-size="11" fill="#8a6135">한화·LIG·현대로템</text>
               <text x="790" y="201" text-anchor="middle" class="kg-node-sub" font-size="9">잠재 인수 후보</text>
             </g>
 
             <!-- 세제 -->
             <g class="kg-node" data-tip="조특법 10조 / 12조">
-              <rect x="430" y="640" width="240" height="40" rx="20" fill="rgba(192,132,252,0.10)" stroke="#c084fc"/>
-              <text x="550" y="657" text-anchor="middle" class="kg-node-label" font-size="11" fill="#d8a4fd">조특법 10조 (R&amp;D 공제)</text>
-              <text x="550" y="671" text-anchor="middle" class="kg-node-sub" font-size="9" fill="#c084fc">+ 12조 (원천기술) · 22조 (의료)</text>
+              <rect x="430" y="640" width="240" height="40" rx="20" fill="rgba(192,132,252,0.10)" stroke="#6b1ab0"/>
+              <text x="550" y="657" text-anchor="middle" class="kg-node-label" font-size="11" fill="#6b1ab0">조특법 10조 (R&amp;D 공제)</text>
+              <text x="550" y="671" text-anchor="middle" class="kg-node-sub" font-size="9" fill="#6b1ab0">+ 12조 (원천기술) · 22조 (의료)</text>
             </g>
 
             <!-- 듀얼유스 (의료) -->
             <g class="kg-node" data-tip="의료 듀얼유스">
-              <rect x="800" y="615" width="160" height="34" rx="17" fill="rgba(74,222,128,0.10)" stroke="#4ade80"/>
-              <text x="880" y="637" text-anchor="middle" class="kg-node-label" font-size="11" fill="#4ade80">의료 듀얼유스</text>
+              <rect x="800" y="615" width="160" height="34" rx="17" fill="rgba(74,222,128,0.10)" stroke="#15803d"/>
+              <text x="880" y="637" text-anchor="middle" class="kg-node-label" font-size="11" fill="#15803d">의료 듀얼유스</text>
             </g>
 
             <!-- 군 도입 -->
             <g class="kg-node" data-tip="한국군 KMUS">
-              <rect x="370" y="240" width="160" height="34" rx="17" fill="rgba(248,113,113,0.10)" stroke="#f87171"/>
-              <text x="450" y="262" text-anchor="middle" class="kg-node-label" font-size="11" fill="#f87171">한국군 도입 임박</text>
+              <rect x="370" y="240" width="160" height="34" rx="17" fill="rgba(248,113,113,0.10)" stroke="#b91c1c"/>
+              <text x="450" y="262" text-anchor="middle" class="kg-node-label" font-size="11" fill="#b91c1c">한국군 도입 임박</text>
             </g>
             <g class="kg-node" data-tip="규제: 방산법 14조">
-              <rect x="555" y="240" width="160" height="34" rx="17" fill="rgba(248,113,113,0.10)" stroke="#f87171"/>
-              <text x="635" y="262" text-anchor="middle" class="kg-node-label" font-size="11" fill="#f87171">방산법 14조 외인제한</text>
+              <rect x="555" y="240" width="160" height="34" rx="17" fill="rgba(248,113,113,0.10)" stroke="#b91c1c"/>
+              <text x="635" y="262" text-anchor="middle" class="kg-node-label" font-size="11" fill="#b91c1c">방산법 14조 외인제한</text>
             </g>
           </g>
 
           <!-- ====== Channel feed-in edges (dashed, low-opacity) ====== -->
           <g>
-            <line class="kg-edge kg-channel-edge" x1="80"  y1="46" x2="135" y2="170" stroke="#4ade80"/>
-            <line class="kg-edge kg-channel-edge" x1="220" y1="46" x2="135" y2="170" stroke="#4a90e2"/>
-            <line class="kg-edge kg-channel-edge" x1="220" y1="46" x2="90"  y2="380" stroke="#4a90e2"/>
-            <line class="kg-edge kg-channel-edge" x1="220" y1="46" x2="1015" y2="380" stroke="#4a90e2"/>
-            <line class="kg-edge kg-channel-edge" x1="360" y1="46" x2="95"  y2="80" stroke="#fbbf24"/>
-            <line class="kg-edge kg-channel-edge" x1="360" y1="46" x2="1015" y2="120" stroke="#fbbf24"/>
-            <line class="kg-edge kg-channel-edge" x1="525" y1="46" x2="790" y2="170" stroke="#d4a574"/>
-            <line class="kg-edge kg-channel-edge" x1="690" y1="46" x2="450" y2="240" stroke="#f87171"/>
-            <line class="kg-edge kg-channel-edge" x1="690" y1="46" x2="635" y2="240" stroke="#f87171"/>
-            <line class="kg-edge kg-channel-edge" x1="840" y1="46" x2="550" y2="640" stroke="#c084fc"/>
-            <line class="kg-edge kg-channel-edge" x1="80"  y1="46" x2="880" y2="615" stroke="#4ade80"/>
+            <line class="kg-edge kg-channel-edge" x1="80"  y1="46" x2="135" y2="170" stroke="#15803d"/>
+            <line class="kg-edge kg-channel-edge" x1="220" y1="46" x2="135" y2="170" stroke="#1d4f93"/>
+            <line class="kg-edge kg-channel-edge" x1="220" y1="46" x2="90"  y2="380" stroke="#1d4f93"/>
+            <line class="kg-edge kg-channel-edge" x1="220" y1="46" x2="1015" y2="380" stroke="#1d4f93"/>
+            <line class="kg-edge kg-channel-edge" x1="360" y1="46" x2="95"  y2="80" stroke="#b45309"/>
+            <line class="kg-edge kg-channel-edge" x1="360" y1="46" x2="1015" y2="120" stroke="#b45309"/>
+            <line class="kg-edge kg-channel-edge" x1="525" y1="46" x2="790" y2="170" stroke="#8a6135"/>
+            <line class="kg-edge kg-channel-edge" x1="690" y1="46" x2="450" y2="240" stroke="#b91c1c"/>
+            <line class="kg-edge kg-channel-edge" x1="690" y1="46" x2="635" y2="240" stroke="#b91c1c"/>
+            <line class="kg-edge kg-channel-edge" x1="840" y1="46" x2="550" y2="640" stroke="#6b1ab0"/>
+            <line class="kg-edge kg-channel-edge" x1="80"  y1="46" x2="880" y2="615" stroke="#15803d"/>
           </g>
 
           <!-- ====== Concept ↔ Company edges ====== -->
@@ -969,16 +996,16 @@
 
           <!-- ====== Center ↔ Companies (gold) ====== -->
           <g>
-            <line class="kg-edge" x1="370" y1="345" x2="155" y2="280" stroke="rgba(212,165,116,0.45)" stroke-width="1.5" marker-start="url(#kgArr)"/>
-            <line class="kg-edge" x1="380" y1="385" x2="200" y2="500" stroke="rgba(212,165,116,0.45)" stroke-width="1.5" marker-start="url(#kgArr)"/>
-            <line class="kg-edge" x1="550" y1="400" x2="550" y2="610" stroke="rgba(212,165,116,0.45)" stroke-width="1.5" marker-start="url(#kgArr)"/>
-            <line class="kg-edge" x1="720" y1="385" x2="900" y2="500" stroke="rgba(212,165,116,0.45)" stroke-width="1.5" marker-start="url(#kgArr)"/>
-            <line class="kg-edge" x1="730" y1="345" x2="945" y2="280" stroke="rgba(212,165,116,0.45)" stroke-width="1.5" marker-start="url(#kgArr)"/>
+            <line class="kg-edge" x1="370" y1="345" x2="155" y2="280" stroke="rgba(138,97,53,0.65)" stroke-width="1.5" marker-start="url(#kgArr)"/>
+            <line class="kg-edge" x1="380" y1="385" x2="200" y2="500" stroke="rgba(138,97,53,0.65)" stroke-width="1.5" marker-start="url(#kgArr)"/>
+            <line class="kg-edge" x1="550" y1="400" x2="550" y2="610" stroke="rgba(138,97,53,0.65)" stroke-width="1.5" marker-start="url(#kgArr)"/>
+            <line class="kg-edge" x1="720" y1="385" x2="900" y2="500" stroke="rgba(138,97,53,0.65)" stroke-width="1.5" marker-start="url(#kgArr)"/>
+            <line class="kg-edge" x1="730" y1="345" x2="945" y2="280" stroke="rgba(138,97,53,0.65)" stroke-width="1.5" marker-start="url(#kgArr)"/>
           </g>
 
           <!-- ====== Center ↔ 세제 (purple) ====== -->
           <g>
-            <line class="kg-edge" x1="550" y1="400" x2="550" y2="640" stroke="rgba(192,132,252,0.55)" stroke-width="1.5" marker-end="url(#kgArrPurple)"/>
+            <line class="kg-edge" x1="550" y1="400" x2="550" y2="640" stroke="rgba(126,34,206,0.7)" stroke-width="1.5" marker-end="url(#kgArrPurple)"/>
           </g>
 
           <!-- ====== Edge labels (selected) ====== -->
@@ -991,13 +1018,13 @@
 
           <!-- ====== Legend ====== -->
           <g transform="translate(40, 685)">
-            <text x="0" y="0" font-size="9" fill="#c8ccd6" letter-spacing="1.4">RANGE</text>
-            <circle cx="58"  cy="-3" r="6" fill="rgba(212,165,116,0.18)" stroke="#d4a574"/><text x="68"  y="0" font-size="10" fill="#c8ccd6">기업</text>
-            <rect   x="100" y="-9" width="14" height="6" rx="3" fill="rgba(74,144,226,0.10)" stroke="#4a90e2"/><text x="118" y="0" font-size="10" fill="#c8ccd6">기술</text>
-            <rect   x="146" y="-9" width="14" height="6" rx="3" fill="rgba(251,191,36,0.10)" stroke="#fbbf24"/><text x="164" y="0" font-size="10" fill="#c8ccd6">VC</text>
-            <rect   x="184" y="-9" width="14" height="6" rx="3" fill="rgba(248,113,113,0.10)" stroke="#f87171"/><text x="202" y="0" font-size="10" fill="#c8ccd6">규제·도입</text>
-            <rect   x="244" y="-9" width="14" height="6" rx="3" fill="rgba(192,132,252,0.10)" stroke="#c084fc"/><text x="262" y="0" font-size="10" fill="#c8ccd6">세제</text>
-            <rect   x="290" y="-9" width="14" height="6" rx="3" fill="rgba(74,222,128,0.10)" stroke="#4ade80"/><text x="308" y="0" font-size="10" fill="#c8ccd6">바이오</text>
+            <text x="0" y="0" font-size="9" fill="#3a3a45" letter-spacing="1.4">RANGE</text>
+            <circle cx="58"  cy="-3" r="6" fill="rgba(212,165,116,0.28)" stroke="#8a6135"/><text x="68"  y="0" font-size="10" fill="#3a3a45">기업</text>
+            <rect   x="100" y="-9" width="14" height="6" rx="3" fill="rgba(74,144,226,0.10)" stroke="#1d4f93"/><text x="118" y="0" font-size="10" fill="#3a3a45">기술</text>
+            <rect   x="146" y="-9" width="14" height="6" rx="3" fill="rgba(251,191,36,0.10)" stroke="#b45309"/><text x="164" y="0" font-size="10" fill="#3a3a45">VC</text>
+            <rect   x="184" y="-9" width="14" height="6" rx="3" fill="rgba(248,113,113,0.10)" stroke="#b91c1c"/><text x="202" y="0" font-size="10" fill="#3a3a45">규제·도입</text>
+            <rect   x="244" y="-9" width="14" height="6" rx="3" fill="rgba(192,132,252,0.10)" stroke="#6b1ab0"/><text x="262" y="0" font-size="10" fill="#3a3a45">세제</text>
+            <rect   x="290" y="-9" width="14" height="6" rx="3" fill="rgba(74,222,128,0.10)" stroke="#15803d"/><text x="308" y="0" font-size="10" fill="#3a3a45">바이오</text>
           </g>
         </svg>
       </div>
