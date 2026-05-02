@@ -1024,11 +1024,9 @@ p { margin: 0 0 var(--s-4); color: var(--text-secondary); }
   font-weight: 400;
   color: var(--text-muted);
   letter-spacing: -0.005em;
-  white-space: nowrap;
+  /* 자연스러운 줄바꿈: nowrap 제거 — 좁은 컬럼에서도 끼임 방지 */
   word-break: keep-all;
-}
-@media (max-width: 640px) {
-  .abbr-expansion { white-space: normal; }
+  overflow-wrap: anywhere;
 }
 
 /* ---------- 20. Print (제안서 출력용) ---------- */

@@ -440,12 +440,15 @@
   function expandAbbreviations() {
     const SKIP_TAGS = new Set([
       'CODE', 'PRE', 'SCRIPT', 'STYLE', 'A', 'ABBR', 'BUTTON',
-      'TEXTAREA', 'INPUT', 'NOSCRIPT', 'OPTION', 'SELECT', 'KBD', 'SAMP'
+      'TEXTAREA', 'INPUT', 'NOSCRIPT', 'OPTION', 'SELECT', 'KBD', 'SAMP',
+      'STRONG', 'B', 'TH', 'H1', 'H2', 'H3', 'H4', 'H5', 'H6'
     ]);
     const SKIP_CLASSES = new Set([
       'no-abbr', 'brand', 'brand__name', 'brand__mark', 'brand__logo',
       'chip', 'badge-num', 'lang-switch', 'footer__seal', 'footer__legal',
-      'sparql-box', 'kg-svg', 'pdf-pageinfo', 'eyebrow', 'stat__value', 'stat__label'
+      'sparql-box', 'kg-svg', 'pdf-pageinfo', 'eyebrow', 'stat__value', 'stat__label',
+      'card__title', 'phase-card__title', 'card__icon',
+      'kg-node-label', 'kg-node-sub', 'kg-edge-label'
     ]);
 
     function shouldSkip(node) {
