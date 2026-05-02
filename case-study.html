@@ -287,6 +287,7 @@
           <p>
             Insight Bank Hub는 6채널 발행물을 NER+RE 파이프라인으로 정규화한 뒤, FIBO·XBRL·도메인 클래스에 매핑하고, 한 사건의 다층 단면을 그래프로 결합합니다.
             그 결과가 <strong style="color:var(--text-primary);">"펀더멘털·기술·세제 통합 평가 리스트"</strong>입니다.
+            <br/><a href="#plain-explainer" style="color: var(--gold-300); font-size: var(--fs-sm); border-bottom: 1px dashed var(--gold-300);">↓ 위 문장을 약어부터 풀어 자세히 설명 보기</a>
           </p>
           <div class="row gap-2 mt-5">
             <span class="chip chip--gold">방산</span>
@@ -318,6 +319,221 @@
             </table>
           </div>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 1.5 풀어쓰기 — 약어 + 단계별 설명 ===== -->
+  <section class="section anchor-pad" id="plain-explainer" style="scroll-margin-top: 80px;">
+    <div class="container">
+      <div data-reveal style="max-width: 880px; margin: 0 auto var(--s-7); text-align: center;">
+        <span class="eyebrow">01.5 · Plain Explainer</span>
+        <h2 style="margin-top: var(--s-4);">위 한 문장, 풀어서 자세히</h2>
+        <p>
+          "<em>NER+RE 파이프라인</em>", "<em>FIBO·XBRL 매핑</em>", "<em>다층 단면을 그래프로 결합</em>" —
+          기술 용어가 한 문장에 응축되어 있어 그대로는 이해가 어려울 수 있습니다.
+          <strong style="color: var(--text-primary);">약어부터 풀고, 단계별로 비유와 함께 설명</strong>합니다.
+        </p>
+      </div>
+
+      <!-- ===== 약어 풀이 ===== -->
+      <div data-reveal>
+        <h3 style="text-align: center; margin-bottom: var(--s-5); font-size: var(--fs-lg);">먼저 약어부터 — 6개 핵심 용어</h3>
+      </div>
+
+      <div class="grid grid-3" style="gap: var(--s-4);" data-reveal>
+        <article class="card" style="padding: var(--s-5);">
+          <div style="font-family: 'JetBrains Mono', monospace; color: var(--gold-300); font-size: 11px; letter-spacing: 0.12em;">ABBREVIATION 01</div>
+          <h4 style="margin: var(--s-2) 0 var(--s-3); color: var(--text-primary); font-size: var(--fs-md);">NER</h4>
+          <p class="text-secondary mb-2" style="font-size: var(--fs-sm); line-height: 1.7;">
+            <strong style="color: var(--text-primary);">Named Entity Recognition (개체명 인식)</strong>
+          </p>
+          <p class="text-secondary mb-0" style="font-size: var(--fs-sm); line-height: 1.7;">
+            글에서 "삼성전자", "이재용", "2026년 R&amp;D 세액공제" 같은 <strong style="color: var(--text-primary);">이름·고유명사·숫자</strong>를 컴퓨터가 자동으로 골라내는 기술.
+          </p>
+        </article>
+
+        <article class="card" style="padding: var(--s-5);">
+          <div style="font-family: 'JetBrains Mono', monospace; color: var(--gold-300); font-size: 11px; letter-spacing: 0.12em;">ABBREVIATION 02</div>
+          <h4 style="margin: var(--s-2) 0 var(--s-3); color: var(--text-primary); font-size: var(--fs-md);">RE</h4>
+          <p class="text-secondary mb-2" style="font-size: var(--fs-sm); line-height: 1.7;">
+            <strong style="color: var(--text-primary);">Relation Extraction (관계 추출)</strong>
+          </p>
+          <p class="text-secondary mb-0" style="font-size: var(--fs-sm); line-height: 1.7;">
+            골라낸 이름들 사이의 <strong style="color: var(--text-primary);">관계</strong>를 파악. 예: <code style="background: var(--glass-200); padding: 1px 6px; border-radius: 4px;">이재용 — 회장 — 삼성전자</code> 식으로 누가 무엇과 어떻게 연결되는지.
+          </p>
+        </article>
+
+        <article class="card" style="padding: var(--s-5);">
+          <div style="font-family: 'JetBrains Mono', monospace; color: var(--gold-300); font-size: 11px; letter-spacing: 0.12em;">TERM 03</div>
+          <h4 style="margin: var(--s-2) 0 var(--s-3); color: var(--text-primary); font-size: var(--fs-md);">파이프라인 (Pipeline)</h4>
+          <p class="text-secondary mb-0" style="font-size: var(--fs-sm); line-height: 1.7;">
+            여러 단계를 순서대로 자동 처리하는 <strong style="color: var(--text-primary);">컨베이어 벨트</strong> 같은 시스템. 원문 → 정규화 → 매핑 → 그래프 적재까지 한 번에 흐름.
+          </p>
+        </article>
+
+        <article class="card" style="padding: var(--s-5);">
+          <div style="font-family: 'JetBrains Mono', monospace; color: var(--gold-300); font-size: 11px; letter-spacing: 0.12em;">STANDARD 04</div>
+          <h4 style="margin: var(--s-2) 0 var(--s-3); color: var(--text-primary); font-size: var(--fs-md);">FIBO</h4>
+          <p class="text-secondary mb-2" style="font-size: var(--fs-sm); line-height: 1.7;">
+            <strong style="color: var(--text-primary);">Financial Industry Business Ontology (금융산업 비즈니스 온톨로지)</strong>
+          </p>
+          <p class="text-secondary mb-0" style="font-size: var(--fs-sm); line-height: 1.7;">
+            전 세계 금융권이 공통으로 쓰는 <strong style="color: var(--text-primary);">금융 용어 사전 + 관계도</strong>. "회사", "주식", "M&amp;A 거래" 같은 개념을 표준 형식으로 정의.
+          </p>
+        </article>
+
+        <article class="card" style="padding: var(--s-5);">
+          <div style="font-family: 'JetBrains Mono', monospace; color: var(--gold-300); font-size: 11px; letter-spacing: 0.12em;">STANDARD 05</div>
+          <h4 style="margin: var(--s-2) 0 var(--s-3); color: var(--text-primary); font-size: var(--fs-md);">XBRL</h4>
+          <p class="text-secondary mb-2" style="font-size: var(--fs-sm); line-height: 1.7;">
+            <strong style="color: var(--text-primary);">eXtensible Business Reporting Language (확장 가능한 비즈니스 보고 언어)</strong>
+          </p>
+          <p class="text-secondary mb-0" style="font-size: var(--fs-sm); line-height: 1.7;">
+            기업 재무제표를 <strong style="color: var(--text-primary);">기계가 읽을 수 있게</strong> 표준화한 언어. 한국·미국·유럽 모두 공시 시스템에서 사용.
+          </p>
+        </article>
+
+        <article class="card" style="padding: var(--s-5);">
+          <div style="font-family: 'JetBrains Mono', monospace; color: var(--gold-300); font-size: 11px; letter-spacing: 0.12em;">TERM 06</div>
+          <h4 style="margin: var(--s-2) 0 var(--s-3); color: var(--text-primary); font-size: var(--fs-md);">그래프 (Knowledge Graph)</h4>
+          <p class="text-secondary mb-0" style="font-size: var(--fs-sm); line-height: 1.7;">
+            정보를 <strong style="color: var(--text-primary);">점(노드)과 선(관계)으로 연결한 거대한 관계도</strong>. 카카오톡 친구 관계도와 비슷하지만, 친구 대신 회사·인물·사건이 연결됨.
+          </p>
+        </article>
+      </div>
+
+      <!-- ===== 3단계 파이프라인 ===== -->
+      <div data-reveal style="margin-top: var(--s-9);">
+        <h3 style="text-align: center; margin-bottom: var(--s-3); font-size: var(--fs-lg);">3단계로 나눠 보면 — 비유와 함께</h3>
+        <p class="text-secondary" style="text-align: center; max-width: 720px; margin: 0 auto var(--s-7); font-size: var(--fs-sm);">
+          "셀트리온이 2026년 5월 미국 FDA에서 신약 X 승인을 받았다"라는 가상의 한 줄을 IBH가 어떻게 가공하는지 단계별로 따라가 봅니다.
+        </p>
+      </div>
+
+      <div class="grid grid-3" style="gap: var(--s-5); position: relative;" data-reveal>
+        <!-- Step 1 -->
+        <article class="card" style="padding: var(--s-5); border-color: var(--border-gold);">
+          <div style="display: flex; align-items: center; gap: var(--s-3); margin-bottom: var(--s-3);">
+            <span class="badge-num">1</span>
+            <strong style="color: var(--gold-300); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;">정규화 (NER + RE)</strong>
+          </div>
+          <h4 style="color: var(--text-primary); margin-bottom: var(--s-3); font-size: var(--fs-md);">이름표 붙이기</h4>
+          <p class="text-secondary" style="font-size: var(--fs-sm); line-height: 1.75;">
+            원본 기사가 "글 덩어리"라면, 자동으로 읽어서 <strong style="color: var(--text-primary);">"누가, 무엇을, 언제, 어디서, 누구와"</strong> 형태로 정리합니다.
+          </p>
+          <div style="margin-top: var(--s-4); padding: var(--s-3); background: var(--bg-elev-2); border-radius: var(--r-sm); font-family: 'JetBrains Mono', monospace; font-size: 11px; line-height: 1.7;">
+            <div style="color: var(--text-muted);"># 원문</div>
+            <div style="color: var(--text-secondary);">"셀트리온이 2026년 5월 미국 FDA에서 신약 X 승인을 받았다"</div>
+            <div style="color: var(--text-muted); margin-top: 8px;"># 변환 결과</div>
+            <div style="color: var(--gold-300);">[셀트리온] — [승인받음] — [신약 X]</div>
+            <div style="color: var(--gold-300);">[승인 주체] — [FDA]</div>
+            <div style="color: var(--gold-300);">[시점] — [2026.05]</div>
+          </div>
+          <p class="text-secondary mt-4 mb-0" style="font-size: var(--fs-xs);">
+            ★ 이게 바로 "<strong style="color: var(--text-primary);">정규화</strong>" — 흩어진 자연어를 표 형태로 바꾸는 작업.
+          </p>
+        </article>
+
+        <!-- Step 2 -->
+        <article class="card" style="padding: var(--s-5); border-color: var(--border-gold);">
+          <div style="display: flex; align-items: center; gap: var(--s-3); margin-bottom: var(--s-3);">
+            <span class="badge-num">2</span>
+            <strong style="color: var(--gold-300); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;">매핑 (FIBO·XBRL·도메인)</strong>
+          </div>
+          <h4 style="color: var(--text-primary); margin-bottom: var(--s-3); font-size: var(--fs-md);">표준 사전에 맞추기</h4>
+          <p class="text-secondary" style="font-size: var(--fs-sm); line-height: 1.75;">
+            "셀트리온"이 그냥 단어가 아니라 <strong style="color: var(--text-primary);">"한국 코스피 상장 바이오 회사"라는 표준 카테고리</strong>에 속한다는 걸 시스템이 알게 합니다.
+          </p>
+          <div style="margin-top: var(--s-4); padding: var(--s-3); background: var(--bg-elev-2); border-radius: var(--r-sm); font-family: 'JetBrains Mono', monospace; font-size: 11px; line-height: 1.7;">
+            <div style="color: var(--text-muted);"># FIBO 사전으로</div>
+            <div style="color: var(--blue-300);">셀트리온 = 금융::상장사::코스피</div>
+            <div style="color: var(--text-muted); margin-top: 6px;"># XBRL 사전으로</div>
+            <div style="color: var(--blue-300);">셀트리온 매출 = 재무::영업수익::연간</div>
+            <div style="color: var(--text-muted); margin-top: 6px;"># 도메인(바이오) 사전으로</div>
+            <div style="color: var(--gold-300);">신약 X = 임상::3상 통과::항암제</div>
+          </div>
+          <p class="text-secondary mt-4 mb-0" style="font-size: var(--fs-xs);">
+            ★ 이렇게 하면 <strong style="color: var(--text-primary);">글로벌 LLM(ChatGPT·Claude)이 그대로 읽고 인용</strong>할 수 있음 — 약속된 표준어이기 때문.
+          </p>
+        </article>
+
+        <!-- Step 3 -->
+        <article class="card" style="padding: var(--s-5); border-color: var(--border-gold);">
+          <div style="display: flex; align-items: center; gap: var(--s-3); margin-bottom: var(--s-3);">
+            <span class="badge-num">3</span>
+            <strong style="color: var(--gold-300); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;">결합 (다층 단면 그래프)</strong>
+          </div>
+          <h4 style="color: var(--text-primary); margin-bottom: var(--s-3); font-size: var(--fs-md);">한 사건을 여러 각도로 묶기</h4>
+          <p class="text-secondary" style="font-size: var(--fs-sm); line-height: 1.75;">
+            <strong style="color: var(--text-primary);">한 사건</strong>("셀트리온 신약 승인")이 6개 매체에 각각 다른 관점으로 실립니다 — 이걸 <strong style="color: var(--text-primary);">거미줄처럼 연결</strong>합니다.
+          </p>
+          <div style="margin-top: var(--s-4); padding: var(--s-3); background: var(--bg-elev-2); border-radius: var(--r-sm); font-size: 11px; line-height: 1.85;">
+            <div style="color: var(--text-secondary);"><strong style="color: var(--text-primary);">바이오타임즈</strong> → 임상 데이터·메커니즘</div>
+            <div style="color: var(--text-secondary);"><strong style="color: var(--text-primary);">KMNA</strong> → 후속 M&amp;A·주가 영향</div>
+            <div style="color: var(--text-secondary);"><strong style="color: var(--text-primary);">스타트업투데이</strong> → 투자자 반응</div>
+            <div style="color: var(--text-secondary);"><strong style="color: var(--text-primary);">월간지방세연구</strong> → R&amp;D 세액공제 적용</div>
+            <div style="color: var(--text-secondary);"><strong style="color: var(--text-primary);">ARG</strong> → 글로벌 시장 통계</div>
+            <div style="color: var(--text-secondary);"><strong style="color: var(--text-primary);">디펜스투데이</strong> → 군 의료 보급 영향(해당 시)</div>
+          </div>
+          <p class="text-secondary mt-4 mb-0" style="font-size: var(--fs-xs);">
+            ★ 이 6개 시각이 한 사건을 중심으로 연결된 게 "<strong style="color: var(--text-primary);">다층 단면을 그래프로 결합</strong>".
+          </p>
+        </article>
+      </div>
+
+      <!-- ===== 결과 — 3축 평가표 ===== -->
+      <div data-reveal style="margin-top: var(--s-9);">
+        <h3 style="text-align: center; margin-bottom: var(--s-3); font-size: var(--fs-lg);">결과 — "펀더멘털·기술·세제 통합 평가 리스트"</h3>
+        <p class="text-secondary" style="text-align: center; max-width: 720px; margin: 0 auto var(--s-6); font-size: var(--fs-sm);">
+          위 3단계를 거치면 한 회사·한 사건에 대해 <strong style="color: var(--text-primary);">세 가지 축</strong>이 자동으로 채워진 표가 만들어집니다.
+        </p>
+      </div>
+
+      <div class="card" data-reveal style="padding: var(--s-6); overflow-x: auto;">
+        <table class="table">
+          <thead>
+            <tr>
+              <th style="width: 22%;">축</th>
+              <th style="width: 40%;">무엇을 보는가</th>
+              <th>출처 채널</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong style="color: var(--gold-300); font-size: var(--fs-md);">펀더멘털</strong><br/><small class="text-muted">재무 기초</small></td>
+              <td class="text-secondary">매출·이익·부채·M&amp;A 이력 — 회사가 얼마나 단단한지</td>
+              <td><span class="chip">KMNA</span> <span class="chip">ARG</span></td>
+            </tr>
+            <tr>
+              <td><strong style="color: var(--gold-300); font-size: var(--fs-md);">기술</strong><br/><small class="text-muted">산업·R&amp;D</small></td>
+              <td class="text-secondary">보유 기술·임상·특허·수출 실적 — 회사가 무엇을 만드는지</td>
+              <td><span class="chip">바이오타임즈</span> <span class="chip">디펜스투데이</span> <span class="chip">스타트업투데이</span></td>
+            </tr>
+            <tr>
+              <td><strong style="color: var(--gold-300); font-size: var(--fs-md);">세제</strong><br/><small class="text-muted">세무·법규</small></td>
+              <td class="text-secondary">세액공제·판례·규제 리스크 — 세금이 얼마나 따라붙는지</td>
+              <td><span class="chip">월간지방세연구</span></td>
+            </tr>
+            <tr style="background: var(--glass-gold);">
+              <td colspan="3" style="text-align: center; color: var(--gold-300); font-weight: 700; padding: var(--s-3);">
+                ★ 이 3축이 한 줄에 담긴 평가표 = IBH 핵심 산출물
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <p class="text-secondary mt-4 mb-0" style="font-size: var(--fs-sm);">
+          법무법인·PEF·회계법인·LLM 회사가 <strong style="color: var(--text-primary);">컨설턴트 1주일 작업</strong>을 <strong style="color: var(--text-primary);">SPARQL 1번 쿼리</strong>로 끝낼 수 있는 이유가 여기에 있습니다.
+        </p>
+      </div>
+
+      <!-- ===== 한 줄 비유 ===== -->
+      <div class="card mt-6" data-reveal style="padding: var(--s-6); background: linear-gradient(135deg, rgba(251,246,236,0.85), rgba(255,255,255,0.75)); border-color: var(--border-gold); text-align: center;">
+        <span class="chip chip--gold">한 문장 요약</span>
+        <p style="margin: var(--s-4) 0 0; font-size: var(--fs-md); line-height: 1.85; color: var(--text-primary);">
+          6개 신문사가 따로 쓴 기사들을, AI가 <strong style="color: var(--gold-300);">이름표 붙이고 → 국제 표준 사전에 맞추고 → 한 사건을 거미줄로 엮어서</strong>,
+          한 회사의 <strong style="color: var(--gold-300);">재무·기술·세금까지 한 표에 담은 통합 평가표</strong>를 만들어낸다는 뜻입니다.
+        </p>
       </div>
     </div>
   </section>
