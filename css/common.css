@@ -1018,9 +1018,23 @@ p { margin: 0 0 var(--s-4); color: var(--text-secondary); }
   .lang-switch__trigger__name { display: none; }
 }
 
-/* ---------- 19. Print (제안서 출력용) ---------- */
+/* ---------- 19. Abbreviation auto-expansion (자동 약어 풀이) ---------- */
+.abbr-expansion {
+  font-size: 0.78em;
+  font-weight: 400;
+  color: var(--text-muted);
+  letter-spacing: -0.005em;
+  white-space: nowrap;
+  word-break: keep-all;
+}
+@media (max-width: 640px) {
+  .abbr-expansion { white-space: normal; }
+}
+
+/* ---------- 20. Print (제안서 출력용) ---------- */
 @media print {
   body { background: white; color: black; }
   .header, .footer, .nav-toggle { display: none; }
   .card { background: #f8f8f8; border: 1px solid #ddd; box-shadow: none; }
+  .abbr-expansion { color: #666; }
 }
