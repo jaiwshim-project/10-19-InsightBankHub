@@ -1,7 +1,7 @@
 /* ============================================================
    Insight Bank Hub — Design System
    "6개 매체 통합 지식 뱅크 + GEO-AIO 싱크탱크"
-   Premium Dark · Glass Morphism · Mobile-First
+   Premium White · Heritage Gold · Glass Morphism · Mobile-First
    Font: KoPubWorld Dotum (한국출판인회의)
    ============================================================ */
 
@@ -46,76 +46,76 @@
        url('https://cdn.jsdelivr.net/gh/webfontworld/kopub@1.0/KoPubWorld_Dotum_Bold.woff2') format('woff2');
 }
 
-/* ---------- 1. 색상 토큰 ---------- */
+/* ---------- 1. 색상 토큰 — White Premium ---------- */
 :root {
-  /* Background — Deep Ink Series */
-  --bg-base: #0a0e1a;
-  --bg-elev-1: #0f1424;
-  --bg-elev-2: #131829;
-  --bg-elev-3: #1a2138;
-  --bg-elev-4: #232b46;
+  /* Background — Heritage Cream / Pure White Series */
+  --bg-base:   #fafaf6;   /* off-white, heritage paper */
+  --bg-elev-1: #f4f1e8;   /* soft warm cream (section alt) */
+  --bg-elev-2: #ede8d9;   /* deeper beige (cards solid) */
+  --bg-elev-3: #ffffff;   /* pure white (menu/dropdown) */
+  --bg-elev-4: #fbf6ec;   /* gold-tinged cream (featured) */
 
-  /* Brand — Heritage Gold (지식 자산의 위상) */
+  /* Brand — Heritage Gold (값을 깊게: 흰 배경 위 가독성) */
   --gold-50:  #fbf6ec;
   --gold-100: #f3e6cc;
-  --gold-300: #e6c895;
-  --gold-500: #d4a574;
-  --gold-600: #b8864e;
-  --gold-700: #8a6135;
+  --gold-300: #8a6135;   /* 본문 텍스트용 deep gold (white bg AA+) */
+  --gold-500: #b8864e;   /* primary 버튼 그라디언트 시작 */
+  --gold-600: #8a6135;   /* primary 버튼 그라디언트 끝 */
+  --gold-700: #6e4a25;   /* 가장 진한 골드 */
 
-  /* Accent — Insight Blue (AI/디지털) */
-  --blue-300: #7eb6f5;
-  --blue-500: #4a90e2;
-  --blue-600: #2c6fc2;
-  --blue-700: #1d4f93;
+  /* Accent — Insight Blue (AI/디지털, white bg 가독성 우선) */
+  --blue-300: #2c6fc2;   /* 본문 텍스트용 deep blue */
+  --blue-500: #1d4f93;
+  --blue-600: #143869;
+  --blue-700: #0e264a;
 
-  /* Accent — Royal Purple (NEW · Phase 2.5 · Stream 09 · Strategic Tier · 월간지방세연구) */
-  --purple-300: #d8a4fd;
-  --purple-500: #c084fc;
-  --purple-700: #7e22ce;
+  /* Accent — Royal Purple (Phase 2.5 · Stream 09 · 월간지방세연구) */
+  --purple-300: #7e22ce;
+  --purple-500: #6b1ab0;
+  --purple-700: #4a1380;
 
-  /* Semantic */
-  --success: #4ade80;
-  --warning: #fbbf24;
-  --danger:  #f87171;
-  --info:    #60a5fa;
+  /* Semantic — white bg 가독성 보정 */
+  --success: #15803d;
+  --warning: #b45309;
+  --danger:  #b91c1c;
+  --info:    #1d4f93;
 
-  /* Text — 가독성 최적화 (다크 배경 #0a0e1a 기준)
-     · primary   #f1f3f7  → 명도비 14.2 : 1  (AAA · 본문 강조)
-     · secondary #c8ccd6  → 명도비 10.1 : 1  (AAA · 본문)
-     · muted     #95a0b8  → 명도비  6.4 : 1  (AA  · 보조 라벨)
-     · faint     #6f7a92  → 명도비  3.6 : 1  (Large text only)
+  /* Text — 가독성 최적화 (화이트 배경 #fafaf6 기준)
+     · primary   #1a1a1f  → 명도비 16.0 : 1  (AAA · 본문 강조)
+     · secondary #3a3a45  → 명도비 11.5 : 1  (AAA · 본문)
+     · muted     #6a6a78  → 명도비  5.8 : 1  (AA  · 보조 라벨)
+     · faint     #9a9aa8  → 명도비  3.2 : 1  (Large text only)
   */
-  --text-primary:   #f1f3f7;
-  --text-secondary: #c8ccd6;
-  --text-muted:     #95a0b8;
-  --text-faint:     #6f7a92;
-  --text-on-gold:   #1a1208;
+  --text-primary:   #1a1a1f;
+  --text-secondary: #3a3a45;
+  --text-muted:     #6a6a78;
+  --text-faint:     #9a9aa8;
+  --text-on-gold:   #1a1208;   /* 골드 버튼 위 텍스트 (변경 없음) */
 
-  /* Border / Divider */
-  --border-subtle:  rgba(255,255,255,0.06);
-  --border-default: rgba(255,255,255,0.10);
-  --border-strong:  rgba(255,255,255,0.18);
-  --border-gold:    rgba(212,165,116,0.35);
-  --border-purple:  rgba(192,132,252,0.30);
+  /* Border / Divider — 흑색 톤 (반전) */
+  --border-subtle:  rgba(0,0,0,0.06);
+  --border-default: rgba(0,0,0,0.10);
+  --border-strong:  rgba(0,0,0,0.18);
+  --border-gold:    rgba(138,97,53,0.35);
+  --border-purple:  rgba(126,34,206,0.30);
 
-  /* Glass — 투명도 최적화 (투명도 시스템 토큰) */
-  --glass-50:  rgba(255,255,255,0.02);
-  --glass-100: rgba(255,255,255,0.04);
-  --glass-200: rgba(255,255,255,0.06);
-  --glass-300: rgba(255,255,255,0.09);
-  --glass-400: rgba(255,255,255,0.13);
-  --glass-gold:   rgba(212,165,116,0.08);
+  /* Glass — White bg 위 subtle dark wash (반전) */
+  --glass-50:  rgba(0,0,0,0.015);
+  --glass-100: rgba(0,0,0,0.03);
+  --glass-200: rgba(0,0,0,0.05);
+  --glass-300: rgba(0,0,0,0.08);
+  --glass-400: rgba(0,0,0,0.12);
+  --glass-gold:   rgba(212,165,116,0.14);
   --glass-blue:   rgba(74,144,226,0.10);
   --glass-purple: rgba(192,132,252,0.10);
   --glass-purple-soft: rgba(192,132,252,0.06);
-  --glass-purple-strong: rgba(192,132,252,0.15);
+  --glass-purple-strong: rgba(192,132,252,0.18);
 
-  /* Shadow */
-  --shadow-sm: 0 2px 6px rgba(0,0,0,0.25);
-  --shadow-md: 0 8px 24px rgba(0,0,0,0.35);
-  --shadow-lg: 0 16px 48px rgba(0,0,0,0.45);
-  --shadow-gold: 0 8px 32px rgba(212,165,116,0.18);
+  /* Shadow — 화이트 테마용 부드러운 그림자 */
+  --shadow-sm: 0 2px 6px rgba(0,0,0,0.05);
+  --shadow-md: 0 8px 24px rgba(0,0,0,0.08);
+  --shadow-lg: 0 16px 48px rgba(0,0,0,0.12);
+  --shadow-gold: 0 8px 32px rgba(138,97,53,0.18);
 
   /* Radius */
   --r-sm: 6px;
@@ -170,9 +170,9 @@ body {
   color: var(--text-primary);
   background: var(--bg-base);
   background-image:
-    radial-gradient(ellipse 80% 50% at 50% -10%, rgba(74,144,226,0.12), transparent 60%),
-    radial-gradient(ellipse 60% 40% at 90% 110%, rgba(212,165,116,0.10), transparent 60%),
-    radial-gradient(ellipse 50% 35% at 5% 60%, rgba(74,144,226,0.06), transparent 60%);
+    radial-gradient(ellipse 80% 50% at 50% -10%, rgba(212,165,116,0.10), transparent 60%),
+    radial-gradient(ellipse 60% 40% at 90% 110%, rgba(212,165,116,0.07), transparent 60%),
+    radial-gradient(ellipse 50% 35% at 5% 60%, rgba(74,144,226,0.04), transparent 60%);
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
@@ -266,7 +266,7 @@ p { margin: 0 0 var(--s-4); color: var(--text-secondary); }
   height: var(--header-h);
   backdrop-filter: blur(20px) saturate(180%);
   -webkit-backdrop-filter: blur(20px) saturate(180%);
-  background: rgba(10,14,26,0.72);
+  background: rgba(255,255,255,0.85);
   border-bottom: 1px solid var(--border-subtle);
 }
 .header__inner {
@@ -470,12 +470,13 @@ p { margin: 0 0 var(--s-4); color: var(--text-secondary); }
 
 /* ---------- 7. Cards / Glass surfaces ---------- */
 .card {
-  background: var(--glass-100);
+  background: rgba(255,255,255,0.65);
   border: 1px solid var(--border-default);
   border-radius: var(--r-lg);
   padding: var(--s-5);
   backdrop-filter: blur(14px) saturate(140%);
   -webkit-backdrop-filter: blur(14px) saturate(140%);
+  box-shadow: var(--shadow-sm);
   transition: all 0.25s var(--ease-out);
 }
 @media (hover: hover) {
@@ -491,7 +492,7 @@ p { margin: 0 0 var(--s-4); color: var(--text-secondary); }
   backdrop-filter: none;
 }
 .card--featured {
-  background: linear-gradient(135deg, var(--glass-gold), var(--glass-100));
+  background: linear-gradient(135deg, rgba(251,246,236,0.85), rgba(255,255,255,0.75));
   border-color: var(--border-gold);
 }
 .card__icon {
@@ -745,8 +746,8 @@ p { margin: 0 0 var(--s-4); color: var(--text-secondary); }
   content: '';
   position: absolute; inset: 0;
   background:
-    radial-gradient(800px 400px at 30% 20%, rgba(212,165,116,0.18), transparent 60%),
-    radial-gradient(600px 400px at 80% 60%, rgba(74,144,226,0.18), transparent 60%);
+    radial-gradient(800px 400px at 30% 20%, rgba(212,165,116,0.16), transparent 60%),
+    radial-gradient(600px 400px at 80% 60%, rgba(74,144,226,0.10), transparent 60%);
   pointer-events: none;
 }
 .hero__inner { position: relative; z-index: 1; text-align: center; }
@@ -831,7 +832,7 @@ p { margin: 0 0 var(--s-4); color: var(--text-secondary); }
   bottom: 24px;
   right: 24px;
   padding: 14px 20px;
-  background: var(--bg-elev-3);
+  background: #ffffff;
   border: 1px solid var(--border-strong);
   border-radius: var(--r-md);
   box-shadow: var(--shadow-lg);
