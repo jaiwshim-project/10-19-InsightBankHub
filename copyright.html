@@ -282,6 +282,79 @@
       margin-top: var(--s-5);
     }
     .legal-box strong { color: var(--purple-500); }
+
+    /* ===== 다운로드 CTA ===== */
+    .dl-cta {
+      padding: var(--s-6) 0;
+      background: linear-gradient(135deg, var(--glass-gold), var(--glass-purple-soft));
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .dl-cta__grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--s-4);
+      max-width: 880px;
+      margin: 0 auto;
+    }
+    @media (max-width: 768px) { .dl-cta__grid { grid-template-columns: 1fr; } }
+    .dl-card {
+      display: flex;
+      align-items: center;
+      gap: var(--s-4);
+      padding: var(--s-5);
+      background: var(--bg-elev-3);
+      border: 1px solid var(--border-default);
+      border-radius: var(--r-lg);
+      transition: all 0.2s var(--ease-out);
+      text-decoration: none;
+      color: inherit;
+    }
+    .dl-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--border-gold);
+      box-shadow: var(--shadow-md);
+    }
+    .dl-card__icon {
+      flex-shrink: 0;
+      width: 56px; height: 56px;
+      border-radius: var(--r-md);
+      background: linear-gradient(135deg, var(--gold-500), var(--gold-700));
+      color: var(--text-on-gold);
+      display: grid; place-items: center;
+    }
+    .dl-card__icon--purple {
+      background: linear-gradient(135deg, var(--purple-300), var(--purple-700));
+      color: #fff;
+    }
+    .dl-card__title {
+      color: var(--text-primary);
+      font-weight: 700;
+      font-size: var(--fs-md);
+      margin: 0 0 4px;
+    }
+    .dl-card__desc {
+      color: var(--text-secondary);
+      font-size: var(--fs-sm);
+      margin: 0 0 4px;
+      line-height: 1.55;
+    }
+    .dl-card__meta {
+      color: var(--text-muted);
+      font-size: var(--fs-xs);
+      letter-spacing: 0.06em;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .dl-card__arrow {
+      flex-shrink: 0;
+      color: var(--gold-500);
+      transition: transform 0.2s var(--ease-out);
+    }
+    .dl-card:hover .dl-card__arrow { transform: translateX(4px); }
+
+    /* 인쇄/PDF 시 다운로드 CTA 숨김 */
+    @media print {
+      .dl-cta { display: none; }
+    }
   </style>
 </head>
 <body>
@@ -345,6 +418,40 @@
         <span><strong>창작 기간</strong>2026-05-01 ~ 2026-05-04</span>
         <span><strong>등록 카테고리</strong>편집저작물</span>
         <span><strong>총 라인 수</strong>15,838행</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 다운로드 CTA ============ -->
+  <section class="dl-cta">
+    <div class="container">
+      <div class="text-center" style="margin-bottom:var(--s-5);">
+        <span class="eyebrow">PDF · ZIP 다운로드</span>
+        <h2 style="margin-top:var(--s-3); font-size:var(--fs-xl);">등록 자료 즉시 다운로드</h2>
+      </div>
+      <div class="dl-cta__grid">
+        <a class="dl-card" href="assets/downloads/Insight_Bank_Hub_Copyright_Overview.pdf" download>
+          <div class="dl-card__icon">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="15" x2="15" y2="15"/><line x1="12" y1="12" x2="12" y2="18"/></svg>
+          </div>
+          <div style="flex:1;">
+            <div class="dl-card__title">요약 PDF 다운로드</div>
+            <div class="dl-card__desc">본 페이지(저작권 등록 개요)를 PDF로 즉시 저장. 디자인 그대로.</div>
+            <div class="dl-card__meta">PDF · 약 1.16 MB · 단일 파일</div>
+          </div>
+          <svg class="dl-card__arrow" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg>
+        </a>
+        <a class="dl-card" href="assets/downloads/Insight_Bank_Hub_Copyright_Assets.zip" download>
+          <div class="dl-card__icon dl-card__icon--purple">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          </div>
+          <div style="flex:1;">
+            <div class="dl-card__title">전체 자료 ZIP 다운로드</div>
+            <div class="dl-card__desc">등록 첨부 8건 마크다운 + 구조도 SVG. 그대로 한국저작권위원회 제출 가능.</div>
+            <div class="dl-card__meta">ZIP · 약 31.5 KB · 8 파일</div>
+          </div>
+          <svg class="dl-card__arrow" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg>
+        </a>
       </div>
     </div>
   </section>
