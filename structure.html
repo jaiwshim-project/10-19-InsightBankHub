@@ -242,35 +242,42 @@
           <rect class="node-box node-box--blue" x="40" y="420" width="1020" height="120" rx="14"/>
 
           <g>
-            <rect class="node-box" x="60" y="448" width="180" height="56" rx="8"/>
-            <text x="150" y="470" text-anchor="middle" class="label-strong" font-size="12">청킹·임베딩</text>
-            <text x="150" y="488" text-anchor="middle" class="label-muted">Chunking · Embed</text>
+            <rect class="node-box" x="69" y="448" width="152" height="56" rx="8"/>
+            <text x="145" y="470" text-anchor="middle" class="label-strong" font-size="12">청킹·임베딩</text>
+            <text x="145" y="488" text-anchor="middle" class="label-muted">Chunking · Embed</text>
 
-            <rect class="node-box" x="252" y="448" width="180" height="56" rx="8"/>
-            <text x="342" y="470" text-anchor="middle" class="label-strong" font-size="12">벡터 DB · BM25</text>
-            <text x="342" y="488" text-anchor="middle" class="label-muted">Hybrid Index</text>
+            <rect class="node-box" x="231" y="448" width="152" height="56" rx="8"/>
+            <text x="307" y="470" text-anchor="middle" class="label-strong" font-size="12">벡터 DB · BM25</text>
+            <text x="307" y="488" text-anchor="middle" class="label-muted">Hybrid Index</text>
 
-            <rect class="node-box" x="444" y="448" width="180" height="56" rx="8"/>
-            <text x="534" y="470" text-anchor="middle" class="label-strong" font-size="12">RAG 엔진</text>
-            <text x="534" y="488" text-anchor="middle" class="label-muted">Retrieval · Citation</text>
+            <rect class="node-box" x="393" y="448" width="152" height="56" rx="8"/>
+            <text x="469" y="470" text-anchor="middle" class="label-strong" font-size="12">RAG 엔진</text>
+            <text x="469" y="488" text-anchor="middle" class="label-muted">Retrieval · Citation</text>
 
             <!-- Phase 2.5 NEW · 보라 -->
-            <rect class="node-box" x="636" y="448" width="200" height="56" rx="8" stroke="var(--purple-500)" fill="var(--glass-purple)"/>
-            <text x="736" y="466" text-anchor="middle" class="label-strong" font-size="12" fill="var(--purple-500)">온톨로지 · 그래프</text>
-            <text x="736" y="482" text-anchor="middle" class="label-muted">RDF · OWL · SPARQL</text>
-            <text x="736" y="498" text-anchor="middle" font-size="9" fill="var(--purple-500)">Phase 2.5 NEW</text>
+            <rect class="node-box" x="555" y="448" width="152" height="56" rx="8" stroke="var(--purple-500)" fill="var(--glass-purple)"/>
+            <text x="631" y="466" text-anchor="middle" class="label-strong" font-size="12" fill="var(--purple-500)">온톨로지·그래프</text>
+            <text x="631" y="482" text-anchor="middle" class="label-muted">RDF · OWL · SPARQL</text>
+            <text x="631" y="498" text-anchor="middle" font-size="9" fill="var(--purple-500)">Phase 2.5 NEW</text>
 
-            <rect class="node-box" x="848" y="448" width="200" height="56" rx="8"/>
-            <text x="948" y="470" text-anchor="middle" class="label-strong" font-size="12">Gemini API</text>
-            <text x="948" y="488" text-anchor="middle" class="label-muted">Answer Generation</text>
+            <!-- GEO-AIO 콘텐츠 생성 NEW · 골드 -->
+            <rect class="node-box node-box--gold" x="717" y="448" width="152" height="56" rx="8"/>
+            <text x="793" y="466" text-anchor="middle" class="label-strong" font-size="12" fill="var(--gold-700)">GEO-AIO 콘텐츠</text>
+            <text x="793" y="482" text-anchor="middle" class="label-muted">SEO · AIO Auto-Gen</text>
+            <text x="793" y="498" text-anchor="middle" font-size="9" fill="var(--gold-700)">Stream 04 연계 NEW</text>
+
+            <rect class="node-box" x="879" y="448" width="152" height="56" rx="8"/>
+            <text x="955" y="470" text-anchor="middle" class="label-strong" font-size="12">Gemini API</text>
+            <text x="955" y="488" text-anchor="middle" class="label-muted">Answer Generation</text>
           </g>
 
           <!-- AI → Users flow -->
-          <path class="flow-line flow-line--solid" d="M150 540 L130 600" marker-end="url(#arr2)"/>
-          <path class="flow-line flow-line--solid" d="M342 540 L320 600" marker-end="url(#arr2)"/>
-          <path class="flow-line flow-line--solid" d="M534 540 L510 600" marker-end="url(#arr2)"/>
-          <path class="flow-line flow-line--solid" d="M736 540 L700 600" marker-end="url(#arr2)" stroke="rgba(126,34,206,0.75)"/>
-          <path class="flow-line flow-line--solid" d="M948 540 L890 600" marker-end="url(#arr2)"/>
+          <path class="flow-line flow-line--solid" d="M145 540 L117 600" marker-end="url(#arr2)"/>
+          <path class="flow-line flow-line--solid" d="M307 540 L282 600" marker-end="url(#arr2)"/>
+          <path class="flow-line flow-line--solid" d="M469 540 L447 600" marker-end="url(#arr2)"/>
+          <path class="flow-line flow-line--solid" d="M631 540 L612 600" marker-end="url(#arr2)" stroke="rgba(126,34,206,0.75)"/>
+          <path class="flow-line flow-line--solid" d="M793 540 L785 600" marker-end="url(#arr2)" stroke="rgba(138,97,53,0.75)"/>
+          <path class="flow-line flow-line--solid" d="M955 540 L970 600" marker-end="url(#arr2)"/>
 
           <!-- Layer 4: 사용자/B2B/AI 엔진 (6개 노드) -->
           <text x="550" y="622" text-anchor="middle" class="label-strong" fill="#8a6135">Layer 4 — Consumer · 독자 + B2B + 외부 AI</text>
@@ -336,11 +343,12 @@
         </div>
 
         <div class="layer-card" data-reveal>
-          <h4>Layer 3 · AI / RAG / 온톨로지</h4>
+          <h4>Layer 3 · AI / RAG / 온톨로지 / GEO-AIO</h4>
           <div class="tech-grid"><strong>임베딩</strong><span class="text-secondary">Gemini Embeddings · 다국어 8개</span></div>
           <div class="tech-grid"><strong>벡터 DB</strong><span class="text-secondary">pgvector · Pinecone (옵션)</span></div>
           <div class="tech-grid"><strong>RAG</strong><span class="text-secondary">하이브리드 검색 · BM25 + 벡터</span></div>
           <div class="tech-grid"><strong style="color:var(--purple-500);">온톨로지 ★</strong><span class="text-secondary">Apache Jena · OWL2 RL · FIBO/XBRL · SPARQL 1.1 (Phase 2.5)</span></div>
+          <div class="tech-grid"><strong style="color:var(--gold-700);">GEO-AIO ★</strong><span class="text-secondary">FAQ·요약·인용 블록 자동 생성 · JSON-LD/llms.txt 동기 · Stream 04 연계</span></div>
           <div class="tech-grid"><strong>LLM</strong><span class="text-secondary">Gemini 2.5 Pro · 멀티턴 · 출처 인용</span></div>
         </div>
 
@@ -373,6 +381,7 @@
             <tr><td>T+3분</td><td>JSON-LD · 태그 · 엔티티 자동 생성</td><td>AI 보조</td><td>구조화 데이터</td></tr>
             <tr><td>T+5분</td><td>청킹 + 임베딩 → 벡터 DB 적재</td><td>RAG 파이프라인</td><td>벡터 인덱스</td></tr>
             <tr style="background:var(--glass-purple-soft);"><td style="color:var(--purple-500);">T+7분</td><td style="color:var(--purple-500);">NER + RE → RDF 트리플 → Apache Jena 적재 + OWL2 추론</td><td style="color:var(--purple-500);">온톨로지 (Phase 2.5)</td><td style="color:var(--purple-500);">그래프 노드 + 추론 사실</td></tr>
+            <tr style="background:rgba(212,165,116,0.07);"><td style="color:var(--gold-700);">T+8분</td><td style="color:var(--gold-700);">GEO-AIO 콘텐츠 자동 생성 — FAQ·요약·인용 블록 + JSON-LD/llms.txt 동기화</td><td style="color:var(--gold-700);">GEO-AIO 엔진</td><td style="color:var(--gold-700);">AI 검색 인용 최적화 자산</td></tr>
             <tr><td>T+10분</td><td>사이트맵·llms.txt 갱신, 외부 검색엔진 핑</td><td>SEO/GEO 모듈</td><td>인용 가능 상태</td></tr>
             <tr><td>T+1시간</td><td>RAG 챗봇 응답 가능 + 출처 인용</td><td>RAG 엔진</td><td>인용 가능 답변</td></tr>
             <tr style="background:var(--glass-purple-soft);"><td style="color:var(--purple-500);">T+1시간</td><td style="color:var(--purple-500);">SPARQL endpoint 갱신 — B2B 그래프 라이선스 고객 즉시 쿼리 가능</td><td style="color:var(--purple-500);">그래프 라이선스</td><td style="color:var(--purple-500);">법무·PEF·IB 인사이트</td></tr>
