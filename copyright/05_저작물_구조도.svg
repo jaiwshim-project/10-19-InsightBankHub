@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" width="1200" height="800">
+  <defs>
+    <linearGradient id="bgGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0a0e1a"/>
+      <stop offset="100%" stop-color="#131829"/>
+    </linearGradient>
+    <radialGradient id="centerGlow" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0%" stop-color="#d4a574" stop-opacity="0.18"/>
+      <stop offset="100%" stop-color="#d4a574" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="goldGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#e6c895"/>
+      <stop offset="100%" stop-color="#8a6135"/>
+    </linearGradient>
+    <linearGradient id="blueGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#7eb6f5"/>
+      <stop offset="100%" stop-color="#1d4f93"/>
+    </linearGradient>
+    <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="6"/>
+      <feOffset dx="0" dy="4"/>
+      <feComponentTransfer><feFuncA type="linear" slope="0.4"/></feComponentTransfer>
+      <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="800" fill="url(#bgGrad)"/>
+  <ellipse cx="600" cy="400" rx="500" ry="320" fill="url(#centerGlow)"/>
+
+  <!-- Title -->
+  <text x="600" y="48" text-anchor="middle" font-family="Noto Serif KR, serif" font-weight="700" font-size="22" fill="#e8eaed">
+    Insight Bank Hub — 편집저작물 구조도
+  </text>
+  <text x="600" y="74" text-anchor="middle" font-family="Pretendard, sans-serif" font-size="13" fill="#9aa0b3" letter-spacing="1.5">
+    Compilation Work · 6 편집 단위 · © 2026 심재우 (SHIM, JAE WOO)
+  </text>
+
+  <!-- Connection lines (배경에 먼저) -->
+  <g stroke="#d4a574" stroke-opacity="0.35" stroke-width="1" fill="none">
+    <line x1="600" y1="400" x2="280" y2="220"/>
+    <line x1="600" y1="400" x2="600" y2="180"/>
+    <line x1="600" y1="400" x2="920" y2="220"/>
+    <line x1="600" y1="400" x2="280" y2="580"/>
+    <line x1="600" y1="400" x2="600" y2="640"/>
+    <line x1="600" y1="400" x2="920" y2="580"/>
+  </g>
+
+  <!-- Center Hub -->
+  <circle cx="600" cy="400" r="120" fill="rgba(212,165,116,0.10)" stroke="url(#goldGrad)" stroke-width="2" filter="url(#softShadow)"/>
+  <text x="600" y="380" text-anchor="middle" font-family="Noto Serif KR, serif" font-weight="700" font-size="18" fill="#e6c895">Insight Bank Hub</text>
+  <text x="600" y="404" text-anchor="middle" font-family="Pretendard, sans-serif" font-size="11" fill="#e8eaed" letter-spacing="0.8">편집저작물 (Compilation)</text>
+  <text x="600" y="426" text-anchor="middle" font-family="Pretendard, sans-serif" font-size="10" fill="#9aa0b3">저작권법 제6조</text>
+
+  <!-- Edit Unit 1 — 6 Media -->
+  <g transform="translate(280,220)">
+    <rect x="-110" y="-50" width="220" height="100" rx="12" fill="rgba(255,255,255,0.06)" stroke="url(#goldGrad)" stroke-width="1.2" filter="url(#softShadow)"/>
+    <text x="0" y="-22" text-anchor="middle" font-family="Pretendard, sans-serif" font-weight="700" font-size="14" fill="#e6c895">① 6개 매체</text>
+    <text x="0" y="0" text-anchor="middle" font-family="Pretendard, sans-serif" font-size="11" fill="#e8eaed">바이오타임즈 · ARG</text>
+    <text x="0" y="16" text-anchor="middle" font-family="Pretendard, sans-serif" font-size="11" fill="#e8eaed">스타트업투데이 · KMNA</text>
+    <text x="0" y="32" text-anchor="middle" font-family="Pretendard, sans-serif" font-size="11" fill="#e8eaed">디펜스투데이 · 월간지방세연구</text>
+  </g>
+
+  <!-- Edit Unit 2 — 14 Modules -->
+  <g transform="translate(600,180)">
+    <rect x="-110" y="-50" width="220" height="100" rx="12" fill="rgba(255,255,255,0.06)" stroke="url(#goldGrad)" stroke-width="1.2" filter="url(#softShadow)"/>
+    <text x="0" y="-22" text-anchor="middle" font-family="Pretendard, sans-serif" font-weight="700" font-size="14" fill="#e6c895">② 14개 모듈</text>
+    <text x="0" y="0" text-anchor="middle" font-family="Pretendard, sans-serif" font-size="11" fill="#e8eaed">5 그룹 메뉴 위계</text>
+    <text x="0" y="16" text-anchor="middle" font-family="Pretendard, sans-serif" font-size="11" fill="#e8eaed">개요·제안·기술·데모·매뉴얼</text>
+    <text x="0" y="32" text-anchor="middle" font-family="Pretendard, sans-serif" font-size="10" fill="#9aa0b3">6 페르소나 진입 경로</text>
+  </g>
+
+  <!-- Edit Unit 3 — 36 Products -->
+  <g transform="translate(920,220)">
+    <rect x="-110" y="-50" width="220" height="100" rx="12" fill="rgba(255,255,255,0.06)" stroke="url(#goldGrad)" stroke-width="1.2" filter="url(#softShadow)"/>
+    <text x="0" y="-22" text-anchor="middle" font-family="Pretendard, sans-serif" font-weight="700" font-size="14" fill="#e6c895">③ 36종 상품</text>
+    <text x="0" y="0" text-anchor="middle" font-family="Pretendard, sans-serif" font-size="11" fill="#e8eaed">8 카테고리 카탈로그</text>
+    <text x="0" y="16" text-anchor="middle" font-family="Pretendard, sans-serif" font-size="11" fill="#e8eaed">B2B 패키지 6종</text>
+    <text x="0" y="32" text-anchor="middle" font-family="Pretendard, sans-serif" font-size="10" fill="#9aa0b3">본업 결합 8종</text>
+  </g>
+
+  <!-- Edit Unit 4 — 9 Stream BM -->
+  <g transform="translate(280,580)">
+    <rect x="-110" y="-50" width="220" height="100" rx="12" fill="rgba(74,144,226,0.10)" stroke="url(#blueGrad)" stroke-width="1.2" filter="url(#softShadow)"/>
+    <text x="0" y="-22" text-anchor="middle" font-family="Pretendard, sans-serif" font-weight="700" font-size="14" fill="#7eb6f5">④ 9 Stream BM</text>
+    <text x="0" y="0" text-anchor="middle" font-family="Pretendard, sans-serif" font-size="11" fill="#e8eaed">광고·구독·B2B API</text>
+    <text x="0" y="16" text-anchor="middle" font-family="Pretendard, sans-serif" font-size="11" fill="#e8eaed">AI 인용·그래프 4Tier</text>
+    <text x="0" y="32" text-anchor="middle" font-family="Pretendard, sans-serif" font-size="10" fill="#9aa0b3">+ 외부 매체 4Tier 확장</text>
+  </g>
+
+  <!-- Edit Unit 5 — 4 Layer Architecture -->
+  <g transform="translate(600,640)">
+    <rect x="-110" y="-50" width="220" height="100" rx="12" fill="rgba(74,144,226,0.10)" stroke="url(#blueGrad)" stroke-width="1.2" filter="url(#softShadow)"/>
+    <text x="0" y="-22" text-anchor="middle" font-family="Pretendard, sans-serif" font-weight="700" font-size="14" fill="#7eb6f5">⑤ 4-Layer 아키텍처</text>
+    <text x="0" y="0" text-anchor="middle" font-family="Pretendard, sans-serif" font-size="11" fill="#e8eaed">Source · Integration</text>
+    <text x="0" y="16" text-anchor="middle" font-family="Pretendard, sans-serif" font-size="11" fill="#e8eaed">Knowledge · Application</text>
+    <text x="0" y="32" text-anchor="middle" font-family="Pretendard, sans-serif" font-size="10" fill="#9aa0b3">FIBO · XBRL · SPARQL</text>
+  </g>
+
+  <!-- Edit Unit 6 — 8 Languages i18n -->
+  <g transform="translate(920,580)">
+    <rect x="-110" y="-50" width="220" height="100" rx="12" fill="rgba(74,144,226,0.10)" stroke="url(#blueGrad)" stroke-width="1.2" filter="url(#softShadow)"/>
+    <text x="0" y="-22" text-anchor="middle" font-family="Pretendard, sans-serif" font-weight="700" font-size="14" fill="#7eb6f5">⑥ 8개 언어 i18n</text>
+    <text x="0" y="0" text-anchor="middle" font-family="Pretendard, sans-serif" font-size="11" fill="#e8eaed">KO·EN·ZH·JA</text>
+    <text x="0" y="16" text-anchor="middle" font-family="Pretendard, sans-serif" font-size="11" fill="#e8eaed">ES·FR·DE·AR(RTL)</text>
+    <text x="0" y="32" text-anchor="middle" font-family="Pretendard, sans-serif" font-size="10" fill="#9aa0b3">언어별 LLM 타깃 매핑</text>
+  </g>
+
+  <!-- Footer caption -->
+  <text x="600" y="755" text-anchor="middle" font-family="Pretendard, sans-serif" font-size="11" fill="#5d6480" letter-spacing="1">
+    소재 선택 (큐레이션) × 배열·구성 (위계·매핑) × 디자인 편집 (다크 프리미엄 + 골드/블루 듀얼) × 다국어 편집 (LLM 매핑)
+  </text>
+  <text x="600" y="775" text-anchor="middle" font-family="Pretendard, sans-serif" font-size="10" fill="#5d6480" letter-spacing="0.6">
+    저작권법 제6조 편집저작물 — 한국저작권위원회 등록 자료
+  </text>
+</svg>
