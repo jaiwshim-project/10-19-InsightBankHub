@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#fafaf6" />
+  <title>저작권 등록 — Insight Bank Hub (편집저작물)</title>
+  <meta name="description" content="Insight Bank Hub는 저작권법 제6조 편집저작물로 한국저작권위원회에 등록된 디지털 콘텐츠 통합 플랫폼입니다. 8 편집 단위 + 4축 창작성." />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="저작권 등록 — Insight Bank Hub (편집저작물)" />
+  <meta property="og:description" content="6 매체 + 16 모듈 + 36 상품 + 9 Stream + 4-Layer + 8 언어 + 사업계획서 + 사례 보기 — 8 편집 단위의 창작성" />
+  <meta property="og:image" content="assets/og-image.svg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+  <link rel="apple-touch-icon" href="assets/favicon.svg" />
+  <link rel="canonical" href="copyright.html" />
+
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <link rel="stylesheet" href="css/common.css" />
+
+  <style>
+    /* ===== 페이지 로컬 ===== */
+    .cr-hero {
+      padding: 100px 0 var(--s-7);
+      text-align: center;
+      border-bottom: 1px solid var(--border-subtle);
+      background: radial-gradient(ellipse at top, rgba(212,165,116,0.10), transparent 60%);
+    }
+    .cr-meta {
+      display: flex; justify-content: center; gap: var(--s-5);
+      flex-wrap: wrap;
+      margin-top: var(--s-4);
+      font-size: var(--fs-sm);
+      color: var(--text-muted);
+    }
+    .cr-meta strong { color: var(--text-primary); margin-right: 6px; }
+
+    /* 등록 개요 카드 */
+    .cr-summary {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--s-4);
+      margin-top: var(--s-6);
+    }
+    @media (max-width: 1024px) { .cr-summary { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 640px)  { .cr-summary { grid-template-columns: 1fr; } }
+    .cr-summary__cell {
+      padding: var(--s-5);
+      background: var(--glass-100);
+      border: 1px solid var(--border-default);
+      border-radius: var(--r-lg);
+      backdrop-filter: blur(12px) saturate(140%);
+    }
+    .cr-summary__cell .label {
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--gold-300);
+      font-weight: 700;
+    }
+    .cr-summary__cell .value {
+      margin-top: var(--s-2);
+      color: var(--text-primary);
+      font-size: var(--fs-md);
+      font-weight: 700;
+    }
+    .cr-summary__cell .sub {
+      margin-top: 4px;
+      color: var(--text-secondary);
+      font-size: var(--fs-sm);
+    }
+
+    /* 8 편집 단위 그리드 */
+    .unit-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--s-4);
+    }
+    @media (max-width: 1024px) { .unit-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 640px)  { .unit-grid { grid-template-columns: 1fr; } }
+    .unit-card {
+      padding: var(--s-5);
+      background: var(--glass-100);
+      border: 1px solid var(--border-default);
+      border-radius: var(--r-lg);
+      backdrop-filter: blur(12px) saturate(140%);
+      position: relative;
+      transition: all 0.25s var(--ease-out);
+    }
+    @media (hover: hover) {
+      .unit-card:hover { transform: translateY(-3px); border-color: var(--border-gold); box-shadow: var(--shadow-md); }
+    }
+    .unit-card__num {
+      position: absolute; top: var(--s-3); right: var(--s-3);
+      font-family: 'Noto Serif KR', serif;
+      font-weight: 700;
+      font-size: var(--fs-lg);
+      color: var(--gold-500);
+      opacity: 0.7;
+    }
+    .unit-card h4 {
+      margin: 0 0 var(--s-2);
+      color: var(--text-primary);
+      font-size: var(--fs-md);
+      padding-right: 32px;
+    }
+    .unit-card p {
+      color: var(--text-secondary);
+      font-size: var(--fs-sm);
+      line-height: 1.65;
+      margin: 0;
+    }
+
+    /* 4축 창작성 */
+    .axis-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--s-5);
+    }
+    @media (max-width: 768px) { .axis-grid { grid-template-columns: 1fr; } }
+    .axis-card {
+      padding: var(--s-6);
+      background: linear-gradient(135deg, var(--glass-gold), var(--glass-100));
+      border: 1px solid var(--border-gold);
+      border-radius: var(--r-lg);
+      backdrop-filter: blur(14px);
+    }
+    .axis-card h3 {
+      color: var(--gold-500);
+      margin: 0 0 var(--s-3);
+      font-size: var(--fs-lg);
+      display: flex; align-items: center; gap: 10px;
+    }
+    .axis-card h3 .axis-num {
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      background: var(--glass-gold);
+      border: 1px solid var(--border-gold);
+      color: var(--gold-500);
+      display: grid; place-items: center;
+      font-family: 'Noto Serif KR', serif;
+      font-size: 14px;
+      font-weight: 700;
+    }
+    .axis-card ul { margin: 0; padding-left: 20px; color: var(--text-secondary); }
+    .axis-card ul li { margin-bottom: 6px; line-height: 1.65; font-size: var(--fs-sm); }
+
+    /* Git 마일스톤 */
+    .timeline {
+      position: relative;
+      margin-top: var(--s-6);
+      padding-left: var(--s-5);
+      border-left: 2px solid var(--border-gold);
+    }
+    .timeline__item {
+      position: relative;
+      padding: 0 0 var(--s-4) var(--s-4);
+    }
+    .timeline__item::before {
+      content: '';
+      position: absolute;
+      left: -29px; top: 4px;
+      width: 12px; height: 12px;
+      border-radius: 50%;
+      background: var(--gold-500);
+      border: 3px solid var(--bg-base);
+      box-shadow: 0 0 0 2px var(--border-gold);
+    }
+    .timeline__item.starred::before { background: var(--purple-500); box-shadow: 0 0 0 2px var(--border-purple); }
+    .timeline__date {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+    }
+    .timeline__hash {
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--gold-500);
+      font-size: 11px;
+      margin-left: 8px;
+    }
+    .timeline__title {
+      margin-top: 4px;
+      color: var(--text-primary);
+      font-size: var(--fs-sm);
+      font-weight: 600;
+    }
+    .timeline__desc {
+      margin-top: 4px;
+      color: var(--text-secondary);
+      font-size: var(--fs-xs);
+      line-height: 1.6;
+    }
+
+    /* 등록 자료 8건 */
+    .docs-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--s-3);
+    }
+    @media (max-width: 640px) { .docs-grid { grid-template-columns: 1fr; } }
+    .docs-card {
+      padding: var(--s-4);
+      background: var(--glass-100);
+      border: 1px solid var(--border-default);
+      border-radius: var(--r-md);
+      display: flex; align-items: flex-start; gap: var(--s-3);
+      transition: all 0.2s var(--ease-out);
+    }
+    .docs-card:hover { background: var(--glass-200); border-color: var(--border-gold); transform: translateX(4px); }
+    .docs-card__num {
+      width: 36px; height: 36px;
+      border-radius: var(--r-sm);
+      background: var(--glass-gold);
+      border: 1px solid var(--border-gold);
+      color: var(--gold-500);
+      font-weight: 700;
+      font-size: var(--fs-sm);
+      display: grid; place-items: center;
+      flex-shrink: 0;
+    }
+    .docs-card__body { flex: 1; }
+    .docs-card__title {
+      color: var(--text-primary);
+      font-weight: 600;
+      font-size: var(--fs-sm);
+      margin-bottom: 2px;
+    }
+    .docs-card__desc {
+      color: var(--text-secondary);
+      font-size: var(--fs-xs);
+      line-height: 1.55;
+    }
+    .docs-card__link {
+      color: var(--gold-500);
+      font-size: var(--fs-xs);
+      margin-top: 4px;
+      display: inline-block;
+    }
+    .docs-card__link:hover { text-decoration: underline; }
+
+    /* 등록 절차 */
+    .step-list {
+      counter-reset: step;
+      padding: 0;
+      list-style: none;
+      margin: 0;
+    }
+    .step-list li {
+      counter-increment: step;
+      position: relative;
+      padding: var(--s-4) 0 var(--s-4) 64px;
+      border-bottom: 1px dashed var(--border-subtle);
+      color: var(--text-secondary);
+      font-size: var(--fs-sm);
+      line-height: 1.7;
+    }
+    .step-list li:last-child { border-bottom: none; }
+    .step-list li::before {
+      content: counter(step, decimal-leading-zero);
+      position: absolute;
+      left: 0; top: var(--s-4);
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      background: var(--glass-gold);
+      border: 1px solid var(--border-gold);
+      color: var(--gold-500);
+      display: grid; place-items: center;
+      font-family: 'Noto Serif KR', serif;
+      font-weight: 700;
+      font-size: var(--fs-sm);
+    }
+    .step-list strong { color: var(--text-primary); display: block; margin-bottom: 2px; }
+
+    /* 강조 박스 */
+    .legal-box {
+      padding: var(--s-5);
+      background: var(--glass-purple-soft);
+      border: 1px solid var(--border-purple);
+      border-radius: var(--r-md);
+      margin-top: var(--s-5);
+    }
+    .legal-box strong { color: var(--purple-500); }
+  </style>
+</head>
+<body>
+
+  <header class="header">
+    <div class="header__inner">
+      <a class="brand" href="index.html" aria-label="Insight Bank Hub"><img src="assets/logo.svg" alt="Insight Bank Hub" class="brand__logo" /></a>
+      <nav class="nav" aria-label="주요 메뉴">
+        <a class="nav__link" href="index.html">개요</a>
+        <div class="nav__group">
+          <button class="nav__link nav__trigger" type="button" aria-haspopup="true">제안</button>
+          <div class="nav__menu">
+            <div class="nav__menu__heading">제안 · 영업 자료</div>
+            <a class="nav__menu-link" href="proposal.html">계약 제안서<small>선명회계법인 12개월 도입</small></a>
+            <a class="nav__menu-link" href="channels.html">6개 채널<small>바이오·ICT·스타트업·M&A·방산·조세</small></a>
+            <a class="nav__menu-link" href="products.html">상품·서비스 카탈로그<small>8 카테고리 36종</small></a>
+            <a class="nav__menu-link" href="monetization.html">수익 모델<small>9 Stream · Y3 88억</small></a>
+            <a class="nav__menu-link" href="competitive-landscape.html">경쟁 환경<small>40+ 글로벌·한국 경쟁사</small></a>
+          </div>
+        </div>
+        <div class="nav__group">
+          <button class="nav__link nav__trigger" type="button" aria-haspopup="true">기술</button>
+          <div class="nav__menu">
+            <div class="nav__menu__heading">기술 · 차별화</div>
+            <a class="nav__menu-link" href="structure.html">시스템 구조도<small>4-Layer 아키텍처 SVG</small></a>
+            <a class="nav__menu-link" href="ontology.html">온톨로지 레이어<small>FIBO/XBRL · 6채널 결합</small></a>
+            <a class="nav__menu-link" href="graph-license.html">그래프 라이선스<small>Stream 09 · SPARQL B2B</small></a>
+          </div>
+        </div>
+        <div class="nav__group">
+          <button class="nav__link nav__trigger" type="button" aria-haspopup="true">데모</button>
+          <div class="nav__menu">
+            <div class="nav__menu__heading">플랫폼 · 운영 데모</div>
+            <a class="nav__menu-link" href="dashboard.html">통합 대시보드<small>6채널 KPI · AI 인용 추이</small></a>
+            <a class="nav__menu-link" href="content.html">콘텐츠 관리<small>발행 큐 · GEO 점수</small></a>
+            <a class="nav__menu-link" href="knowledge.html">RAG 지식베이스<small>벡터 인덱스 · 토픽</small></a>
+            <a class="nav__menu-link" href="chatbot.html">RAG 챗봇<small>Gemini · 출처 인용</small></a>
+          </div>
+        </div>
+        <a class="nav__link" href="case-study.html">사례 보기</a>
+      </nav>
+      <button class="nav-toggle" aria-label="메뉴"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
+    </div>
+  </header>
+
+  <!-- ============ HERO ============ -->
+  <section class="cr-hero">
+    <div class="container">
+      <span class="eyebrow">한국저작권위원회 · 편집저작물</span>
+      <h1 class="display" style="font-size:clamp(36px,6vw,56px); margin: var(--s-4) 0 var(--s-3);">
+        Insight Bank Hub<br/>
+        <span class="text-gradient">저작권법 제6조 편집저작물</span>
+      </h1>
+      <p style="max-width:720px; margin:0 auto; color:var(--text-secondary);">
+        한국 산업·자본·조세 6개 매체 · 16 기능 모듈 · 36종 상품 카탈로그 · 9 Revenue Streams ·
+        4-Layer 아키텍처 · 8개 언어 i18n · 사업계획서 · 사례 보기 —
+        <strong style="color:var(--text-primary);">8 편집 단위의 창작성</strong>으로 등록.
+      </p>
+      <div class="cr-meta">
+        <span><strong>저작자</strong>심재우 (SHIM, JAE WOO)</span>
+        <span><strong>창작 기간</strong>2026-05-01 ~ 2026-05-04</span>
+        <span><strong>등록 카테고리</strong>편집저작물</span>
+        <span><strong>총 라인 수</strong>15,838행</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 1. 등록 개요 ============ -->
+  <section class="section section--sm">
+    <div class="container">
+      <div class="text-center" style="max-width:640px; margin:0 auto var(--s-5);">
+        <span class="eyebrow">01 · 등록 개요</span>
+        <h2 style="margin-top:var(--s-3);">등록 정보 한눈에</h2>
+      </div>
+
+      <div class="cr-summary">
+        <div class="cr-summary__cell">
+          <div class="label">저작물 제호</div>
+          <div class="value">Insight Bank Hub</div>
+          <div class="sub">인사이트 뱅크 허브</div>
+        </div>
+        <div class="cr-summary__cell">
+          <div class="label">저작물 유형</div>
+          <div class="value">편집저작물</div>
+          <div class="sub">저작권법 제6조</div>
+        </div>
+        <div class="cr-summary__cell">
+          <div class="label">등록 기관</div>
+          <div class="value">한국저작권위원회</div>
+          <div class="sub">cros.or.kr</div>
+        </div>
+        <div class="cr-summary__cell">
+          <div class="label">수수료 / 처리</div>
+          <div class="value">26,800원</div>
+          <div class="sub">7~14일 소요</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 2. 8 편집 단위 ============ -->
+  <section class="section section--sm">
+    <div class="container">
+      <div class="text-center" style="max-width:680px; margin:0 auto var(--s-5);">
+        <span class="eyebrow">02 · 편집된 소재</span>
+        <h2 style="margin-top:var(--s-3);">8 편집 단위 — 무엇을 어떻게 편집했는가</h2>
+        <p>편집저작물의 보호는 <strong style="color:var(--text-primary);">소재의 선택·배열·구성</strong>에 있습니다. 본 저작물은 다음 8 단위를 GEO-AIO 관점에서 큐레이션했습니다.</p>
+      </div>
+
+      <div class="unit-grid">
+        <div class="unit-card">
+          <span class="unit-card__num">01</span>
+          <h4>6 인터넷 매체</h4>
+          <p>바이오타임즈 · ARG · 스타트업투데이 · 한국M&amp;A경제신문 · 디펜스투데이 · 월간지방세연구. <strong>산업+자본+조세 3축 결합</strong>의 큐레이션.</p>
+        </div>
+        <div class="unit-card">
+          <span class="unit-card__num">02</span>
+          <h4>16 기능 모듈</h4>
+          <p>5 그룹 메뉴 위계(개요·제안·기술·데모·사례 보기). 6 페르소나별 진입 경로 매트릭스 설계.</p>
+        </div>
+        <div class="unit-card">
+          <span class="unit-card__num">03</span>
+          <h4>36종 상품 카탈로그</h4>
+          <p>광고·구독·B2B API·AI 인용·그래프·컨설팅·교육·패키지 8 카테고리. 본업 결합 8종 강조.</p>
+        </div>
+        <div class="unit-card">
+          <span class="unit-card__num">04</span>
+          <h4>9 Stream BM</h4>
+          <p>광고/구독/B2B/콘텐츠/컨설팅/교육/AI 인용/글로벌/<strong>그래프 라이선스 4티어</strong>(Royal Purple).</p>
+        </div>
+        <div class="unit-card">
+          <span class="unit-card__num">05</span>
+          <h4>4-Layer 아키텍처</h4>
+          <p>Source → Integration(Serverless RSS) → Knowledge(RAG·온톨로지·3D 그래프) → Application.</p>
+        </div>
+        <div class="unit-card">
+          <span class="unit-card__num">06</span>
+          <h4>8 언어 i18n</h4>
+          <p>KO·EN·ZH·JA·ES·FR·DE·AR(RTL). 언어별 LLM 타깃 매핑 + <strong>영문 약어 자동 확장기</strong>.</p>
+        </div>
+        <div class="unit-card">
+          <span class="unit-card__num">07</span>
+          <h4>사업계획서 6 핵심 섹션</h4>
+          <p>시장·BM·재무·로드맵·리스크·자금. 각 섹션 200단어 해설. IR/투자자 의사결정 지원.</p>
+        </div>
+        <div class="unit-card">
+          <span class="unit-card__num">08</span>
+          <h4>사례 보기 통합 인사이트</h4>
+          <p>K-방산 무인화 IPO 시나리오 — <strong>6채널 결합으로만 가능한 통합 인사이트</strong>. 3D 온톨로지 그래프 시각화.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 3. 4축 창작성 ============ -->
+  <section class="section section--sm" style="background: var(--bg-elev-1);">
+    <div class="container">
+      <div class="text-center" style="max-width:680px; margin:0 auto var(--s-5);">
+        <span class="eyebrow">03 · 창작성 입증</span>
+        <h2 style="margin-top:var(--s-3);">4축 창작성 — 왜 이 편집이 보호되는가</h2>
+      </div>
+
+      <div class="axis-grid">
+        <div class="axis-card">
+          <h3><span class="axis-num">①</span> 소재 선택의 창작성</h3>
+          <ul>
+            <li>한국 수백 매체 중 <strong>산업+자본+조세 3축</strong>을 만드는 6개 매체 선별</li>
+            <li>36종 상품을 8 카테고리로 의미 분류 (AI 인용 라이선스 · 그래프 라이선스 신설)</li>
+            <li>의사결정자 6 페르소나별 진입 경로 매트릭스</li>
+            <li>사업계획서: GEO-AIO 사업 본질에 맞춘 6 섹션 선택</li>
+            <li>사례 보기: 단일 매체 흉내 불가한 통합 시나리오 큐레이션</li>
+          </ul>
+        </div>
+        <div class="axis-card">
+          <h3><span class="axis-num">②</span> 배열·구성의 창작성</h3>
+          <ul>
+            <li>16 모듈을 <strong>5 그룹 메뉴 위계</strong>로 재구성 (헤더·푸터 일관)</li>
+            <li>4-Layer 아키텍처 + 3D 온톨로지 그래프 시각화</li>
+            <li>그래프 4티어 가격(Read-only/Pro/Enterprise/Strategic) 매트릭스</li>
+            <li>B2B 패키지 6종 — 36종 상품의 페르소나별 매핑</li>
+            <li>사례 보기 — 단일 시나리오에 6채널 컨트리뷰션 분담 매핑</li>
+          </ul>
+        </div>
+        <div class="axis-card">
+          <h3><span class="axis-num">③</span> 디자인 편집의 창작성</h3>
+          <ul>
+            <li><strong>White Premium 베이스</strong> + Heritage Gold + Royal Purple + Insight Blue 4색 체계</li>
+            <li>74+ 디자인 토큰 (5단계 elevation · 9단계 spacing · 11단계 type scale)</li>
+            <li><strong>KoPubWorld Dotum</strong> (한국출판인회의) — 로컬+CDN 3순위 폴백</li>
+            <li>WCAG 명도비 4단계 텍스트 토큰 (16:1 ~ 3.2:1)</li>
+            <li>글래스 모피즘 + fadeUp 시퀀스 + 스크롤 인터랙션</li>
+          </ul>
+        </div>
+        <div class="axis-card">
+          <h3><span class="axis-num">④</span> 다국어 편집의 창작성</h3>
+          <ul>
+            <li>8 언어 → 타깃 LLM 매핑 매트릭스 (EN→ChatGPT, ZH→Qwen ...)</li>
+            <li><strong>영문 약어 자동 확장기</strong> — 첫 등장 시 <code>(English · 한글)</code> 풀이</li>
+            <li>약어 사전 큐레이션 (NER · RE · FIBO · XBRL · RAG · GEO 등)</li>
+            <li>RTL(아랍어) 부분 적용 규칙 — 가독성을 위해 숫자·차트는 LTR 유지</li>
+            <li>도메인 전문 용어 한국어 표준화 + LLM 인덱싱 양면 최적화</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 4. Git 마일스톤 ============ -->
+  <section class="section section--sm">
+    <div class="container">
+      <div class="text-center" style="max-width:680px; margin:0 auto var(--s-5);">
+        <span class="eyebrow">04 · 창작 과정 증명</span>
+        <h2 style="margin-top:var(--s-3);">Git 마일스톤 — 24 커밋 / 4일 / 단독 기여</h2>
+        <p>모든 커밋이 <strong style="color:var(--text-primary);">의도적 편집 단위</strong>를 담고 있습니다. 변조 불가능한 SHA-1 해시로 창작 시점을 증명합니다.</p>
+      </div>
+
+      <div class="timeline">
+        <div class="timeline__item">
+          <div class="timeline__date">2026-05-01 18:43 KST<span class="timeline__hash">16e0051</span></div>
+          <div class="timeline__title">초기 6채널 통합 — 편집 단위 1 확정</div>
+          <div class="timeline__desc">feat: Insight Bank Hub 초기 구축 — 6채널 통합 GEO-AIO 싱크탱크</div>
+        </div>
+        <div class="timeline__item">
+          <div class="timeline__date">2026-05-01 19:12 KST<span class="timeline__hash">770f6c2</span></div>
+          <div class="timeline__title">14→5 그룹 메뉴 위계 — 배열 창작성</div>
+          <div class="timeline__desc">feat: 메뉴 구조 정리(14→5 그룹) + 매뉴얼·구조도 전면 업데이트</div>
+        </div>
+        <div class="timeline__item starred">
+          <div class="timeline__date">2026-05-01 22:46 KST<span class="timeline__hash">6e90ae1</span></div>
+          <div class="timeline__title">Royal Purple 토큰 + KoPubWorld Dotum — 시각 편집</div>
+          <div class="timeline__desc">feat: Royal Purple 토큰화 + KoPubWorld Dotum 폰트 + 로고 PNG 생성</div>
+        </div>
+        <div class="timeline__item starred">
+          <div class="timeline__date">2026-05-01 23:11 KST<span class="timeline__hash">a4ac416</span></div>
+          <div class="timeline__title">사례 보기 신설 — 편집 단위 8</div>
+          <div class="timeline__desc">feat: 사례 보기 페이지 신설 + 14개 페이지 네비에 메뉴 추가</div>
+        </div>
+        <div class="timeline__item">
+          <div class="timeline__date">2026-05-01 23:20 KST<span class="timeline__hash">7f07f70</span></div>
+          <div class="timeline__title">3D 온톨로지 그래프 — 시각 편집</div>
+          <div class="timeline__desc">feat(case-study): 3D 온톨로지 그래프 + 각 섹션 200단어 해설</div>
+        </div>
+        <div class="timeline__item starred">
+          <div class="timeline__date">2026-05-02 09:22 KST<span class="timeline__hash">d34aeeb</span></div>
+          <div class="timeline__title">사업계획서 신설 — 편집 단위 7</div>
+          <div class="timeline__desc">feat: 사업계획서 페이지 신설 + 15개 페이지 푸터에 링크 추가</div>
+        </div>
+        <div class="timeline__item starred">
+          <div class="timeline__date">2026-05-02 10:20 KST<span class="timeline__hash">9d1e88e</span></div>
+          <div class="timeline__title">다크 → 화이트 테마 전면 전환 — 디자인 결단</div>
+          <div class="timeline__desc">style(theme): 다크 → 화이트 프리미엄 테마 전면 전환</div>
+        </div>
+        <div class="timeline__item starred">
+          <div class="timeline__date">2026-05-02 18:46 KST<span class="timeline__hash">94a5e76</span></div>
+          <div class="timeline__title">영문 약어 자동 확장기 — 다국어 편집</div>
+          <div class="timeline__desc">feat(i18n): 영문 약어 자동 확장기 — 모든 페이지 첫 등장 시 (English · 한글)</div>
+        </div>
+        <div class="timeline__item starred">
+          <div class="timeline__date">2026-05-04 17:36 KST<span class="timeline__hash">cc0cbe2</span></div>
+          <div class="timeline__title">등록 자료 8건 추가 — 편집저작물 등록 준비 완료</div>
+          <div class="timeline__desc">docs(copyright): 한국저작권위원회 편집저작물 등록 자료 8건 추가</div>
+        </div>
+      </div>
+
+      <p class="text-muted" style="margin-top:var(--s-5); font-size:var(--fs-sm); text-align:center;">
+        전체 24 커밋 이력은
+        <a href="https://github.com/jaiwshim-project/10-19-InsightBankHub/commits/main" target="_blank" rel="noopener" style="color:var(--gold-500); text-decoration:underline;">GitHub 저장소</a>
+        에서 확인할 수 있습니다.
+      </p>
+    </div>
+  </section>
+
+  <!-- ============ 5. 등록 자료 8건 ============ -->
+  <section class="section section--sm" style="background: var(--bg-elev-1);">
+    <div class="container">
+      <div class="text-center" style="max-width:680px; margin:0 auto var(--s-5);">
+        <span class="eyebrow">05 · 첨부 자료</span>
+        <h2 style="margin-top:var(--s-3);">한국저작권위원회 등록 첨부 8건</h2>
+        <p>저장소 <code>copyright/</code> 폴더에서 원문 마크다운으로 열람·다운로드 가능합니다.</p>
+      </div>
+
+      <div class="docs-grid">
+        <a class="docs-card" href="https://github.com/jaiwshim-project/10-19-InsightBankHub/blob/main/copyright/01_%EC%A0%80%EC%9E%91%EA%B6%8C%EB%93%B1%EB%A1%9D%EC%8B%A0%EC%B2%AD%EC%84%9C.md" target="_blank" rel="noopener">
+          <div class="docs-card__num">01</div>
+          <div class="docs-card__body">
+            <div class="docs-card__title">저작권 등록 신청서</div>
+            <div class="docs-card__desc">온라인 등록 신청서 초안 — 저작자·저작물·권리관계·창작·공표 정보</div>
+            <span class="docs-card__link">GitHub에서 열기 →</span>
+          </div>
+        </a>
+        <a class="docs-card" href="https://github.com/jaiwshim-project/10-19-InsightBankHub/blob/main/copyright/02_%EC%A0%80%EC%9E%91%EB%AC%BC_%EB%AA%85%EC%84%B8%EC%84%9C.md" target="_blank" rel="noopener">
+          <div class="docs-card__num">02</div>
+          <div class="docs-card__body">
+            <div class="docs-card__title">저작물 명세서</div>
+            <div class="docs-card__desc">8 편집 단위 + 16 모듈 + 디자인 시스템 + 디렉토리 구조</div>
+            <span class="docs-card__link">GitHub에서 열기 →</span>
+          </div>
+        </a>
+        <a class="docs-card" href="https://github.com/jaiwshim-project/10-19-InsightBankHub/blob/main/copyright/03_%EC%B0%BD%EC%9E%91%EC%84%B1_%EC%84%A4%EB%AA%85%EC%84%9C.md" target="_blank" rel="noopener">
+          <div class="docs-card__num">03</div>
+          <div class="docs-card__body">
+            <div class="docs-card__title">창작성 설명서 ★</div>
+            <div class="docs-card__desc">4축 창작성 입증 (소재 선택·배열·디자인·다국어) — 등록의 핵심</div>
+            <span class="docs-card__link">GitHub에서 열기 →</span>
+          </div>
+        </a>
+        <a class="docs-card" href="https://github.com/jaiwshim-project/10-19-InsightBankHub/blob/main/copyright/04_%EC%86%8C%EC%8A%A4%EC%BD%94%EB%93%9C_%EC%9A%94%EC%95%BD.md" target="_blank" rel="noopener">
+          <div class="docs-card__num">04</div>
+          <div class="docs-card__body">
+            <div class="docs-card__title">소스코드 요약</div>
+            <div class="docs-card__desc">50p 이내 발췌 가이드 + Edge Headless 자동 PDF 변환 스크립트</div>
+            <span class="docs-card__link">GitHub에서 열기 →</span>
+          </div>
+        </a>
+        <a class="docs-card" href="https://github.com/jaiwshim-project/10-19-InsightBankHub/blob/main/copyright/05_%EC%A0%80%EC%9E%91%EB%AC%BC_%EA%B5%AC%EC%A1%B0%EB%8F%84.svg" target="_blank" rel="noopener">
+          <div class="docs-card__num">05</div>
+          <div class="docs-card__body">
+            <div class="docs-card__title">저작물 구조도 (SVG)</div>
+            <div class="docs-card__desc">6 편집 단위 시각화 다이어그램 (1200×800 SVG)</div>
+            <span class="docs-card__link">GitHub에서 열기 →</span>
+          </div>
+        </a>
+        <a class="docs-card" href="https://github.com/jaiwshim-project/10-19-InsightBankHub/blob/main/copyright/06_%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7_%EB%AA%A9%EB%A1%9D.md" target="_blank" rel="noopener">
+          <div class="docs-card__num">06</div>
+          <div class="docs-card__body">
+            <div class="docs-card__title">스크린샷 목록</div>
+            <div class="docs-card__desc">20장 PNG 촬영 가이드 + puppeteer/Edge headless 자동화 명령</div>
+            <span class="docs-card__link">GitHub에서 열기 →</span>
+          </div>
+        </a>
+        <a class="docs-card" href="https://github.com/jaiwshim-project/10-19-InsightBankHub/blob/main/copyright/07_Git_%EC%9D%B4%EB%A0%A5_%EC%A6%9D%EB%AA%85.md" target="_blank" rel="noopener">
+          <div class="docs-card__num">07</div>
+          <div class="docs-card__body">
+            <div class="docs-card__title">Git 이력 증명서</div>
+            <div class="docs-card__desc">24 커밋 / 4일 / 단독 기여 100% — 창작 시점 입증</div>
+            <span class="docs-card__link">GitHub에서 열기 →</span>
+          </div>
+        </a>
+        <a class="docs-card" href="https://github.com/jaiwshim-project/10-19-InsightBankHub/blob/main/copyright/08_%EC%B2%B4%ED%81%AC%EB%A6%AC%EC%8A%A4%ED%8A%B8.md" target="_blank" rel="noopener">
+          <div class="docs-card__num">08</div>
+          <div class="docs-card__body">
+            <div class="docs-card__title">제출 체크리스트</div>
+            <div class="docs-card__desc">등록 직전 점검 + 위험·보정 대응 + 후속 등록 권장</div>
+            <span class="docs-card__link">GitHub에서 열기 →</span>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 6. 등록 절차 ============ -->
+  <section class="section section--sm">
+    <div class="container">
+      <div class="text-center" style="max-width:680px; margin:0 auto var(--s-5);">
+        <span class="eyebrow">06 · 등록 방법</span>
+        <h2 style="margin-top:var(--s-3);">한국저작권위원회 등록 절차</h2>
+      </div>
+
+      <ol class="step-list">
+        <li>
+          <strong>cros.or.kr 접속 및 회원가입</strong>
+          한국저작권위원회 저작권 등록 시스템(cros.or.kr)에 접속하여 실명 인증 후 회원가입.
+        </li>
+        <li>
+          <strong>저작권 등록 → 편집저작물 등록 신청</strong>
+          메뉴에서 편집저작물 등록 신청서를 선택. 본 페이지의 등록 개요(섹션 01)와 등록 자료 01번을 그대로 입력.
+        </li>
+        <li>
+          <strong>첨부 파일 업로드</strong>
+          02 명세서 + 03 창작성 설명서(핵심) + 04 소스코드 요약 + 05 구조도 + 07 Git 이력 + 신분증 사본을 업로드. 06 스크린샷은 권장.
+        </li>
+        <li>
+          <strong>수수료 결제 — 26,800원</strong>
+          편집저작물 1건 등록 수수료. 신용카드 또는 가상계좌.
+        </li>
+        <li>
+          <strong>처리 대기 — 7~14일</strong>
+          위원회 심사 후 등록증 발급. 보정 요청 시 추가 7~14일 소요.
+        </li>
+        <li>
+          <strong>등록 완료 후 효력</strong>
+          분쟁 시 창작 시점·저작자·소유권의 추정 근거(저작권법 제53조). 등록 후 위반에 대한 법정손해배상 청구 가능(제125조의2).
+        </li>
+      </ol>
+
+      <div class="legal-box">
+        <strong>편집저작물 보호 범위</strong><br/>
+        <span style="color:var(--text-secondary); font-size:var(--fs-sm);">
+          본 등록은 <strong>소재(원저작물)의 선택·배열·구성</strong>에 대한 창작성에 한해 보호됩니다.
+          편집된 개별 소재 — 6개 매체의 콘텐츠, 외부 폰트(KoPubWorld Dotum · Pretendard · Noto Serif KR), 외부 라이브러리(3D-Force-Graph 등) — 는 별도 권리자에게 권리가 있으며 본 등록의 보호 범위가 아닙니다.
+        </span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="footer">
+    <div class="footer__cta-strip">
+      <div class="container">
+        <div class="row" style="justify-content:space-between; align-items:center; flex-wrap:wrap; gap:var(--s-4);">
+          <div>
+            <h3>여섯 채널의 권위, 하나의 인사이트 뱅크 허브로</h3>
+            <p>제안서 검토부터 시작하시거나, 데모 모듈을 둘러보세요.</p>
+          </div>
+          <div class="row gap-2">
+            <a class="btn btn--primary" href="proposal.html">제안서 보기</a>
+            <a class="btn btn--ghost" href="dashboard.html">데모 대시보드</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer__main">
+      <div class="container">
+        <div class="footer__grid">
+          <div class="footer__brand-col">
+            <img src="assets/logo.svg" alt="Insight Bank Hub" />
+            <p class="footer__tagline">6개 인터넷 매체를 통합한 GEO-AIO 싱크탱크 허브.<br/>분산된 채널을 인용 가능한 자산으로 전환합니다.</p>
+            <div class="footer__langs">🇰🇷 🇺🇸 🇨🇳 🇯🇵 🇪🇸 🇫🇷 🇩🇪 🇸🇦</div>
+            <div class="footer__social">
+              <a href="#" aria-label="X / Twitter"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+              <a href="#" aria-label="LinkedIn"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67h-3.55V9h3.41v1.56h.05c.48-.9 1.65-1.85 3.4-1.85 3.64 0 4.31 2.4 4.31 5.51zM5.34 7.43A2.06 2.06 0 113.28 5.37a2.06 2.06 0 012.06 2.06zm-1.78 13.02h3.56V9H3.56zM22.23 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.46c.98 0 1.77-.77 1.77-1.72V1.72C24 .77 23.21 0 22.23 0z"/></svg></a>
+              <a href="#" aria-label="YouTube"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M23.5 6.5c-.3-1-1-1.8-2-2C19.7 4 12 4 12 4s-7.7 0-9.5.5c-1 .2-1.7 1-2 2C0 8.3 0 12 0 12s0 3.7.5 5.5c.3 1 1 1.8 2 2C4.3 20 12 20 12 20s7.7 0 9.5-.5c1-.2 1.7-1 2-2 .5-1.8.5-5.5.5-5.5s0-3.7-.5-5.5zM9.5 15.5v-7l6 3.5z"/></svg></a>
+              <a href="#" aria-label="RSS"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M4 4v3a14 14 0 0114 14h3A17 17 0 004 4zm0 6v3a8 8 0 018 8h3a11 11 0 00-11-11zm2.5 8a2.5 2.5 0 110 5 2.5 2.5 0 010-5z"/></svg></a>
+            </div>
+          </div>
+          <div class="footer__col">
+            <h5>플랫폼</h5>
+            <a href="dashboard.html">통합 대시보드</a>
+            <a href="content.html">콘텐츠 관리</a>
+            <a href="knowledge.html">RAG 지식베이스</a>
+            <a href="ontology.html">온톨로지</a>
+            <a href="graph-license.html">그래프 라이선스</a>
+            <a href="chatbot.html">RAG 챗봇</a>
+          </div>
+          <div class="footer__col">
+            <h5>자료</h5>
+            <a href="index.html">개요</a>
+            <a href="channels.html">6개 채널</a>
+            <a href="products.html">상품·서비스</a>
+            <a href="competitive-landscape.html">경쟁 환경</a>
+            <a href="monetization.html">수익 모델</a>
+            <a href="proposal.html">계약 제안서</a>
+            <a href="business-plan.html">사업계획서</a>
+            <a href="structure.html">시스템 구조도</a>
+            <a href="manual.html">운영 매뉴얼</a>
+          </div>
+          <div class="footer__col">
+            <h5>연락처</h5>
+            <p>jaiwshim@gmail.com</p>
+            <p>평일 09:00 – 18:00 KST</p>
+            <p>SLA 24/7 비상 라인</p>
+            <a href="proposal.html" class="btn btn--ghost btn--sm" style="margin-top:8px; display:inline-flex;">파트너 문의 →</a>
+          </div>
+        </div>
+
+        <hr class="footer__divider" />
+
+        <div class="footer__bottom">
+          <span>© 2026 Insight Bank Hub. All rights reserved.</span>
+          <div class="footer__legal">
+            <a href="#">이용약관</a>
+            <a href="#">개인정보처리방침</a>
+            <a href="#">llms.txt</a>
+            <a href="copyright.html">저작권</a>
+            <span class="footer__seal">v1.0 · Confidential</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/common.js"></script>
+</body>
+</html>
